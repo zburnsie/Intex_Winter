@@ -1,69 +1,102 @@
-// import React from 'react';
-// import Button from "@/components/ui/button";
 
-// const LandingPage = () => {
-//   return (
-//     <div className="min-h-screen flex flex-col">
-//       {/* Header */}
-//       <header className="flex justify-between items-center p-6 shadow-md bg-white">
-//         <h1 className="text-2xl font-bold">CineNiche</h1>
-//         <div className="space-x-4">
-//           <Button variant="outline">Login</Button>
-//           <Button>Create Account</Button>
-//         </div>
-//       </header>
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import TestimonialsSection from "../components/TestimonialsSection";
+import FeaturedCarousel from "../components/FeaturedCarousel";
+import RotatingPoster from "../components/RotatingPoster";
 
-//       {/* Hero Section */}
-//       <section className="flex flex-col items-center justify-center text-center bg-cover bg-center text-white py-24 px-4" style={{ backgroundImage: "url('/images/hero.jpg')" }}>
-//         <h2 className="text-4xl font-extrabold mb-4">Stream the Stories Less Told</h2>
-//         <p className="text-lg max-w-xl mb-6">Explore cult classics, indie gems, and international cinema—all in one place.</p>
-//         <div className="space-x-4">
-//           <Button variant="secondary">Explore Plans</Button>
-//           <Button>Create Free Account</Button>
-//         </div>
-//       </section>
+const LandingPage = () => {
+  const [posterTitles, setPosterTitles] = useState<string[]>([]);
+  const baseUrl = "https://localhost:5000";
 
-//       {/* Features Section */}
-//       <section className="py-16 px-6 bg-gray-100 text-center">
-//         <h3 className="text-3xl font-semibold mb-12">Why CineNiche?</h3>
-//         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-6xl mx-auto">
-//           <div>
-//             <div className="text-4xl mb-2">🎥</div>
-//             <p>Curated Indie & Cult Films</p>
-//           </div>
-//           <div>
-//             <div className="text-4xl mb-2">🌍</div>
-//             <p>Global Cinema Collection</p>
-//           </div>
-//           <div>
-//             <div className="text-4xl mb-2">⭐</div>
-//             <p>Personalized Recommendations</p>
-//           </div>
-//           <div>
-//             <div className="text-4xl mb-2">📱</div>
-//             <p>Watch Anywhere — iOS, Android, Roku, and more</p>
-//           </div>
-//         </div>
-//       </section>
+  useEffect(() => {
+    fetch(`${baseUrl}/api/posters`)
+      .then((res) => {
+        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+        return res.json();
+      })
+      .then((data) => {
+        const randomPosters = [...data].sort(() => 0.5 - Math.random()).slice(0, 12);
+        setPosterTitles(randomPosters);
+      })
+      .catch((error) => {
+        console.error("Error fetching posters:", error);
+      });
+  }, []);
 
-//       {/* Footer CTA */}
-//       <section className="py-12 bg-black text-white text-center">
-//         <h4 className="text-2xl font-semibold mb-4">Join CineNiche and discover your next favorite film.</h4>
-//         <Button>Create Account</Button>
-//       </section>
+  return (
+    <div className="min-h-screen w-full overflow-x-hidden bg-black text-white font-sans">
+      {/* Header */}
+      <header className="flex justify-between items-center px-8 py-6 bg-black/60 backdrop-blur-sm fixed w-full z-50">
+        <h1 className="text-2xl font-bold tracking-wide">CineNiche</h1>
+        <div className="space-x-4">
+          <Link to="/login">
+            <button className="text-white border border-white px-4 py-2 rounded hover:bg-white hover:text-black transition">
+              Log In
+            </button>
+          </Link>
+          <Link to="/register">
+            <button className="bg-red-600 px-4 py-2 rounded hover:bg-red-700 transition">
+              Join Now
+            </button>
+          </Link>
+        </div>
+      </header>
 
-//       {/* Footer */}
-//       <footer className="py-6 bg-gray-800 text-white text-center text-sm">
-//         <p>&copy; 2025 CineNiche. All rights reserved.</p>
-//         <div className="mt-2 space-x-4">
-//           <a href="#" className="hover:underline">About</a>
-//           <a href="#" className="hover:underline">Contact</a>
-//           <a href="#" className="hover:underline">Privacy Policy</a>
-//           <a href="#" className="hover:underline">Terms</a>
-//         </div>
-//       </footer>
-//     </div>
-//   );
-// };
+      {/* Hero */}
+      <section
+        className="h-screen flex flex-col items-center justify-center text-center px-4 bg-cover bg-center relative"
+        style={{ backgroundImage: `url('/images/kanopy-style-hero.jpg')` }}
+      >
+        <div className="absolute inset-0 bg-black/60"></div>
+        <div className="relative z-10 max-w-2xl">
+          <h2 className="text-5xl font-extrabold mb-6 leading-tight">
+            Discover Bold, Brilliant, & Hidden Films
+          </h2>
+          <p className="text-lg mb-8">
+            Stream award-winning documentaries, indie gems, and global cinema, anytime.
+          </p>
+          <div className="space-x-4">
+            <Link to="/register">
+              <button className="bg-red-600 px-6 py-3 text-lg rounded hover:bg-red-700 transition">
+                Join CineNiche
+              </button>
+            </Link>
+            <Link to="/login">
+              <button className="px-6 py-3 text-lg border border-white rounded hover:bg-white hover:text-black transition">
+                Log In
+              </button>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Featured Films Carousel */}
+      <FeaturedCarousel posters={posterTitles.slice(0, 12)} />
+
+      {/* Explore Our Collection – Rotating Poster */}
+      <section className="bg-black py-20 px-6 text-center">
+        <h3 className="text-3xl font-semibold mb-10">Explore Our Collection</h3>
+        <div className="flex justify-center items-center">
+          {posterTitles.length > 0 && <RotatingPoster poster={posterTitles} />}
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <TestimonialsSection />
+
+      {/* Footer */}
+      <footer className="py-8 bg-black text-center text-gray-400 text-sm">
+        <p>&copy; 2025 CineNiche. All rights reserved.</p>
+        <div className="mt-2 space-x-4">
+          <a href="#" className="hover:underline">About</a>
+          <a href="#" className="hover:underline">Help Center</a>
+          <a href="#" className="hover:underline">Privacy</a>
+          <a href="#" className="hover:underline">Terms</a>
+        </div>
+      </footer>
+    </div>
+  );
+};
 
 // export default LandingPage;
