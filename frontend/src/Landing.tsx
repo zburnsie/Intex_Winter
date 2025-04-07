@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TestimonialsSection from "../components/TestimonialsSection";
@@ -98,4 +99,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage;
+// export default LandingPage;

@@ -7,7 +7,7 @@ interface PaginationProps {
 }
 
 const Pagination = ({currentPage, totalPages, pageSize, onPageChange, onPageSizeChange}: PaginationProps) => {
-    console.log('Raw Total Pages:', totalPages);
+    // console.log('Raw Total Pages:', totalPages);
     const safeTotalPages = Number.isInteger(totalPages) && totalPages > 0 ? totalPages : 0;
 
     if (safeTotalPages === 0) {

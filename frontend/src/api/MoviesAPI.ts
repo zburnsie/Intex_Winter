@@ -12,19 +12,32 @@ const API_URL = 'https://localhost:5000/api/Movie'
 export const fetchMovies = async (
     pageSize: number,
     pageNum: number,
-    selectedGenre: any[]
+    selectedGenre: any[],
+    searchTerm: string = ""
 ): Promise<FetchMoviesResponse> => {
     try {
         const genre = selectedGenre
-        .map((g) => `movieGenres=${g}`)
-        .join("&");
+            .map((g) => `movieGenres=${g}`)
+            .join("&");
+
+        const query = new URLSearchParams({
+            pageSize: pageSize.toString(),
+            pageNum: pageNum.toString(),
+            search: searchTerm
+        });
+
+        if (genre.length > 0) {
+            query.append("genreString", genre);
+        }
 
         const response = await fetch(
-            `${API_URL}/AllMovies?pageSize=${pageSize}&pageNum=${pageNum}${genre.length ? `&${genre}` : ''}`
+            `${API_URL}/AllMovies?${query.toString()}`
         );
+
         if (!response.ok) {
             throw new Error(`Error fetching movies: ${response.statusText}`);
         }
+
         const rawData = await response.json();
         console.log('Fetched movie data:', rawData);
         return rawData;

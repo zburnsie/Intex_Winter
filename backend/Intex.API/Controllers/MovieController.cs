@@ -14,9 +14,16 @@ namespace Intex.API.Controllers
         public MovieController(MovieDbContext temp) => _movieContext = temp;
 
         [HttpGet("AllMovies")]
-        public IActionResult GetMovies(int pageSize = 10, int pageNum = 1, [FromQuery] List<string>? movieGenres = null)
+        public IActionResult GetMovies(int pageSize = 10, int pageNum = 1, [FromQuery] List<string>? movieGenres = null, [FromQuery] string? search = null)
         {
             var query = _movieContext.Movies.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var lowerSearch = search.ToLower();
+                query = query.Where(m => m.Title != null && m.Title.ToLower().Contains(lowerSearch));
+            }
+
             var totalMovies = query.Count();
 
             var something = query
@@ -79,16 +86,75 @@ namespace Intex.API.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateMovie(int id, [FromBody] object movie)
+        [HttpPut("updateMovie/{showId}")]
+        public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
-            return Ok(new { Message = $"Movie with ID {id} updated successfully." });
+            var existingMovie = _movieContext.Movies.FirstOrDefault(m => m.ShowId == showId);
+            if (existingMovie == null)
+            {
+                return NotFound(new { Message = $"Movie with ShowId {showId} not found." });
+            }
+
+            // Update fields
+            existingMovie.Title = updatedMovie.Title;
+            existingMovie.Director = updatedMovie.Director;
+            existingMovie.Cast = updatedMovie.Cast;
+            existingMovie.Country = updatedMovie.Country;
+            existingMovie.ReleaseYear = updatedMovie.ReleaseYear;
+            existingMovie.Rating = updatedMovie.Rating;
+            existingMovie.Duration = updatedMovie.Duration;
+            existingMovie.Description = updatedMovie.Description;
+            existingMovie.Action = updatedMovie.Action;
+            existingMovie.Adventure = updatedMovie.Adventure;
+            existingMovie.AnimeSeriesInternationalTvShows = updatedMovie.AnimeSeriesInternationalTvShows;
+            existingMovie.BritishTvShowsDocuseriesInternationalTvShows = updatedMovie.BritishTvShowsDocuseriesInternationalTvShows;
+            existingMovie.Children = updatedMovie.Children;
+            existingMovie.Comedies = updatedMovie.Comedies;
+            existingMovie.ComediesDramasInternationalMovies = updatedMovie.ComediesDramasInternationalMovies;
+            existingMovie.ComediesInternationalMovies = updatedMovie.ComediesInternationalMovies;
+            existingMovie.ComediesRomanticMovies = updatedMovie.ComediesRomanticMovies;
+            existingMovie.CrimeTvShowsDocuseries = updatedMovie.CrimeTvShowsDocuseries;
+            existingMovie.Documentaries = updatedMovie.Documentaries;
+            existingMovie.DocumentariesInternationalMovies = updatedMovie.DocumentariesInternationalMovies;
+            existingMovie.Docuseries = updatedMovie.Docuseries;
+            existingMovie.Dramas = updatedMovie.Dramas;
+            existingMovie.DramasInternationalMovies = updatedMovie.DramasInternationalMovies;
+            existingMovie.DramasRomanticMovies = updatedMovie.DramasRomanticMovies;
+            existingMovie.FamilyMovies = updatedMovie.FamilyMovies;
+            existingMovie.Fantasy = updatedMovie.Fantasy;
+            existingMovie.HorrorMovies = updatedMovie.HorrorMovies;
+            existingMovie.InternationalMoviesThrillers = updatedMovie.InternationalMoviesThrillers;
+            existingMovie.InternationalTvShowsRomanticTvShowsTvDramas = updatedMovie.InternationalTvShowsRomanticTvShowsTvDramas;
+            existingMovie.KidsTv = updatedMovie.KidsTv;
+            existingMovie.LanguageTvShows = updatedMovie.LanguageTvShows;
+            existingMovie.Musicals = updatedMovie.Musicals;
+            existingMovie.NatureTv = updatedMovie.NatureTv;
+            existingMovie.RealityTv = updatedMovie.RealityTv;
+            existingMovie.Spirituality = updatedMovie.Spirituality;
+            existingMovie.TvAction = updatedMovie.TvAction;
+            existingMovie.TvComedies = updatedMovie.TvComedies;
+            existingMovie.TvDramas = updatedMovie.TvDramas;
+            existingMovie.TalkShowsTvComedies = updatedMovie.TalkShowsTvComedies;
+            existingMovie.Thrillers = updatedMovie.Thrillers;
+
+            _movieContext.SaveChanges();
+
+            return Ok(new { Message = $"Movie with ShowId {showId} updated successfully." });
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteMovie(int id)
+        [HttpDelete("deleteMovie/{showId}")]
+        public IActionResult DeleteMovie(string showId)
         {
-            return Ok(new { Message = $"Movie with ID {id} deleted successfully." });
+            var movie = _movieContext.Movies.FirstOrDefault(m => m.ShowId == showId);
+            if (movie == null)
+            {
+                return NotFound(new { Message = $"Movie with ShowId {showId} not found." });
+            }
+
+            _movieContext.Movies.Remove(movie);
+            _movieContext.SaveChanges();
+
+            return Ok(new { Message = $"Movie with ShowId {showId} deleted successfully." });
         }
     }
 }
