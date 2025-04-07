@@ -1,14 +1,19 @@
-import ItemList from "./ItemList";
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import MoviesPage from './pages/MoviesPage';
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div>
-      <h1>Intex App</h1>
-      <ItemList />
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/movies" element={<MoviesPage />} />
+        {/* You can add <Route path="/login" element={<LoginPage />} /> etc. later */}
+      </Routes>
+    </Router>
   );
-}
+};
 
 export default App;
+
 
 
