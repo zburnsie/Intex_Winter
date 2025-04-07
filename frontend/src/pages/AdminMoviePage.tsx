@@ -1,11 +1,16 @@
 import { useEffect, useState } from "react";
+import { deleteMovie, fetchMovies } from "../api/MoviesAPI";
+import { Movie } from "../types/Movie"; // Adjust the path based on your project structure
+import Pagination from "../components/Pagination";
+import NewMovieForm from "../components/NewMovieForm";
+import EditMovieForm from "../components/EditMovieForm";
 
 
 const AdminMoviePage = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState<boolean>(true);
-    const [pageSize, setPageSize] = useState<number>(10); // Example page size for pagination
+    const [pageSize, setPageSize] = useState<number>(50); // Example page size for pagination
     const [pageNum, setPageNum] = useState<number>(1); // Current page number for pagination
     const [totalPages, setTotalPages] = useState<number>(0); // Total number of pages for pagination
     const [showForm, setShowForm] = useState<boolean>(false); // State to control the visibility of the form for adding a new movie
@@ -14,9 +19,9 @@ const AdminMoviePage = () => {
     useEffect(() => {
         const loadMovies = async () => {
             try {
-                const data = await fetchMovies(pageSize, 1, []); // Assuming pageNum is 1 for now
-                setMovies(data.movies);
-                setTotalPages(Math.ceil(data.totalNumMovies / pageSize));
+                const data = await fetchMovies(pageSize, pageNum, []); // Assuming pageNum is 1 for now
+                setMovies(data?.movies ?? []);;
+                setTotalPages(Math.ceil(data.totalMovies / pageSize));
             } catch (error) {
                 setError((error as Error).message);
             } finally {
@@ -27,13 +32,13 @@ const AdminMoviePage = () => {
         loadMovies(); // Call the function to fetch movies
     }, [pageSize, pageNum]);
 
-    const handleDelete = async (movieId: string) => {
+    const handleDelete = async (showId: string) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this movie?");
         if (!confirmDelete) return;
         
         try {
-            await deleteMovie(movieId); // Call the API to delete the movie
-            setMovies(movies.filter((m) => m.movieId !== movieId)); // Update the state to remove the deleted movie
+            await deleteMovie(showId); // Call the API to delete the movie
+            setMovies(movies.filter((m) => m.showId !== showId)); // Update the state to remove the deleted movie
             alert("Movie deleted successfully.");
         } catch (error) {
             // Handle error
@@ -48,48 +53,138 @@ const AdminMoviePage = () => {
 
     return (
         <>
-        <div>
-            <h1>Admin Page</h1>
-            {!showForm && (
-                <button
-                    onClick={() => setShowForm(true)} // Show the form to add a new movie
-                    className="btn btn-success mb-3"
-                >
-                    Add New Movie
-                </button>
-            )}
-            {showForm && (
-                <NewMovieForm
-                    onSuccess={() => {
-                        setShowForm(false);
-                        fetchMovies(pageSize, pageNum, []).then((data) => setProjects(data.movies)); // Refresh the movie list after adding a new movie
-                    }}
-                    onCancel={() => setShowForm(false)} // Hide the form when cancelled
-                />
-            )}
+        <div className="container-fluid mt-4">
+            <div className="row">
+                <div className="col px-3">
+                    <h1 className="text-center">Admin Page</h1>
+                    {!showForm && (
+                        <div className="row mb-3">
+                            <div className="col d-flex justify-content-end align-items-center gap-2">
+                                {/* Placeholder for future search input */}
+                                {/* <input type="text" className="form-control w-auto" placeholder="Search..." /> */}
+                                <button
+                                    onClick={() => setShowForm(true)}
+                                    className="btn btn-success"
+                                >
+                                    Add New Movie
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                    {showForm && (
+                        <NewMovieForm
+                            onSuccess={() => {
+                                setShowForm(false);
+                                fetchMovies(pageSize, pageNum, []).then((data) => setMovies(data.movies)); // Refresh the movie list after adding a new movie
+                            }}
+                            onCancel={() => setShowForm(false)} // Hide the form when cancelled
+                        />
+                    )}
 
-            {editingMovie && (
-                <EditMovieForm 
-                    movie={editingMovie} 
-                    onSuccess={() => {
-                        setEditingMovie(null); // Clear the editing state
-                        fetchMovies(pageSize, pageNum, []).then((data) => setMovies(data.movies)); // Refresh the movie list after editing
-                    }}
-                    onCancel={() => setEditingMovie(null)} // Clear the editing state when cancelled
-                />
-            )}
-
-            <p>Manage Movies</p>
-            
-            <table className="table table-striped table-bordered">
-                <thead className="table-dark">
-                    <tr>
-                        
-                    </tr>
-                
-                </thead>
-
-            </table>
+                    {editingMovie && (
+                        <div
+                            className="modal fade show d-block"
+                            tabIndex={-1}
+                            role="dialog"
+                            onClick={() => setEditingMovie(null)}
+                            style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+                        >
+                            <div
+                                className="modal-dialog modal-lg"
+                                role="document"
+                                onClick={(e) => e.stopPropagation()}
+                            >
+                                <div className="modal-content">
+                                    <div className="modal-header">
+                                        <h5 className="modal-title">Edit Movie</h5>
+                                        <button
+                                            type="button"
+                                            className="btn-close"
+                                            aria-label="Close"
+                                            onClick={() => setEditingMovie(null)}
+                                        ></button>
+                                    </div>
+                                    <div className="modal-body">
+                                        <EditMovieForm 
+                                            movie={editingMovie} 
+                                            onSuccess={() => {
+                                                setEditingMovie(null);
+                                                fetchMovies(pageSize, pageNum, []).then((data) => setMovies(data.movies));
+                                            }}
+                                            onCancel={() => setEditingMovie(null)}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+                    
+                    <div className="row">
+                        <div className="col">
+                            <div className="table-responsive">
+                                <table className="table table-sm table-striped table-bordered align-middle text-start shadow-sm">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Director</th>
+                                            <th>Release Year</th>
+                                            <th>Rating</th>
+                                            <th>Action Score</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody className="align-middle">
+                                        {movies.map((movie) => (
+                                            <tr key={movie.showId}>
+                                                <td>{movie.title}</td>
+                                                <td>{movie.director ?? "—"}</td>
+                                                <td>{movie.releaseYear}</td>
+                                                <td>{movie.rating}</td>
+                                                <td>{movie.action}</td>
+                                                <td>
+                                                    <div className="d-flex justify-content-center gap-2">
+                                                        <button
+                                                            onClick={() => setEditingMovie(movie)}
+                                                            className="btn btn-warning btn-sm"
+                                                        >
+                                                            Edit
+                                                        </button>
+                                                        <button
+                                                            onClick={() => handleDelete(movie.showId!)}
+                                                            className="btn btn-danger btn-sm"
+                                                        >
+                                                            Delete
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="row mt-3 mb-5 align-items-center">
+                        <div className="col-md-6">
+                            <p className="mb-0">
+                                Showing {(pageNum - 1) * pageSize + 1} to {Math.min(pageNum * pageSize, movies.length * totalPages)} of {movies.length * totalPages} entries
+                            </p>
+                        </div>
+                        <div className="col-md-6 text-end">
+                            <Pagination
+                                currentPage={pageNum}
+                                totalPages={totalPages}
+                                pageSize={pageSize}
+                                onPageChange={setPageNum}
+                                onPageSizeChange={(newSize) => {
+                                    setPageSize(newSize);
+                                    setPageNum(1);
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         </>
     );
