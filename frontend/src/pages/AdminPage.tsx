@@ -10,19 +10,21 @@ const AdminMoviePage = () => {
     const [showForm, setShowForm] = useState<boolean>(false); // State to control the visibility of the form for adding a new movie
     const [editingMovie, setEditingMovie] = useState<Movie | null>(null); // State to track the movie being edited
 
-    useEffect(()) => {
+    useEffect(() => {
         const loadMovies = async () => {
             try {
-                const data = await fetchMovies(pageSize, pageNum, []);
+                const data = await fetchMovies(pageSize, 1, []); // Assuming pageNum is 1 for now
                 setMovies(data.movies);
-                setTotalPages(Math.ceil(data.totalNumMovies / pageSize))
+                setTotalPages(Math.ceil(data.totalNumMovies / pageSize));
             } catch (error) {
                 setError((error as Error).message);
             } finally {
                 setLoading(false); // Set loading to false after fetching
             }
-        }
-    }
+        };
+
+        loadMovies(); // Call the function to fetch movies
+    }, [pageSize]);
 
 
     return (
