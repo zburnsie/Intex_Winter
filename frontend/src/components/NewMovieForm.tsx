@@ -72,16 +72,27 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieProps) => {
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
-        setFormData({
-            ...formData,
-            [e.target.name]: e.target.value,
-        });
+        const { name, value, type } = e.target;
+        setFormData(prev => ({
+            ...prev,
+            [name]: type === "number" ? Number(value) : value,
+        }));
     }
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await addMovie(toFullMovie(formData));
-        onSuccess();
+        console.log("Submitting movie:", formData);
+
+        const fullMovie = toFullMovie(formData);
+        console.log("Full movie object:", fullMovie);
+
+        try {
+            const addedMovie = await addMovie(fullMovie);
+            console.log("Movie added successfully:", addedMovie);
+            onSuccess();
+        } catch (error) {
+            console.error("Error adding movie:", error);
+        }
     }
 
     return (

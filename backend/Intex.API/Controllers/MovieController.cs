@@ -17,10 +17,6 @@ namespace Intex.API.Controllers
         public IActionResult GetMovies(int pageSize = 10, int pageNum = 1, [FromQuery] List<string>? movieGenres = null)
         {
             var query = _movieContext.Movies.AsQueryable();
-            // if (movieGenres != null && movieGenres.Any())
-            // {
-            //     query = query.Where(m => movieGenres.Contains(m.Genre));
-            // }
             var totalMovies = query.Count();
 
             var something = query
@@ -43,10 +39,44 @@ namespace Intex.API.Controllers
             return Ok(new { Message = $"Details for movie with ID {id} will go here." });
         }
 
-        [HttpPost]
-        public IActionResult CreateMovie([FromBody] object movie)
+        [HttpPost("AddMovie")]
+        public IActionResult AddMovie([FromBody] MoviesTitle movie)
         {
-            return Created("", new { Message = "Movie created successfully." });
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    Console.WriteLine("Model state is invalid.");
+                    return BadRequest(ModelState);
+                }
+
+                // Generate the next ShowId
+                var lastId = _movieContext.Movies
+                    .AsEnumerable()
+                    .Where(m => m.ShowId != null && m.ShowId.StartsWith("s"))
+                    .Select(m =>
+                    {
+                        var success = int.TryParse(m.ShowId.Substring(1), out var n);
+                        return success ? n : 0;
+                    })
+                    .DefaultIfEmpty(0)
+                    .Max();
+
+                movie.ShowId = "s" + (lastId + 1);
+
+                Console.WriteLine("Assigned ShowId: " + movie.ShowId);
+                Console.WriteLine("Final Movie Object: " + System.Text.Json.JsonSerializer.Serialize(movie));
+
+                _movieContext.Movies.Add(movie);
+                _movieContext.SaveChanges();
+
+                return CreatedAtAction(nameof(GetMovieById), new { id = movie.ShowId }, movie);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error adding movie: " + ex.ToString());
+                return StatusCode(500, "An error occurred while saving the movie.");
+            }
         }
 
         [HttpPut("{id}")]

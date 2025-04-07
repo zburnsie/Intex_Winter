@@ -15,6 +15,7 @@ const AdminMoviePage = () => {
     const [totalPages, setTotalPages] = useState<number>(0); // Total number of pages for pagination
     const [showForm, setShowForm] = useState<boolean>(false); // State to control the visibility of the form for adding a new movie
     const [editingMovie, setEditingMovie] = useState<Movie | null>(null); // State to track the movie being edited
+    const [searchTerm, setSearchTerm] = useState<string>(""); // State for the search term
 
     useEffect(() => {
         const loadMovies = async () => {
@@ -31,6 +32,10 @@ const AdminMoviePage = () => {
 
         loadMovies(); // Call the function to fetch movies
     }, [pageSize, pageNum]);
+
+    const filteredMovies = movies.filter((movie) =>
+        movie.title?.toLowerCase().includes(searchTerm.toLowerCase())
+    ); // Filtered movie list based on search term
 
     const handleDelete = async (showId: string) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this movie?");
@@ -60,8 +65,13 @@ const AdminMoviePage = () => {
                     {!showForm && (
                         <div className="row mb-3">
                             <div className="col d-flex justify-content-end align-items-center gap-2">
-                                {/* Placeholder for future search input */}
-                                {/* <input type="text" className="form-control w-auto" placeholder="Search..." /> */}
+                                <input
+                                    type="text"
+                                    className="form-control w-auto"
+                                    placeholder="Search..."
+                                    value={searchTerm}
+                                    onChange={(e) => setSearchTerm(e.target.value)}
+                                />
                                 <button
                                     onClick={() => setShowForm(true)}
                                     className="btn btn-success"
@@ -134,7 +144,7 @@ const AdminMoviePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody className="align-middle">
-                                        {movies.map((movie) => (
+                                        {filteredMovies.map((movie) => (
                                             <tr key={movie.showId}>
                                                 <td>{movie.title}</td>
                                                 <td>{movie.director ?? "—"}</td>
@@ -167,7 +177,7 @@ const AdminMoviePage = () => {
                     <div className="row mt-3 mb-5 align-items-center">
                         <div className="col-md-6">
                             <p className="mb-0">
-                                Showing {(pageNum - 1) * pageSize + 1} to {Math.min(pageNum * pageSize, movies.length * totalPages)} of {movies.length * totalPages} entries
+                                Showing {(pageNum - 1) * pageSize + 1} to {Math.min(pageNum * pageSize, filteredMovies.length)} of {filteredMovies.length} entries
                             </p>
                         </div>
                         <div className="col-md-6 text-end">
