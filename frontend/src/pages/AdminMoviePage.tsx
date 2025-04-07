@@ -17,25 +17,21 @@ const AdminMoviePage = () => {
     const [editingMovie, setEditingMovie] = useState<Movie | null>(null); // State to track the movie being edited
     const [searchTerm, setSearchTerm] = useState<string>(""); // State for the search term
 
+    const loadMovies = async () => {
+        try {
+            const data = await fetchMovies(pageSize, pageNum, [], searchTerm);
+            setMovies(data?.movies ?? []);
+            setTotalPages(Math.ceil(data.totalMovies / pageSize));
+        } catch (error) {
+            setError((error as Error).message);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        const loadMovies = async () => {
-            try {
-                const data = await fetchMovies(pageSize, pageNum, []); // Assuming pageNum is 1 for now
-                setMovies(data?.movies ?? []);;
-                setTotalPages(Math.ceil(data.totalMovies / pageSize));
-            } catch (error) {
-                setError((error as Error).message);
-            } finally {
-                setLoading(false); // Set loading to false after fetching
-            }
-        };
-
-        loadMovies(); // Call the function to fetch movies
+        loadMovies();
     }, [pageSize, pageNum]);
-
-    const filteredMovies = movies.filter((movie) =>
-        movie.title?.toLowerCase().includes(searchTerm.toLowerCase())
-    ); // Filtered movie list based on search term
 
     const handleDelete = async (showId: string) => {
         const confirmDelete = window.confirm("Are you sure you want to delete this movie?");
@@ -63,29 +59,47 @@ const AdminMoviePage = () => {
                 <div className="col px-3">
                     <h1 className="text-center">Admin Page</h1>
                     {!showForm && (
-                        <div className="row mb-3">
-                            <div className="col d-flex justify-content-end align-items-center gap-2">
+                        <div className="d-flex justify-content-between align-items-center mb-3">
+                            <button className="btn btn-success" onClick={() => setShowForm(true)}>
+                                Add New Movie
+                            </button>
+                            <form
+                                onSubmit={(e) => {
+                                    e.preventDefault();
+                                    setPageNum(1);
+                                    loadMovies();
+                                }}
+                                className="d-flex gap-2"
+                            >
                                 <input
                                     type="text"
-                                    className="form-control w-auto"
+                                    className="form-control"
                                     placeholder="Search..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
                                 />
-                                <button
-                                    onClick={() => setShowForm(true)}
-                                    className="btn btn-success"
-                                >
-                                    Add New Movie
+                                <button type="submit" className="btn btn-primary">
+                                    Search
                                 </button>
-                            </div>
+                                <button
+                                    type="button"
+                                    className="btn btn-secondary"
+                                    onClick={() => {
+                                        setSearchTerm("");
+                                        setPageNum(1);
+                                        loadMovies();
+                                    }}
+                                >
+                                    Clear
+                                </button>
+                            </form>
                         </div>
                     )}
                     {showForm && (
                         <NewMovieForm
                             onSuccess={() => {
                                 setShowForm(false);
-                                fetchMovies(pageSize, pageNum, []).then((data) => setMovies(data.movies)); // Refresh the movie list after adding a new movie
+                                loadMovies(); // Refresh the movie list after adding
                             }}
                             onCancel={() => setShowForm(false)} // Hide the form when cancelled
                         />
@@ -119,7 +133,7 @@ const AdminMoviePage = () => {
                                             movie={editingMovie} 
                                             onSuccess={() => {
                                                 setEditingMovie(null);
-                                                fetchMovies(pageSize, pageNum, []).then((data) => setMovies(data.movies));
+                                                loadMovies(); // Refresh the movie list after editing
                                             }}
                                             onCancel={() => setEditingMovie(null)}
                                         />
@@ -144,7 +158,7 @@ const AdminMoviePage = () => {
                                         </tr>
                                     </thead>
                                     <tbody className="align-middle">
-                                        {filteredMovies.map((movie) => (
+                                        {movies.map((movie) => (
                                             <tr key={movie.showId}>
                                                 <td>{movie.title}</td>
                                                 <td>{movie.director ?? "—"}</td>
@@ -177,7 +191,7 @@ const AdminMoviePage = () => {
                     <div className="row mt-3 mb-5 align-items-center">
                         <div className="col-md-6">
                             <p className="mb-0">
-                                Showing {(pageNum - 1) * pageSize + 1} to {Math.min(pageNum * pageSize, filteredMovies.length)} of {filteredMovies.length} entries
+                                Showing {(pageNum - 1) * pageSize + 1} to {Math.min(pageNum * pageSize, movies.length)} of {movies.length} entries
                             </p>
                         </div>
                         <div className="col-md-6 text-end">

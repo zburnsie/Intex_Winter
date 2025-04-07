@@ -14,9 +14,16 @@ namespace Intex.API.Controllers
         public MovieController(MovieDbContext temp) => _movieContext = temp;
 
         [HttpGet("AllMovies")]
-        public IActionResult GetMovies(int pageSize = 10, int pageNum = 1, [FromQuery] List<string>? movieGenres = null)
+        public IActionResult GetMovies(int pageSize = 10, int pageNum = 1, [FromQuery] List<string>? movieGenres = null, [FromQuery] string? search = null)
         {
             var query = _movieContext.Movies.AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                var lowerSearch = search.ToLower();
+                query = query.Where(m => m.Title != null && m.Title.ToLower().Contains(lowerSearch));
+            }
+
             var totalMovies = query.Count();
 
             var something = query
@@ -85,10 +92,19 @@ namespace Intex.API.Controllers
             return Ok(new { Message = $"Movie with ID {id} updated successfully." });
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteMovie(int id)
+        [HttpDelete("delete/{showId}")]
+        public IActionResult DeleteMovie(string showId)
         {
-            return Ok(new { Message = $"Movie with ID {id} deleted successfully." });
+            var movie = _movieContext.Movies.FirstOrDefault(m => m.ShowId == showId);
+            if (movie == null)
+            {
+                return NotFound(new { Message = $"Movie with ShowId {showId} not found." });
+            }
+
+            _movieContext.Movies.Remove(movie);
+            _movieContext.SaveChanges();
+
+            return Ok(new { Message = $"Movie with ShowId {showId} deleted successfully." });
         }
     }
 }
