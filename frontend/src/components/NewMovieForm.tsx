@@ -5,10 +5,10 @@ import { addMovie } from "../api/MoviesAPI";
 interface NewMovieFormData {
     title: string;
     director: string;
-    releaseYear: number;
+    releaseYear?: number;
     rating: string;
     description?: string;
-    action?: number;
+    genres: string[];
 }
 
 interface NewMovieProps {
@@ -20,10 +20,10 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieProps) => {
     const [formData, setFormData] = useState<NewMovieFormData>({
         title: "",
         director: "",
-        releaseYear: 0,
+        releaseYear: undefined,
         rating: "",
         description: "",
-        action: 0,
+        genres: [],
     });
 
     const toFullMovie = (data: NewMovieFormData): Movie => ({
@@ -33,11 +33,11 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieProps) => {
         director: data.director,
         cast: null,
         country: null,
-        releaseYear: data.releaseYear,
+        releaseYear: data.releaseYear ?? null,
         rating: data.rating,
         duration: null,
         description: data.description ?? null,
-        action: data.action ?? null,
+        action: null,
         adventure: null,
         animeSeriesInternationalTvShows: null,
         britishTvShowsDocuseriesInternationalTvShows: null,
@@ -128,22 +128,34 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieProps) => {
                     className="form-control"
                     id="releaseYear"
                     name="releaseYear"
-                    value={formData.releaseYear}
+                    value={formData.releaseYear ?? ""}
                     onChange={handleChange}
                     required
                 />
             </div>
             <div className="mb-3">
                 <label htmlFor="rating" className="form-label">Rating</label>
-                <input
-                    type="text"
-                    className="form-control"
+                <select
+                    className="form-select"
                     id="rating"
                     name="rating"
                     value={formData.rating}
                     onChange={handleChange}
                     required
-                />
+                >
+                    <option value="">Select a rating</option>
+                    <option value="G">G</option>
+                    <option value="PG">PG</option>
+                    <option value="PG-13">PG-13</option>
+                    <option value="R">R</option>
+                    <option value="NC-17">NC-17</option>
+                    <option value="TV-Y">TV-Y</option>
+                    <option value="TV-Y7">TV-Y7</option>
+                    <option value="TV-G">TV-G</option>
+                    <option value="TV-PG">TV-PG</option>
+                    <option value="TV-14">TV-14</option>
+                    <option value="TV-MA">TV-MA</option>
+                </select>
             </div>
             <div className="mb-3">
                 <label htmlFor="description" className="form-label">Description</label>
@@ -157,17 +169,53 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieProps) => {
                 />
             </div>
             <div className="mb-3">
-                <label htmlFor="action" className="form-label">Action Score</label>
-                <input
-                    type="number"
-                    className="form-control"
-                    id="action"
-                    name="action"
-                    value={formData.action}
-                    onChange={handleChange}
-                />
+                <label htmlFor="genrePicker" className="form-label">Genres</label>
+                <div className="d-flex gap-2">
+                    <select
+                        id="genrePicker"
+                        className="form-select"
+                        onChange={(e) => {
+                            const selected = e.target.value;
+                            if (selected && !formData.genres.includes(selected)) {
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    genres: [...prev.genres, selected]
+                                }));
+                            }
+                            e.target.value = "";
+                        }}
+                    >
+                        <option value="">Select a genre</option>
+                        {[
+                            "Action", "Adventure", "Anime", "Comedy", "Crime", "Documentary",
+                            "Drama", "Family", "Fantasy", "Horror", "International", "Kids",
+                            "Musical", "Nature", "Reality", "Romance", "Sci-Fi", "Spiritual",
+                            "Thriller", "TV", "Western"
+                        ].map((genre) => (
+                            <option key={genre} value={genre}>{genre}</option>
+                        ))}
+                    </select>
+                </div>
+                <div className="mt-2 d-flex flex-wrap gap-2">
+                    {formData.genres.map((genre) => (
+                        <span key={genre} className="badge bg-secondary">
+                            {genre}
+                            <button
+                                type="button"
+                                className="btn-close btn-close-white ms-2"
+                                aria-label="Remove"
+                                onClick={() => {
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        genres: prev.genres.filter((g) => g !== genre)
+                                    }));
+                                }}
+                            ></button>
+                        </span>
+                    ))}
+                </div>
             </div>
-            <div className="d-flex justify-content-end gap-2">
+            <div className="d-flex justify-content-center gap-2 mb-4">
                 <button type="button" className="btn btn-secondary" onClick={onCancel}>Cancel</button>
                 <button type="submit" className="btn btn-primary">Submit</button>
             </div>

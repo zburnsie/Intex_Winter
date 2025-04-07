@@ -4,6 +4,7 @@ import { Movie } from "../types/Movie"; // Adjust the path based on your project
 import Pagination from "../components/Pagination";
 import NewMovieForm from "../components/NewMovieForm";
 import EditMovieForm from "../components/EditMovieForm";
+import { getGenresFromMovie } from "../components/genreUtils";
 
 
 const AdminMoviePage = () => {
@@ -87,7 +88,17 @@ const AdminMoviePage = () => {
                                     onClick={() => {
                                         setSearchTerm("");
                                         setPageNum(1);
-                                        loadMovies();
+                                        setMovies([]);
+                                        setLoading(true);
+                                        setError(null);
+                                        fetchMovies(pageSize, 1, [], "").then((data) => {
+                                            setMovies(data?.movies ?? []);
+                                            setTotalPages(Math.ceil(data.totalMovies / pageSize));
+                                        }).catch((error) => {
+                                            setError((error as Error).message);
+                                        }).finally(() => {
+                                            setLoading(false);
+                                        });
                                     }}
                                 >
                                     Clear
@@ -152,8 +163,10 @@ const AdminMoviePage = () => {
                                             <th>Title</th>
                                             <th>Director</th>
                                             <th>Release Year</th>
+                                            <th>Type</th>
                                             <th>Rating</th>
-                                            <th>Action Score</th>
+                                            <th>Duration</th>
+                                            <th>Genres</th>
                                             <th>Actions</th>
                                         </tr>
                                     </thead>
@@ -163,8 +176,10 @@ const AdminMoviePage = () => {
                                                 <td>{movie.title}</td>
                                                 <td>{movie.director ?? "—"}</td>
                                                 <td>{movie.releaseYear}</td>
+                                                <td>{movie.type}</td>
                                                 <td>{movie.rating}</td>
-                                                <td>{movie.action}</td>
+                                                <td>{movie.duration}</td>
+                                                <td>{getGenresFromMovie(movie).join(", ") || "—"}</td>
                                                 <td>
                                                     <div className="d-flex justify-content-center gap-2">
                                                         <button
