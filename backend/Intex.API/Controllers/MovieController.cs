@@ -12,14 +12,14 @@ namespace Intex.API.Controllers
     [Route("api/[controller]")]
     public class MovieController : Controller
     {
-        private MovieDbContext _movieContext;
+        private MovieDbContext _context;
 
-        public MovieController(MovieDbContext temp) => _movieContext = temp;
+        public MovieController(MovieDbContext temp) => _context = temp;
 
         [HttpGet("AllMovies")]
         public IActionResult GetMovies(int pageSize = 10, int pageNum = 1, [FromQuery] List<string>? movieGenres = null, [FromQuery] string? search = null)
         {
-            var query = _movieContext.Movies.AsQueryable();
+            var query = _context.Movies.AsQueryable();
 
             if (!string.IsNullOrWhiteSpace(search))
             {
@@ -99,7 +99,7 @@ namespace Intex.API.Controllers
                     return BadRequest(ModelState);
                 }
 
-                var lastId = _movieContext.Movies
+                var lastId = _context.Movies
                     .AsEnumerable()
                     .Where(m => m.ShowId != null && m.ShowId.StartsWith("s"))
                     .Select(m =>
@@ -115,8 +115,8 @@ namespace Intex.API.Controllers
                 Console.WriteLine("Assigned ShowId: " + movie.ShowId);
                 Console.WriteLine("Final Movie Object: " + System.Text.Json.JsonSerializer.Serialize(movie));
 
-                _movieContext.Movies.Add(movie);
-                _movieContext.SaveChanges();
+                _context.Movies.Add(movie);
+                _context.SaveChanges();
 
                 return CreatedAtAction(nameof(GetMovieById), new { id = movie.ShowId }, movie);
             }
@@ -130,7 +130,7 @@ namespace Intex.API.Controllers
         [HttpPut("updateMovie/{showId}")]
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
-            var existingMovie = _movieContext.Movies.FirstOrDefault(m => m.ShowId == showId);
+            var existingMovie = _context.Movies.FirstOrDefault(m => m.ShowId == showId);
             if (existingMovie == null)
             {
                 return NotFound(new { Message = $"Movie with ShowId {showId} not found." });
@@ -177,7 +177,7 @@ namespace Intex.API.Controllers
             existingMovie.TalkShowsTvComedies = updatedMovie.TalkShowsTvComedies;
             existingMovie.Thrillers = updatedMovie.Thrillers;
 
-            _movieContext.SaveChanges();
+            _context.SaveChanges();
 
             return Ok(new { Message = $"Movie with ShowId {showId} updated successfully." });
         }
@@ -185,14 +185,14 @@ namespace Intex.API.Controllers
         [HttpDelete("deleteMovie/{showId}")]
         public IActionResult DeleteMovie(string showId)
         {
-            var movie = _movieContext.Movies.FirstOrDefault(m => m.ShowId == showId);
+            var movie = _context.Movies.FirstOrDefault(m => m.ShowId == showId);
             if (movie == null)
             {
                 return NotFound(new { Message = $"Movie with ShowId {showId} not found." });
             }
 
-            _movieContext.Movies.Remove(movie);
-            _movieContext.SaveChanges();
+            _context.Movies.Remove(movie);
+            _context.SaveChanges();
 
             return Ok(new { Message = $"Movie with ShowId {showId} deleted successfully." });
         }
