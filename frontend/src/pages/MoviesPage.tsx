@@ -73,7 +73,7 @@ const MoviesPage: React.FC = () => {
   }, []);
 
   return (
-    <Container fluid className="px-4">
+    <Container fluid className="movies-page px-4">
       <div className="movies-controls mx-auto mb-4">
         <h2 className="text-center">Browse Movies</h2>
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />

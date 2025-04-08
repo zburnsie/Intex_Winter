@@ -25,7 +25,7 @@ const MovieCard: React.FC<MovieCardProps> = ({ title, imagePath }) => {
           width: '100%',
           height: 'auto',
           objectFit: 'cover',
-          borderRadius: 0,
+          borderRadius: '12px',
           display: 'block',
         }}
       />

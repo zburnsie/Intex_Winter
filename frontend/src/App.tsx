@@ -17,14 +17,20 @@ const App: React.FC = () => {
     <>
       {/* Hide nav bar on landing page */}
       {!isLanding && (
-        <nav className="bg-gray-900 text-white p-4 flex gap-4 text-sm">
-          <Link to="/" className="hover:underline">Home</Link>
-          <Link to="/adminpage" className="hover:underline">Admin</Link>
-          <Link to="/movies" className="hover:underline">Movies</Link>
-          <Link to="/login" className="hover:underline">Login</Link>
-          <Link to="/register" className="hover:underline">Register</Link>
-        </nav>
-      )}
+  <nav className="bg-black text-white px-8 py-4 flex items-center justify-between sticky top-0 z-50">
+    <div className="text-2xl font-extrabold tracking-tight text-red-600">
+      CINE<span className="text-white">NICHE</span>
+    </div>
+    <div className="flex gap-6 text-sm font-medium">
+      <Link to="/" className="hover:text-red-500 transition-colors">Home</Link>
+      <Link to="/adminpage" className="hover:text-red-500 transition-colors">Admin</Link>
+      <Link to="/movies" className="hover:text-red-500 transition-colors">Movies</Link>
+      <Link to="/login" className="hover:text-red-500 transition-colors">Login</Link>
+      <Link to="/register" className="hover:text-red-500 transition-colors">Register</Link>
+    </div>
+  </nav>
+)}
+
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
