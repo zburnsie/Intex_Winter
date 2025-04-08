@@ -88,4 +88,30 @@
   color: #e50914;
 }
 
+/* ========== SCROLL ANIMATIONS ========== */
 
+@keyframes scrollFast {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scrollSlow {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scrollFast {
+  animation: scrollFast 40s linear infinite;
+}
+
+.animate-scrollSlow {
+  animation: scrollSlow 60s linear infinite;
+}
