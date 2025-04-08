@@ -70,15 +70,7 @@ namespace Intex.API.Controllers
             var something = query
                 .OrderBy(m => m.Title)
                 .Skip((pageNum - 1) * pageSize)
-                .Take(100)
-                .ToList()
-                .Select(m => new
-                {
-                    m.Title,
-                    m.ShowId,
-                    Genre = GetFirstGenre(m),
-                    NormalizedTitle = NormalizeTitle(m.Title)
-                })
+                .Take(pageSize)
                 .ToList();
 
             var someObject = new
