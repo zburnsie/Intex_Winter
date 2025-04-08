@@ -23,6 +23,7 @@ const App: React.FC = () => {
           <Link to="/movies" className="hover:underline">Movies</Link>
           <Link to="/login" className="hover:underline">Login</Link>
           <Link to="/register" className="hover:underline">Register</Link>
+          <Link to="/privacy" className="hover:underline">Privacy Policy</Link>
         </nav>
       )}
 
