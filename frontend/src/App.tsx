@@ -1,13 +1,16 @@
 import React from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
+
 import LandingPage from './pages/Landing';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminMoviePage from './pages/AdminMoviePage';
 import MoviesPage from './pages/MoviesPage';
+
 const App: React.FC = () => {
   const location = useLocation();
   const isLanding = location.pathname === '/';
+
   return (
     <>
       {/* Hide nav bar on landing page */}
@@ -20,6 +23,7 @@ const App: React.FC = () => {
           <Link to="/register" className="hover:underline">Register</Link>
         </nav>
       )}
+
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
@@ -30,4 +34,6 @@ const App: React.FC = () => {
     </>
   );
 };
+
 export default App;
+
