@@ -5,6 +5,8 @@ import Pagination from "../components/Pagination";
 import NewMovieForm from "../components/NewMovieForm";
 import EditMovieForm from "../components/EditMovieForm";
 import { getGenresFromMovie } from "../components/genreUtils";
+import './AdminPage.css';
+
 
 
 const AdminMoviePage = () => {
@@ -55,7 +57,7 @@ const AdminMoviePage = () => {
 
     return (
         <>
-        <div className="container-fluid mt-4">
+        <div className="container-fluid">
             <div className="row">
                 <div className="col px-3">
                     <h1 className="text-center">Manage Content</h1>
