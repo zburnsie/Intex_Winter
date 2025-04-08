@@ -6,10 +6,11 @@ import RotatingPoster from "../components/RotatingPoster";
 
 const LandingPage = () => {
   const [posterTitles, setPosterTitles] = useState<string[]>([]);
-  const baseUrl = "https://localhost:5000";
+  const posterListApi = "https://localhost:5000/api/posters"; // Your backend still provides the list
+  const baseImageUrl = "https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/";
 
   useEffect(() => {
-    fetch(`${baseUrl}/api/posters`)
+    fetch(posterListApi)
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
         return res.json();
@@ -71,13 +72,13 @@ const LandingPage = () => {
       </section>
 
       {/* Featured Films Carousel */}
-      <FeaturedCarousel posters={posterTitles.slice(0, 12)} />
+      <FeaturedCarousel posters={posterTitles} baseUrl={baseImageUrl} />
 
       {/* Explore Our Collection – Rotating Poster */}
       <section className="bg-black py-20 px-6 text-center">
         <h3 className="text-3xl font-semibold mb-10">Explore Our Collection</h3>
         <div className="flex justify-center items-center">
-          {posterTitles.length > 0 && <RotatingPoster poster={posterTitles} />}
+          {posterTitles.length > 0 && <RotatingPoster poster={posterTitles} baseUrl={baseImageUrl} />}
         </div>
       </section>
 

@@ -5,12 +5,12 @@ import PosterCard from '../components/PosterCard';
 
 type Props = {
   posters: string[];
+  baseUrl: string;
 };
 
-const FeaturedCarousel = ({ posters }: Props) => {
+const FeaturedCarousel = ({ posters, baseUrl }: Props) => {
   const scrollContainer = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const baseUrl = 'https://localhost:5000';
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainer.current) {
@@ -65,7 +65,7 @@ const FeaturedCarousel = ({ posters }: Props) => {
           >
             {posters.map((filename, i) => {
               const encoded = encodeURIComponent(filename);
-              const imageSrc = `${baseUrl}/Movie%20Posters/${encoded}`;
+              const imageSrc = `${baseUrl}${encoded}`;
               const altText = filename.replace(/\.[^/.]+$/, '');
 
               return (
