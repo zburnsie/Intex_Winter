@@ -7,7 +7,9 @@ import RegisterPage from './pages/RegisterPage';
 import AdminMoviePage from './pages/AdminMoviePage';
 import MoviesPage from './pages/MoviesPage';
 import PrivacyPage from './pages/PrivacyPage';
+import MovieDetailPage from './pages/MovieDetailPage';
 import './App.css';
+
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -38,12 +40,14 @@ const App: React.FC = () => {
         <Route path="/adminpage" element={<AdminMoviePage />} />
         <Route path="/movies" element={<MoviesPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/movie/:showId" element={<MovieDetailPage />} /> {/* 👈 new route */}
       </Routes>
     </>
   );
 };
 
 export default App;
+
 
 
 

@@ -38,11 +38,19 @@ const MoviesPage: React.FC = () => {
           .map((movie: any) => {
             const normalizedTitle = normalizeTitleForPath(movie.title);
             const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
+          
+            // Fix just this one title
+            const cleanTitle = movie.title === "#AnneFrank - Parallel Stories"
+              ? "AnneFrank - Parallel Stories"
+              : movie.title;
+          
             return {
               ...movie,
+              title: cleanTitle,
               imagePath,
             };
           });
+          
           
 
         setMovies(filtered);
@@ -82,7 +90,12 @@ const MoviesPage: React.FC = () => {
       <Row className="gx-2 gy-3">
         {movies.map((movie) => (
           <Col key={movie.title} xs={6} sm={4} md={3} lg={2} className="d-flex">
-            <MovieCard title={movie.title} imagePath={movie.imagePath} />
+            <MovieCard
+              title={movie.title}
+              imagePath={movie.imagePath}
+              showId={movie.showId}
+            />
+
           </Col>
         ))}
       </Row>
