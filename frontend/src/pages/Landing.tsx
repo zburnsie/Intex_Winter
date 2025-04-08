@@ -7,24 +7,34 @@ import RotatingPoster from '../components/RotatingPoster';
 const LandingPage = () => {
   const [posterTitles, setPosterTitles] = useState<string[]>([]);
   const [scrolled, setScrolled] = useState(false);
+  const baseImageUrl = 'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
 
-  const posterListApi = 'https://localhost:5000/api/posters';
-  const baseImageUrl =
-    'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
+  const normalizeTitleForPath = (title: string): string => {
+    return title
+      .normalize("NFD")
+      .replace(/\p{Diacritic}/gu, '')
+      .replace(/[^\w\s]/gu, '')
+      .trim();
+  };
 
   useEffect(() => {
-    fetch(posterListApi)
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-        return res.json();
-      })
-      .then((data) => {
-        const randomPosters = [...data].sort(() => 0.5 - Math.random()).slice(0, 12);
-        setPosterTitles(randomPosters);
-      })
-      .catch((error) => {
+    const fetchPosters = async () => {
+      try {
+        const response = await fetch('http://localhost:4000/api/movie/AllMovies');
+        const data = await response.json();
+
+        const posters = data.movies
+          .map((movie: any) => `${normalizeTitleForPath(movie.title)}.jpg`)
+          .filter((value: string, index: number, self: string[]) => self.indexOf(value) === index) // remove duplicates
+          .slice(0, 12);
+
+        setPosterTitles(posters);
+      } catch (error) {
         console.error('Error fetching posters:', error);
-      });
+      }
+    };
+
+    fetchPosters();
   }, []);
 
   useEffect(() => {
@@ -43,9 +53,7 @@ const LandingPage = () => {
           scrolled ? 'bg-black/90 py-3 shadow-md' : 'bg-black/60 py-5'
         } backdrop-blur-md px-8 flex justify-between items-center`}
       >
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
-          CineNiche
-        </h1>
+        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">CineNiche</h1>
         <div className="space-x-3">
           <Link to="/login">
             <button className="text-white border border-white px-4 py-2 rounded-md hover:bg-white hover:text-black transition">

@@ -9,7 +9,6 @@ import MoviesPage from './pages/MoviesPage';
 
 const App: React.FC = () => {
   const location = useLocation();
-
   const isLanding = location.pathname === '/';
 
   return (
@@ -37,3 +36,4 @@ const App: React.FC = () => {
 };
 
 export default App;
+
