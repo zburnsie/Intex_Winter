@@ -8,25 +8,32 @@ interface MovieCardProps {
 
 const MovieCard: React.FC<MovieCardProps> = ({ title, imagePath }) => {
   return (
-    <Card className="movie-card shadow-sm h-100 border-0 rounded-3">
-      <div className="image-wrapper">
-        <Card.Img
-          variant="top"
-          src={imagePath}
-          onError={(e) => {
-            e.currentTarget.onerror = null; // Prevent infinite loop if default fails
-            e.currentTarget.src = '/default-poster.jpg';
-          }}
-          className="movie-img"
-        />
-      </div>
-      <Card.Body className="p-2 text-center">
-        <Card.Title className="fs-6 mb-0">{title}</Card.Title>
-      </Card.Body>
+    <Card
+      className="shadow-sm border-0"
+      style={{ margin: 0, padding: 0, background: 'none' }}
+      title={title} // <-- Tooltip
+    >
+      <Card.Img
+        variant="top"
+        src={imagePath}
+        alt={title}
+        onError={(e) => {
+          e.currentTarget.onerror = null;
+          e.currentTarget.src = '/default-poster.jpg';
+        }}
+        style={{
+          width: '100%',
+          height: 'auto',
+          objectFit: 'cover',
+          borderRadius: 0,
+          display: 'block',
+        }}
+      />
     </Card>
   );
 };
 
 export default MovieCard;
+
 
 
