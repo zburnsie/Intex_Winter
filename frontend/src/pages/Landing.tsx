@@ -3,11 +3,31 @@ import { Link } from 'react-router-dom';
 import TestimonialsSection from '../components/TestimonialsSection';
 import FeaturedCarousel from '../components/FeaturedCarousel';
 import RotatingPoster from '../components/RotatingPoster';
+import './Landing.css';
+import driveHero from '../images/drive-hero.webp';
+import lotrImage from '../images/lotr.jpg';
+import perfectDays from '../images/perfect-days.jpeg';
+import babyDriver from '../images/baby-driver.jpg';
+import severance from '../images/severance.jpg';
+import keira from '../images/keira.jpg';
+
+const backgroundImages = [
+  driveHero,
+  lotrImage,
+  perfectDays,
+  babyDriver,
+  severance,
+  keira,
+];
 
 const LandingPage = () => {
   const [posterTitles, setPosterTitles] = useState<string[]>([]);
-  const [scrolled, setScrolled] = useState(false);
-  const baseImageUrl = 'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
+
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  const baseImageUrl =
+    'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
+
 
   const normalizeTitleForPath = (title: string): string => {
     return title
@@ -25,7 +45,12 @@ const LandingPage = () => {
 
         const posters = data.movies
           .map((movie: any) => `${normalizeTitleForPath(movie.title)}.jpg`)
-          .filter((value: string, index: number, self: string[]) => self.indexOf(value) === index) // remove duplicates
+
+          .filter(
+            (value: string, index: number, self: string[]) =>
+              self.indexOf(value) === index
+          )
+          .sort(() => Math.random() - 0.5)
           .slice(0, 12);
 
         setPosterTitles(posters);
@@ -38,76 +63,77 @@ const LandingPage = () => {
   }, []);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
-    };
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prev) => (prev + 1) % backgroundImages.length);
+    }, 5000); // Change image every 5 seconds
+
+    return () => clearInterval(interval);
   }, []);
 
   return (
-    <div className="min-h-screen w-full overflow-x-hidden bg-black text-white font-sans">
-      {/* Header */}
-      <header
-        className={`fixed top-0 w-full z-50 transition-all duration-300 ${
-          scrolled ? 'bg-black/90 py-3 shadow-md' : 'bg-black/60 py-5'
-        } backdrop-blur-md px-8 flex justify-between items-center`}
-      >
-        <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">CineNiche</h1>
-        <div className="space-x-3">
-          <Link to="/login">
-            <button className="text-white border border-white px-4 py-2 rounded-md hover:bg-white hover:text-black transition">
-              Log In
-            </button>
-          </Link>
-          <Link to="/register">
-            <button className="bg-red-600 px-4 py-2 rounded-md hover:bg-red-700 transition">
-              Join Now
-            </button>
-          </Link>
-        </div>
-      </header>
 
-      {/* Hero */}
-      <section
-        className="h-screen flex flex-col items-center justify-center text-center px-4 bg-cover bg-center relative pt-32"
-        style={{ backgroundImage: `url('/images/kanopy-style-hero.jpg')` }}
-      >
-        <div className="absolute inset-0 bg-black/60" />
-        <div className="relative z-10 max-w-2xl">
-          <h2 className="text-5xl font-extrabold mb-6 leading-tight">
+    <div className="landing-container">
+      <section className="hero-section">
+        {/* Fade-enabled background layers */}
+        {backgroundImages.map((bg, index) => (
+          <div
+            key={index}
+            className={`hero-background ${
+              index === currentImageIndex ? 'active' : ''
+            }`}
+            style={{ backgroundImage: `url(${bg})` }}
+          />
+        ))}
+
+        {/* Dark gradient overlay */}
+        <div className="hero-overlay" />
+
+        {/* Hero text content */}
+        <div className="hero-content">
+          <h1 className="hero-title">CineNiche</h1>
+          <h1 className="hero-subtitle">
             Discover Bold, Brilliant, & Hidden Films
-          </h2>
-          <p className="text-lg text-gray-300 max-w-md mx-auto">
-            Stream award-winning documentaries, indie gems, and global cinema, anytime.
+          </h1>
+          <p className="hero-description">
+            Stream award-winning documentaries, indie gems, and global cinema,
+            anytime.
+
           </p>
+          <div className="hero-buttons">
+            <Link to="/register">
+              <button className="join-button">Join Now</button>
+            </Link>
+            <Link to="/login">
+              <button className="login-button">Log In</button>
+            </Link>
+          </div>
         </div>
       </section>
 
-      {/* Featured Films Carousel */}
-      <FeaturedCarousel posters={posterTitles} baseUrl={baseImageUrl} />
+      <section className="carousel-wrapper">
+        <FeaturedCarousel posters={posterTitles} baseUrl={baseImageUrl} />
+      </section>
 
-      {/* Explore Our Collection – Rotating Poster */}
-      <section className="bg-black py-20 px-6 text-center">
-        <h3 className="text-3xl font-semibold mb-10">Explore Our Collection</h3>
-        <div className="flex justify-center items-center">
+      <section className="collection-section">
+        <h3>Explore Our Collection</h3>
+        <div className="poster-wrapper">
           {posterTitles.length > 0 && (
             <RotatingPoster poster={posterTitles} baseUrl={baseImageUrl} />
           )}
         </div>
       </section>
 
-      {/* Testimonials */}
       <TestimonialsSection />
 
-      {/* Footer */}
-      <footer className="py-8 bg-black text-center text-gray-400 text-sm">
+      <footer className="footer">
         <p>&copy; 2025 CineNiche. All rights reserved.</p>
-        <div className="mt-2 space-x-4">
-          <a href="#" className="hover:underline">About</a>
-          <a href="#" className="hover:underline">Help Center</a>
-          <a href="#" className="hover:underline">Privacy</a>
-          <a href="#" className="hover:underline">Terms</a>
+
+        <div className="footer-links">
+          <a href="#">About</a>
+          <a href="#">Help Center</a>
+          <a href="#">Privacy</a>
+          <a href="#">Terms</a>
+
         </div>
       </footer>
     </div>
