@@ -1,6 +1,4 @@
-import { Rating } from "../types/Rating";
 import { Movie } from "../types/Movie";
-import { User} from "../types/User";
 
 interface FetchMoviesResponse {
     movies: Movie[];

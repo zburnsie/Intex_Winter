@@ -26,8 +26,8 @@ dist-ssr
 
 # Visual Studio
 .vs/
-bin/
-obj/
+**/bin/
+**/obj/
 *.user
 
 # Environment variables
