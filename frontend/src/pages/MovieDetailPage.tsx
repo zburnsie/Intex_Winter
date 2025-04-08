@@ -43,9 +43,12 @@ const MovieDetailPage: React.FC = () => {
         const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
 
         setMovie({
-          title: data.title === "#AnneFrank - Parallel Stories" 
-            ? "AnneFrank - Parallel Stories" 
-            : data.title || "Unknown",
+          title:
+            data.title === "#AnneFrank - Parallel Stories"
+              ? "AnneFrank - Parallel Stories"
+              : data.title === "#Selfie"
+              ? "Selfie"
+              : data.title || "Unknown",
           director: data.director || '—',
           cast: data.cast || '—',
           country: data.country || '—',
@@ -53,9 +56,8 @@ const MovieDetailPage: React.FC = () => {
           rating: data.rating || '—',
           duration: data.duration || '—',
           description: data.description || 'No description available.',
-          imagePath: imagePath  // ✅ this is the one you just built from normalizedTitle
+          imagePath: imagePath
         });
-        
         
       } catch (err) {
         setError((err as Error).message);
