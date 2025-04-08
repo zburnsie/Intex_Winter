@@ -31,7 +31,6 @@ const App: React.FC = () => {
   </nav>
 )}
 
-
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
