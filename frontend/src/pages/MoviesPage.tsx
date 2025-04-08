@@ -18,7 +18,6 @@ const MoviesPage: React.FC = () => {
       .normalize("NFD") // decompose unicode
       .replace(/\p{Diacritic}/gu, '') // remove diacritics
       .replace(/[^\w\s]/gu, '') // remove non-alphanumeric but preserve whitespace
-      // don't collapse spaces, leave any double spaces intact
       .trim();
   };
 
@@ -36,22 +35,20 @@ const MoviesPage: React.FC = () => {
           })
           .slice(0, visibleCount)
           .map((movie: any) => {
-            const normalizedTitle = normalizeTitleForPath(movie.title);
-            const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
-          
-            // Fix just this one title
-            const cleanTitle = movie.title === "#AnneFrank - Parallel Stories"
+            // Handle the edge case where we want to remove '#' only for AnneFrank title
+            const cleanedTitle = movie.title === "#AnneFrank - Parallel Stories"
               ? "AnneFrank - Parallel Stories"
               : movie.title;
-          
+
+            const normalizedTitle = normalizeTitleForPath(cleanedTitle);
+            const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
+
             return {
               ...movie,
-              title: cleanTitle,
-              imagePath,
+              title: cleanedTitle,
+              imagePath
             };
           });
-          
-          
 
         setMovies(filtered);
       } catch (error) {
@@ -95,7 +92,6 @@ const MoviesPage: React.FC = () => {
               imagePath={movie.imagePath}
               showId={movie.showId}
             />
-
           </Col>
         ))}
       </Row>
@@ -104,3 +100,4 @@ const MoviesPage: React.FC = () => {
 };
 
 export default MoviesPage;
+
