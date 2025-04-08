@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import './LoginPage.css';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
@@ -6,20 +7,18 @@ const LoginPage = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Implement login logic here
     console.log('Logging in with:', email, password);
   };
 
   return (
-    <div className="container py-5">
-      <h1 className="display-4 text-center mb-4">Login</h1>
-      <div className="mx-auto" style={{ maxWidth: '400px' }}>
-        <form onSubmit={handleSubmit} className="border p-4 rounded shadow-sm bg-light">
+    <div className="login-page-container">
+      <h1 className="login-title">Login</h1>
+      <div className="login-form-wrapper">
+        <form onSubmit={handleSubmit} className="login-form">
           <div className="mb-3">
-            <label htmlFor="email" className="form-label">Email address</label>
             <input
               type="email"
-              className="form-control"
+              className="form-control custom-input"
               id="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
@@ -28,10 +27,9 @@ const LoginPage = () => {
             />
           </div>
           <div className="mb-3">
-            <label htmlFor="password" className="form-label">Password</label>
             <input
               type="password"
-              className="form-control"
+              className="form-control custom-input"
               id="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
@@ -41,8 +39,8 @@ const LoginPage = () => {
           </div>
           <button type="submit" className="btn btn-primary w-100">Log In</button>
         </form>
-        <p className="mt-3 text-center">
-          Don't have an account? <a href="/create-account">Register here</a>
+        <p className="mt-3 text-center login-register-link">
+          Don't have an account? <a href="/register">Register here</a>
         </p>
       </div>
     </div>
@@ -50,3 +48,6 @@ const LoginPage = () => {
 };
 
 export default LoginPage;
+
+
+

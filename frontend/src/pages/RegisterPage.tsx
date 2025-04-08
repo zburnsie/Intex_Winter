@@ -1,35 +1,71 @@
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-// import { Button } from "@/components/ui/button";
+import './LoginPage.css';
 
 const RegisterPage = () => {
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    console.log('Registering:', { fullName, email, password, confirmPassword });
+  };
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 px-4">
-      <div className="max-w-md w-full bg-white p-8 rounded-lg shadow-md">
-        <h2 className="text-2xl font-bold text-center mb-6">Create Your CineNiche Account</h2>
-        <form className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium mb-1">Full Name</label>
-            <input type="text" className="w-full border border-gray-300 p-2 rounded" required />
+    <div className="login-page-container">
+      <h1 className="login-title">Create Your CineNiche Account</h1>
+      <div className="login-form-wrapper">
+        <form onSubmit={handleSubmit} className="login-form">
+          <div className="mb-3">
+            <input
+              type="text"
+              className="form-control custom-input"
+              id="fullName"
+              value={fullName}
+              onChange={(e) => setFullName(e.target.value)}
+              placeholder="Enter full name"
+              required
+            />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Email</label>
-            <input type="email" className="w-full border border-gray-300 p-2 rounded" required />
+          <div className="mb-3">
+            <input
+              type="email"
+              className="form-control custom-input"
+              id="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter email"
+              required
+            />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input type="password" className="w-full border border-gray-300 p-2 rounded" required />
+          <div className="mb-3">
+            <input
+              type="password"
+              className="form-control custom-input"
+              id="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter password"
+              required
+            />
           </div>
-          <div>
-            <label className="block text-sm font-medium mb-1">Confirm Password</label>
-            <input type="password" className="w-full border border-gray-300 p-2 rounded" required />
+          <div className="mb-3">
+            <input
+              type="password"
+              className="form-control custom-input"
+              id="confirmPassword"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Confirm password"
+              required
+            />
           </div>
-          {/* Replace with <Button> if using ShadCN */}
-          <button type="submit" className="w-full bg-black text-white py-2 rounded hover:bg-gray-800 transition">
-            Create Account
-          </button>
+          <button type="submit" className="btn btn-primary w-100">Create Account</button>
         </form>
-        <p className="text-center text-sm mt-4">
-          Already have an account? <Link to="/login" className="text-blue-600 hover:underline">Log in</Link>
+        <p className="login-register-link">
+          Already have an account? <Link to="/login">Log in</Link>
         </p>
       </div>
     </div>
@@ -37,3 +73,5 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
+
+

@@ -6,24 +6,28 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminMoviePage from './pages/AdminMoviePage';
 import MoviesPage from './pages/MoviesPage';
-import PrivacyPage from "./pages/PrivacyPage";
+import PrivacyPage from './pages/PrivacyPage';
+import './App.css';
 
 const App: React.FC = () => {
   const location = useLocation();
   const isLanding = location.pathname === '/';
 
   return (
-
     <>
       {/* Hide nav bar on landing page */}
       {!isLanding && (
-        <nav className="bg-gray-900 text-white p-4 flex gap-4 text-sm">
-          <Link to="/" className="hover:underline">Home</Link>
-          <Link to="/adminpage" className="hover:underline">Admin</Link>
-          <Link to="/movies" className="hover:underline">Movies</Link>
-          <Link to="/login" className="hover:underline">Login</Link>
-          <Link to="/register" className="hover:underline">Register</Link>
-          <Link to="/privacy" className="hover:underline">Privacy Policy</Link>
+        <nav className="custom-navbar">
+          <Link to="/" className="navbar-logo">
+            <span className="logo-red">CINE</span><span className="logo-white">NICHE</span>
+          </Link>
+          <div className="navbar-links">
+            <Link to="/">Home</Link>
+            <Link to="/adminpage">Admin</Link>
+            <Link to="/movies">Movies</Link>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </div>
         </nav>
       )}
 
@@ -36,9 +40,10 @@ const App: React.FC = () => {
         <Route path="/privacy" element={<PrivacyPage />} />
       </Routes>
     </>
-
   );
 };
 
 export default App;
+
+
 
