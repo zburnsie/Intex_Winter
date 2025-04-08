@@ -8,8 +8,6 @@ import ItemList from './ItemList';
 import AdminMoviePage from './pages/AdminMoviePage';
 import MoviesPage from './pages/MoviesPage';
 import PrivacyPage from "./pages/PrivacyPage";
-import CreateAccountPage from "./pages/CreateAccountPage";
-import LoginPage from "./pages/LoginPage";
 
 const App: React.FC = () => {
   return (
@@ -20,6 +18,7 @@ const App: React.FC = () => {
       <Route path="/itemlist" element={<ItemList />} />
       <Route path="/adminpage" element={<AdminMoviePage />} />
       <Route path="/movies" element={<MoviesPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
     </Routes>
   );
 };
