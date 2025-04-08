@@ -4,9 +4,10 @@ import PosterCard from '../components/PosterCard';
 
 type Props = {
   poster: string[];
+  baseUrl: string;
 };
 
-const RotatingPoster = ({ poster }: Props) => {
+const RotatingPoster = ({ poster, baseUrl }: Props) => {
   const [index, setIndex] = useState(0);
   const navigate = useNavigate();
 
@@ -18,9 +19,8 @@ const RotatingPoster = ({ poster }: Props) => {
   }, [poster.length]);
 
   const current = poster[index];
-  const imageSrc = `https://localhost:5000/Movie%20Posters/${encodeURIComponent(
-    current
-  )}`;
+  const encoded = encodeURIComponent(current);
+  const imageSrc = `${baseUrl}${encoded}`;
   const altText = current.replace(/\.[^/.]+$/, '');
 
   return (

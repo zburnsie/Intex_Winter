@@ -5,12 +5,12 @@ import PosterCard from '../components/PosterCard';
 
 type Props = {
   posters: string[];
+  baseUrl: string;
 };
 
-const FeaturedCarousel = ({ posters }: Props) => {
+const FeaturedCarousel = ({ posters, baseUrl }: Props) => {
   const scrollContainer = useRef<HTMLDivElement>(null);
   const [isHovered, setIsHovered] = useState(false);
-  const baseUrl = 'https://localhost:5000';
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollContainer.current) {
@@ -33,39 +33,24 @@ const FeaturedCarousel = ({ posters }: Props) => {
 
   return (
     <section
-      className="bg-black text-white py-16 px-4 relative w-full overflow-x-hidden"
+      className="bg-black text-white py-20 px-4 relative w-full overflow-x-hidden"
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
-      <div className="max-w-7xl mx-auto relative">
-        <div className="flex justify-between items-center mb-6 px-2">
-          <h3 className="text-3xl font-bold">Featured Films</h3>
-          <div className="space-x-2 hidden md:flex">
-            <button
-              onClick={() => scroll('left')}
-              className="p-2 bg-white/10 rounded hover:bg-white/20"
-            >
-              <ChevronLeft />
-            </button>
-            <button
-              onClick={() => scroll('right')}
-              className="p-2 bg-white/10 rounded hover:bg-white/20"
-            >
-              <ChevronRight />
-            </button>
-          </div>
-        </div>
+      <div className="max-w-7xl mx-auto">
+        <h3 className="text-3xl font-bold mb-6 px-2">Featured Films</h3>
 
         {/* Scrollable Poster Row */}
         <div className="relative">
+          {/* Carousel Items */}
           <div
             ref={scrollContainer}
-            className="flex gap-4 overflow-x-auto scroll-smooth px-2 no-scrollbar relative z-10"
+            className="flex gap-4 overflow-x-auto scroll-smooth px-2 no-scrollbar"
             style={{ scrollbarWidth: 'none' }}
           >
             {posters.map((filename, i) => {
               const encoded = encodeURIComponent(filename);
-              const imageSrc = `${baseUrl}/Movie%20Posters/${encoded}`;
+              const imageSrc = `${baseUrl}${encoded}`;
               const altText = filename.replace(/\.[^/.]+$/, '');
 
               return (
@@ -87,9 +72,27 @@ const FeaturedCarousel = ({ posters }: Props) => {
             })}
           </div>
 
-          {/* Left & Right Gradient Overlays */}
-          <div className="absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-black to-transparent pointer-events-none z-20" />
-          <div className="absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-black to-transparent pointer-events-none z-20" />
+          {/* Arrows on Hover */}
+          {isHovered && (
+            <>
+              <button
+                onClick={() => scroll('left')}
+                className="absolute left-2 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/50 hover:bg-black/80 transition"
+              >
+                <ChevronLeft className="text-white w-6 h-6" />
+              </button>
+              <button
+                onClick={() => scroll('right')}
+                className="absolute right-2 top-1/2 -translate-y-1/2 z-20 p-2 rounded-full bg-black/50 hover:bg-black/80 transition"
+              >
+                <ChevronRight className="text-white w-6 h-6" />
+              </button>
+            </>
+          )}
+
+          {/* Gradient Fades */}
+          <div className="absolute left-0 top-0 h-full w-12 bg-gradient-to-r from-black to-transparent pointer-events-none z-10" />
+          <div className="absolute right-0 top-0 h-full w-12 bg-gradient-to-l from-black to-transparent pointer-events-none z-10" />
         </div>
       </div>
     </section>
