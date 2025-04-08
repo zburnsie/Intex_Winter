@@ -7,8 +7,6 @@ import EditMovieForm from "../components/EditMovieForm";
 import { getGenresFromMovie } from "../components/genreUtils";
 import './AdminPage.css';
 
-
-
 const AdminMoviePage = () => {
     const [movies, setMovies] = useState<Movie[]>([]);
     const [error, setError] = useState<string | null>(null);
@@ -19,6 +17,9 @@ const AdminMoviePage = () => {
     const [showForm, setShowForm] = useState<boolean>(false); // State to control the visibility of the form for adding a new movie
     const [editingMovie, setEditingMovie] = useState<Movie | null>(null); // State to track the movie being edited
     const [searchTerm, setSearchTerm] = useState<string>(""); // State for the search term
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+    const [movieToDelete, setMovieToDelete] = useState<Movie | null>(null);
+    const [showSuccessModal, setShowSuccessModal] = useState(false); // New state for success modal
 
     const loadMovies = async () => {
         try {
@@ -36,19 +37,20 @@ const AdminMoviePage = () => {
         loadMovies();
     }, [pageSize, pageNum]);
 
-    const handleDelete = async (showId: string) => {
-        const confirmDelete = window.confirm("Are you sure you want to delete this movie?");
-        if (!confirmDelete) return;
-        
+    const confirmDelete = async () => {
+        if (!movieToDelete) return;
+    
         try {
-            await deleteMovie(showId); // Call the API to delete the movie
-            setMovies(movies.filter((m) => m.showId !== showId)); // Update the state to remove the deleted movie
-            alert("Movie deleted successfully.");
+            await deleteMovie(movieToDelete.showId!);
+            setMovies(movies.filter((m) => m.showId !== movieToDelete.showId));
+            setShowSuccessModal(true); // Show success modal instead of alert
         } catch (error) {
-            // Handle error
             console.error("Failed to delete movie:", (error as Error).message);
             setError("Failed to delete the movie. Please try again.");
             alert("Failed to delete the movie.");
+        } finally {
+            setShowDeleteModal(false);
+            setMovieToDelete(null);
         }
     };
 
@@ -191,7 +193,10 @@ const AdminMoviePage = () => {
                                                             Edit
                                                         </button>
                                                         <button
-                                                            onClick={() => handleDelete(movie.showId!)}
+                                                            onClick={() => {
+                                                                setMovieToDelete(movie);
+                                                                setShowDeleteModal(true);
+                                                            }}
                                                             className="btn btn-danger btn-sm"
                                                         >
                                                             Delete
@@ -227,6 +232,47 @@ const AdminMoviePage = () => {
                 </div>
             </div>
         </div>
+        {showDeleteModal && movieToDelete && (
+            <div className="modal fade show d-block" tabIndex={-1} role="dialog" style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}>
+                <div className="modal-dialog" role="document" onClick={() => setShowDeleteModal(false)}>
+                    <div className="modal-content text-black" style={{ backgroundColor: "#fff" }} onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h5 className="modal-title">Confirm Deletion</h5>
+                            <button type="button" className="btn-close" onClick={() => setShowDeleteModal(false)}></button>
+                        </div>
+                        <div className="modal-body text-black" style={{ color: "#000", fontSize: "1rem", minHeight: "2rem", lineHeight: "1.5", whiteSpace: "normal" }}>
+                            <p className="m-0" style={{ color: "#000" }}>
+                                Are you sure you want to delete <strong>{movieToDelete?.title || 'this movie'}</strong>?
+                            </p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>Cancel</button>
+                            <button type="button" className="btn btn-danger" onClick={confirmDelete}>Delete</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
+        {showSuccessModal && (
+            <div className="modal fade show d-block" tabIndex={-1} role="dialog" style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}>
+                <div className="modal-dialog" role="document" onClick={() => setShowSuccessModal(false)}>
+                    <div className="modal-content text-black" style={{ backgroundColor: "#fff" }} onClick={(e) => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h5 className="modal-title">Success</h5>
+                            <button type="button" className="btn-close" onClick={() => setShowSuccessModal(false)}></button>
+                        </div>
+                        <div className="modal-body text-black" style={{ color: "#000", fontSize: "1rem", minHeight: "2rem", lineHeight: "1.5", whiteSpace: "normal" }}>
+                            <p className="m-0" style={{ color: "#000" }}>
+                                Movie deleted successfully.
+                            </p>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-primary" onClick={() => setShowSuccessModal(false)}>OK</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        )}
         </>
     );
 }
