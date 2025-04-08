@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import TestimonialsSection from "./components/TestimonialsSection";
-import FeaturedCarousel from "./components/FeaturedCarousel";
-import RotatingPoster from "./components/RotatingPoster";
+import TestimonialsSection from "../components/TestimonialsSection";
+import FeaturedCarousel from "../components/FeaturedCarousel";
+import RotatingPoster from "../components/RotatingPoster";
 
 const LandingPage = () => {
   const [posterTitles, setPosterTitles] = useState<string[]>([]);

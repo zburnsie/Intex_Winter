@@ -36,6 +36,7 @@ if (app.Environment.IsDevelopment())
 app.UseCors(allowedOrigins); // Enable CORS
 app.UseAuthorization();
 app.MapControllers();
+app.UseStaticFiles();
 
 
 
