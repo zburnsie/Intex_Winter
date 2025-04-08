@@ -45,3 +45,5 @@ dist-ssr
 # Ignore Movie Posters folder
 # Ignore movie posters folder
 **/Movie Posters/
+.azure
+infra/

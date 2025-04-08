@@ -17,7 +17,7 @@ const Pagination = ({currentPage, totalPages, pageSize, onPageChange, onPageSize
 
     const renderPageButtons = () => {
         const pages = [];
-        const maxDisplayed = 5;
+        // const maxDisplayed = 5;
         const sidePages = 2;
 
         const startPage = Math.max(2, currentPage - sidePages);
