@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 
 import LandingPage from './pages/Landing';
 import LoginPage from './pages/LoginPage';
@@ -9,14 +9,14 @@ import MoviesPage from './pages/MoviesPage';
 
 const App: React.FC = () => {
   return (
-    <div>
-      {/* Optional Navigation Links - good for dev testing */}
-      <nav style={{ padding: '1rem', background: '#eee', marginBottom: '1rem', display: 'flex', gap: '1rem' }}>
-        <Link to="/">Home</Link>
-        <Link to="/adminpage">Admin Movie Page</Link>
-        <Link to="/movies">Browse Movies</Link>
-        <Link to="/login">Login</Link>
-        <Link to="/register">Register</Link>
+    <Router>
+      {/* Optional Dev Navigation */}
+      <nav className="bg-gray-900 text-white p-4 flex gap-4 text-sm">
+        <Link to="/" className="hover:underline">Home</Link>
+        <Link to="/adminpage" className="hover:underline">Admin</Link>
+        <Link to="/movies" className="hover:underline">Movies</Link>
+        <Link to="/login" className="hover:underline">Login</Link>
+        <Link to="/register" className="hover:underline">Register</Link>
       </nav>
 
       <Routes>
@@ -26,9 +26,8 @@ const App: React.FC = () => {
         <Route path="/adminpage" element={<AdminMoviePage />} />
         <Route path="/movies" element={<MoviesPage />} />
       </Routes>
-    </div>
+    </Router>
   );
 };
 
 export default App;
-
