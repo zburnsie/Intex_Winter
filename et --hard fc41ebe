@@ -1,0 +1,32 @@
+[33m2ec7fd6[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mLukeDev[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m HEAD@{0}: pull origin main: Fast-forward
+[33mfc41ebe[m[33m ([m[1;31morigin/LukeDev[m[33m)[m HEAD@{1}: commit: now using ML
+[33m123503f[m HEAD@{2}: commit: trying without pics
+[33mcf3671c[m HEAD@{3}: commit: trying without the movies
+[33m00512cd[m HEAD@{4}: commit: commit
+[33md4e2c2a[m HEAD@{5}: commit: commit
+[33ma2d9faf[m HEAD@{6}: checkout: moving from main to LukeDev
+[33ma2d9faf[m HEAD@{7}: checkout: moving from LukeDev to main
+[33m2a086de[m HEAD@{8}: checkout: moving from main to LukeDev
+[33m2a086de[m HEAD@{9}: checkout: moving from LukeDev to main
+[33mf5e2bda[m HEAD@{10}: commit (merge): Resolve merge conflicts
+[33m2c902d4[m HEAD@{11}: commit: working?
+[33mabc8a78[m HEAD@{12}: reset: moving to abc8a78e4dce6abb118a7aec1de00d8a4afdf4d6
+[33m021cef4[m HEAD@{13}: reset: moving to 021cef4e2415bcf78fbd581c2db504832ad705e6
+[33maedc761[m HEAD@{14}: reset: moving to aedc761f7a07c9002172a7c56aa1cff09fdec303
+[33mc7b2cad[m HEAD@{15}: commit: tryagain
+[33maedc761[m HEAD@{16}: commit: try again
+[33m021cef4[m HEAD@{17}: commit: test
+[33mabc8a78[m HEAD@{18}: reset: moving to HEAD~1
+[33m360cb46[m HEAD@{19}: reset: moving to HEAD~1
+[33mfcaa7f0[m HEAD@{20}: commit: LandingProgress
+[33m360cb46[m HEAD@{21}: commit: landing
+[33mabc8a78[m HEAD@{22}: commit: Clean up build artifacts and update .gitignore
+[33m903fdb0[m HEAD@{23}: checkout: moving from main to LukeDev
+[33m903fdb0[m HEAD@{24}: checkout: moving from LukeDev to main
+[33m5c3d8e5[m HEAD@{25}: commit: Test Landing
+[33m338f96b[m HEAD@{26}: checkout: moving from main to LukeDev
+[33m338f96b[m HEAD@{27}: checkout: moving from LukeDev to main
+[33m60c82fd[m HEAD@{28}: checkout: moving from main to LukeDev
+[33m338f96b[m HEAD@{29}: checkout: moving from LukeDev to main
+[33m60c82fd[m HEAD@{30}: checkout: moving from main to LukeDev
+[33m60c82fd[m HEAD@{31}: clone: from https://github.com/zburnsie/Intex_Winter.git
