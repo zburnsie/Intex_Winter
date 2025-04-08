@@ -6,12 +6,14 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminMoviePage from './pages/AdminMoviePage';
 import MoviesPage from './pages/MoviesPage';
+import PrivacyPage from "./pages/PrivacyPage";
 
 const App: React.FC = () => {
   const location = useLocation();
   const isLanding = location.pathname === '/';
 
   return (
+
     <>
       {/* Hide nav bar on landing page */}
       {!isLanding && (
@@ -30,8 +32,10 @@ const App: React.FC = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/adminpage" element={<AdminMoviePage />} />
         <Route path="/movies" element={<MoviesPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
       </Routes>
     </>
+
   );
 };
 

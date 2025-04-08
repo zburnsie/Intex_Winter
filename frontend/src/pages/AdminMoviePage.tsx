@@ -58,7 +58,7 @@ const AdminMoviePage = () => {
         <div className="container-fluid mt-4">
             <div className="row">
                 <div className="col px-3">
-                    <h1 className="text-center">Admin Page</h1>
+                    <h1 className="text-center">Manage Content</h1>
                     {!showForm && (
                         <div className="d-flex justify-content-between align-items-center mb-3">
                             <button className="btn btn-success" onClick={() => setShowForm(true)}>
