@@ -40,3 +40,52 @@
 .read-the-docs {
   color: #888;
 }
+
+/* ========== NAVBAR STYLES ========== */
+
+.custom-navbar {
+  background-color: #000;
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.navbar-logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.logo-red {
+  color: #e50914;
+}
+
+.logo-white {
+  color: white;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar-links a {
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar-links a:hover {
+  color: #e50914;
+}
+
+
