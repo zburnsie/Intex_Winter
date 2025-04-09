@@ -146,3 +146,76 @@
 .footer-links a:hover {
   text-decoration: underline;
 }
+
+/* Auto-scroll keyframes */
+@keyframes scrollSlow {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scrollFast {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Classes for animation speed */
+.animate-scrollFast {
+  animation: scrollFast 60s linear infinite;
+}
+
+.animate-scrollSlow {
+  animation: scrollSlow 90s linear infinite;
+}
+
+/* Ensure poster rows don't wrap */
+.featured-row {
+  display: flex;
+  gap: 3rem;
+  white-space: nowrap;
+  overflow: hidden;
+  width: max-content;
+  flex-shrink: 0;
+  min-width: 100%;
+  animation: scrollLinear 100s linear infinite;
+}
+
+.carousel-wrapper {
+  overflow: hidden;
+  padding: 60px 30px;
+  background-color: black;
+}
+
+.poster-wrapper {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-top: 40px;
+}
+
+.featured-row-container {
+  overflow: hidden;
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+.featured-row.slower {
+  animation-duration: 150s;
+}
+
+@keyframes scrollLinear {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
