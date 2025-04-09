@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import MovieCard from '../components/MovieCard';
 import SearchBar from '../components/SearchBar';
 import GenreFilter from '../components/GenreFilter';
@@ -7,23 +7,26 @@ import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import './MoviesPage.css';
 
+const baseApiUrl =
+  'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net';
+// const baseApiUrl = 'http://localhost:4000';
+
+const baseImageUrl =
+  'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
+
 const MoviesPage: React.FC = () => {
   const [movies, setMovies] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedGenre, setSelectedGenre] = useState('');
   const [visibleCount, setVisibleCount] = useState(20);
-
   const [showCookieBanner, setShowCookieBanner] = useState(true);
   const handleAcceptCookies = () => setShowCookieBanner(false);
 
-  const baseImageUrl =
-    'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
-
   const normalizeTitleForPath = (title: string): string => {
     return title
-      .normalize('NFD') // decompose unicode
-      .replace(/\p{Diacritic}/gu, '') // remove diacritics
-      .replace(/[^\w\s]/gu, '') // remove non-alphanumeric but preserve whitespace
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .replace(/[^\w\s]/gu, '')
       .trim();
   };
 
@@ -31,9 +34,8 @@ const MoviesPage: React.FC = () => {
     const fetchMovies = async () => {
       try {
         const response = await fetch(
-          'http://localhost:4000/api/movie/AllMovies?pageSize=8000'
+          `${baseApiUrl}/api/Movie/AllMovies?pageSize=8000`
         );
-
         const data = await response.json();
 
         const filtered = data.movies
