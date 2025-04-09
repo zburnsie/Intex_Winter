@@ -102,8 +102,15 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieProps) => {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        await updateMovie(formData.showId!, toFullMovie(formData));
-        onSuccess();
+        try {
+            const updated = toFullMovie(formData);
+            console.log("Updating movie with data:", updated);
+            await updateMovie(formData.showId!, updated);
+            onSuccess();
+        } catch (err) {
+            console.error("Failed to update movie:", err);
+            alert("Failed to update movie. Please check the console for details.");
+        }
     }
 
     return (

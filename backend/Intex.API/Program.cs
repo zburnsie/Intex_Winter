@@ -80,6 +80,11 @@ builder.Services.AddCors(options =>
 });
 
 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<MovieDbContext>(options =>
+    options.UseSqlite(connectionString));
+builder.Services.AddDbContext<RecommendContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<IdentityUser>>();
 
 var app = builder.Build();
