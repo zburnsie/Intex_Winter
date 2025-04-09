@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import { Container } from 'react-bootstrap';
 import MovieCard from '../components/MovieCard';
 import SearchBar from '../components/SearchBar';
-import GenreFilter from '../components/GenreFilter';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
 import './MoviesPage.css';
 
+const genreLabels = [
+  'action', 'adventure', 'animeSeriesInternationalTvShows', 'britishTvShowsDocuseriesInternationalTvShows',
+  'children', 'comedies', 'comediesDramasInternationalMovies', 'comediesInternationalMovies',
+  'comediesRomanticMovies', 'crimeTvShowsDocuseries', 'documentaries', 'documentariesInternationalMovies',
+  'docuseries', 'dramas', 'dramasInternationalMovies', 'dramasRomanticMovies',
+  'familyMovies', 'fantasy', 'horrorMovies', 'internationalMoviesThrillers',
+  'internationalTvShowsRomanticTvShowsTvDramas', 'kidsTv', 'languageTvShows', 'musicals',
+  'natureTv', 'realityTv', 'spirituality', 'tvAction', 'tvComedies', 'tvDramas',
+  'talkShowsTvComedies', 'thrillers'
+];
+
 const MoviesPage: React.FC = () => {
-  const [movies, setMovies] = useState<any[]>([]);
+  const [moviesByGenre, setMoviesByGenre] = useState<Record<string, any[]>>({});
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedGenre, setSelectedGenre] = useState('');
   const [visibleCount, setVisibleCount] = useState(20);
 
   const baseImageUrl =
@@ -18,50 +27,67 @@ const MoviesPage: React.FC = () => {
 
   const normalizeTitleForPath = (title: string): string => {
     return title
-      .normalize('NFD') // decompose unicode
-      .replace(/\p{Diacritic}/gu, '') // remove diacritics
-      .replace(/[^\w\s]/gu, '') // remove non-alphanumeric but preserve whitespace
+      .normalize('NFD')
+      .replace(/\p{Diacritic}/gu, '')
+      .replace(/[^\w\s]/gu, '')
       .trim();
+  };
+
+  const getFirstGenre = (movie: any): string | null => {
+    for (const genre of genreLabels) {
+      if (movie[genre] === 1) return genre;
+    }
+    return null;
   };
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         const response = await fetch('http://localhost:4000/api/movie/AllMovies?pageSize=8000');
-
         const data = await response.json();
 
+        const grouped: Record<string, any[]> = {};
+
         const filtered = data.movies
-          .filter((movie: any) => {
-            const matchesSearch = movie.title
-              .toLowerCase()
-              .includes(searchQuery.toLowerCase());
-            const matchesGenre =
-              selectedGenre === '' || movie.genre === selectedGenre;
-            return matchesSearch && matchesGenre;
-          })
-          .slice(0, visibleCount)
           .map((movie: any) => {
             const cleanedTitle = movie.title === "#AnneFrank - Parallel Stories"
               ? "AnneFrank - Parallel Stories"
               : movie.title === "#Selfie"
               ? "Selfie"
               : movie.title;
-          
+
             const normalizedTitle = normalizeTitleForPath(cleanedTitle);
             const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
-          
+
+            const firstGenre = getFirstGenre(movie);
+            if (!firstGenre) return null;
+
             return {
               ...movie,
               title: cleanedTitle,
               imagePath,
+              genre: firstGenre,
               releaseYear: movie.releaseYear,
               rating: movie.rating,
-              description: movie.description
+              description: movie.description,
+              director: movie.director,
+              cast: movie.cast,
+              country: movie.country,
+              duration: movie.duration
             };
-          });
+          })
+          .filter((movie: any) => {
+            if (!movie) return false;
+            return movie.title.toLowerCase().includes(searchQuery.toLowerCase());
+          })
+          .slice(0, visibleCount);
 
-        setMovies(filtered);
+        for (const movie of filtered) {
+          if (!grouped[movie.genre]) grouped[movie.genre] = [];
+          grouped[movie.genre].push(movie);
+        }
+
+        setMoviesByGenre(grouped);
       } catch (error) {
         console.error('Failed to fetch movies:', error);
       }
@@ -72,7 +98,7 @@ const MoviesPage: React.FC = () => {
     }, 300);
 
     return () => clearTimeout(delayDebounce);
-  }, [searchQuery, selectedGenre, visibleCount]);
+  }, [searchQuery, visibleCount]);
 
   const handleScroll = () => {
     if (
@@ -89,40 +115,42 @@ const MoviesPage: React.FC = () => {
   }, []);
 
   return (
-    
-<AuthorizeView>
-<span>
-  <Logout>
-    Logout <AuthorizedUser value="email" />
-  </Logout>
-</span>
-    <Container fluid className="movies-page px-4">
-      <div className="movies-controls mx-auto mb-4">
-        <h2 className="text-center">Browse Movies</h2>
-        <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-        <GenreFilter selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre} />
-      </div>
-      <div className="movie-grid">
-    {movies.map((movie) => (
-      <div className="movie-grid-item" key={movie.title}>
-        <MovieCard
-          title={movie.title}
-          imagePath={movie.imagePath}
-          showId={movie.showId}
-          releaseYear={movie.releaseYear}
-          rating={movie.rating}
-          description={movie.description}
-          director={movie.director}
-          cast={movie.cast}
-          country={movie.country}
-          duration={movie.duration}
-        />
-      </div>
-  ))}
-</div>
-
-    </Container>
-  </AuthorizeView>
+    <AuthorizeView>
+      <span>
+        <Logout>
+          Logout <AuthorizedUser value="email" />
+        </Logout>
+      </span>
+      <Container fluid className="movies-page px-4">
+        <div className="movies-controls mx-auto mb-4">
+          <h2 className="text-center">Browse Movies</h2>
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
+        </div>
+        {Object.entries(moviesByGenre).map(([genre, movies]) => (
+          <div key={genre} className="genre-section mb-5">
+            <h3 className="text-white mb-3" style={{ marginTop: '40px' }}>{genre}</h3>
+            <div className="genre-row">
+              {movies.map((movie) => (
+                <div className="movie-grid-item" key={movie.title}>
+                  <MovieCard
+                    title={movie.title}
+                    imagePath={movie.imagePath}
+                    showId={movie.showId}
+                    releaseYear={movie.releaseYear}
+                    rating={movie.rating}
+                    description={movie.description}
+                    director={movie.director}
+                    cast={movie.cast}
+                    country={movie.country}
+                    duration={movie.duration}
+                  />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </Container>
+    </AuthorizeView>
   );
 };
 

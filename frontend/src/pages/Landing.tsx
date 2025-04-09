@@ -1,29 +1,28 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import TestimonialsSection from '../components/TestimonialsSection';
-import FeaturedCarousel from '../components/FeaturedCarousel';
-import RotatingPoster from '../components/RotatingPoster';
-import './Landing.css';
-import driveHero from '../images/drive-hero.webp';
-import lotrImage from '../images/lotr.jpg';
-import perfectDays from '../images/perfect-days.jpeg';
-import babyDriver from '../images/baby-driver.jpg';
-import severance from '../images/severance.jpg';
-import keira from '../images/keira.jpg';
+import React, { useEffect, useState } from 'react';
+import { Container, Button } from 'react-bootstrap';
+import MovieCard from '../components/MovieCard';
+import SearchBar from '../components/SearchBar';
+import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
+import Logout from '../components/Logout';
+import './MoviesPage.css';
 
-const backgroundImages = [
-  driveHero,
-  lotrImage,
-  perfectDays,
-  babyDriver,
-  severance,
-  keira,
+const genreLabels = [
+  'action', 'adventure', 'animeSeriesInternationalTvShows', 'britishTvShowsDocuseriesInternationalTvShows',
+  'children', 'comedies', 'comediesDramasInternationalMovies', 'comediesInternationalMovies',
+  'comediesRomanticMovies', 'crimeTvShowsDocuseries', 'documentaries', 'documentariesInternationalMovies',
+  'docuseries', 'dramas', 'dramasInternationalMovies', 'dramasRomanticMovies',
+  'familyMovies', 'fantasy', 'horrorMovies', 'internationalMoviesThrillers',
+  'internationalTvShowsRomanticTvShowsTvDramas', 'kidsTv', 'languageTvShows', 'musicals',
+  'natureTv', 'realityTv', 'spirituality', 'tvAction', 'tvComedies', 'tvDramas',
+  'talkShowsTvComedies', 'thrillers'
 ];
 
-const LandingPage = () => {
-  const [posterTitles, setPosterTitles] = useState<string[]>([]);
+const pageSize = 8;
 
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+const MoviesPage: React.FC = () => {
+  const [moviesByGenre, setMoviesByGenre] = useState<Record<string, any[]>>({});
+  const [searchQuery, setSearchQuery] = useState('');
+  const [genrePageState, setGenrePageState] = useState<Record<string, number>>({});
 
   const baseImageUrl =
     'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
@@ -36,124 +35,142 @@ const LandingPage = () => {
       .trim();
   };
 
-  const shuffleArray = (array: any[]) => {
-    let currentIndex = array.length,  randomIndex;
-
-    // While there remain elements to shuffle...
-    while (currentIndex !== 0) {
-
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
+  const getFirstGenre = (movie: any): string | null => {
+    for (const genre of genreLabels) {
+      if (movie[genre] === 1) return genre;
     }
-
-    return array;
-  }
+    return null;
+  };
 
   useEffect(() => {
-    const fetchPosters = async () => {
+    const fetchMovies = async () => {
       try {
-        const response = await fetch(
-          'http://localhost:4000/api/movie/AllMovies?pageSize=100'
-        );
+        const response = await fetch('http://localhost:4000/api/movie/AllMovies?pageSize=8000');
         const data = await response.json();
 
-        let posters = data.movies
-          .map((movie: any) => `${normalizeTitleForPath(movie.title)}.jpg`)
+        const grouped: Record<string, any[]> = {};
 
-          .filter(
-            (value: string, index: number, self: string[]) =>
-              self.indexOf(value) === index
-          )
-          .sort(() => Math.random() - 0.5)
-          .slice(0, 100);
+        const filtered = data.movies
+          .map((movie: any) => {
+            const cleanedTitle = movie.title === "#AnneFrank - Parallel Stories"
+              ? "AnneFrank - Parallel Stories"
+              : movie.title === "#Selfie"
+              ? "Selfie"
+              : movie.title;
 
-        setPosterTitles(posters);
+            const normalizedTitle = normalizeTitleForPath(cleanedTitle);
+            const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
+
+            const firstGenre = getFirstGenre(movie);
+            if (!firstGenre) return null;
+
+            return {
+              ...movie,
+              title: cleanedTitle,
+              imagePath,
+              genre: firstGenre,
+              releaseYear: movie.releaseYear,
+              rating: movie.rating,
+              description: movie.description,
+              director: movie.director,
+              cast: movie.cast,
+              country: movie.country,
+              duration: movie.duration
+            };
+          })
+          .filter((movie: any) => {
+            if (!movie) return false;
+            return movie.title.toLowerCase().includes(searchQuery.toLowerCase());
+          });
+
+        for (const movie of filtered) {
+          if (!grouped[movie.genre]) grouped[movie.genre] = [];
+          grouped[movie.genre].push(movie);
+        }
+
+        setMoviesByGenre(grouped);
       } catch (error) {
-        console.error('Error fetching posters:', error);
+        console.error('Failed to fetch movies:', error);
       }
     };
 
-    fetchPosters();
-  }, []);
+    const delayDebounce = setTimeout(() => {
+      fetchMovies();
+    }, 300);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentImageIndex((prev) => (prev + 1) % backgroundImages.length);
-    }, 5000); // Change image every 5 seconds
+    return () => clearTimeout(delayDebounce);
+  }, [searchQuery]);
 
-    return () => clearInterval(interval);
-  }, []);
+  const handlePageChange = (genre: string, direction: number) => {
+    setGenrePageState((prev) => ({
+      ...prev,
+      [genre]: Math.max(0, (prev[genre] || 0) + direction)
+    }));
+  };
 
   return (
-    <div className="landing-container">
-      <section className="hero-section">
-        {/* Fade-enabled background layers */}
-        {backgroundImages.map((bg, index) => (
-          <div
-            key={index}
-            className={`hero-background ${
-              index === currentImageIndex ? 'active' : ''
-            }`}
-            style={{ backgroundImage: `url(${bg})` }}
-          />
-        ))}
-
-        {/* Dark gradient overlay */}
-        <div className="hero-overlay" />
-
-        {/* Hero text content */}
-        <div className="hero-content">
-          <h1 className="hero-title">CineNiche</h1>
-          <h1 className="hero-subtitle">
-            Discover Bold, Brilliant, & Hidden Films
-          </h1>
-          <p className="hero-description">
-            Stream award-winning documentaries, indie gems, and global cinema,
-            anytime.
-          </p>
-          <div className="hero-buttons">
-            <Link to="/register">
-              <button className="join-button">Join Now</button>
-            </Link>
-            <Link to="/login">
-              <button className="login-button">Log In</button>
-            </Link>
-          </div>
+    <AuthorizeView>
+      <span>
+        <Logout>
+          Logout <AuthorizedUser value="email" />
+        </Logout>
+      </span>
+      <Container fluid className="movies-page px-4">
+        <div className="movies-controls mx-auto mb-4">
+          <h2 className="text-center">Browse Movies</h2>
+          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
         </div>
-      </section>
+        {Object.entries(moviesByGenre).map(([genre, movies]) => {
+          const currentPage = genrePageState[genre] || 0;
+          const startIndex = currentPage * pageSize;
+          const visibleMovies = movies.slice(startIndex, startIndex + pageSize);
 
-      <section className="carousel-wrapper">
-        <FeaturedCarousel posters={posterTitles} baseUrl={baseImageUrl} />
-      </section>
-
-      <section className="collection-section">
-        <h3>Explore Our Collection</h3>
-        <div className="poster-wrapper">
-          {posterTitles.length > 0 && (
-            <RotatingPoster poster={posterTitles} baseUrl={baseImageUrl} />
-          )}
-        </div>
-      </section>
-
-      <TestimonialsSection />
-
-      <footer className="footer">
-        <p>&copy; 2025 CineNiche. All rights reserved.</p>
-
-        <div className="footer-links">
-          <a href="#">About</a>
-          <a href="#">Help Center</a>
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-        </div>
-      </footer>
-    </div>
+          return (
+            <div key={genre} className="genre-section mb-5">
+              <h3 className="text-white mb-3" style={{ marginTop: '40px' }}>{genre}</h3>
+              <div className="genre-row">
+                {visibleMovies.map((movie) => (
+                  <div className="movie-grid-item" key={movie.title}>
+                    <MovieCard
+                      title={movie.title}
+                      imagePath={movie.imagePath}
+                      showId={movie.showId}
+                      releaseYear={movie.releaseYear}
+                      rating={movie.rating}
+                      description={movie.description}
+                      director={movie.director}
+                      cast={movie.cast}
+                      country={movie.country}
+                      duration={movie.duration}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="d-flex justify-content-between mt-2">
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => handlePageChange(genre, -1)}
+                  disabled={currentPage === 0}
+                >
+                  ◀ Previous
+                </Button>
+                <Button
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => handlePageChange(genre, 1)}
+                  disabled={startIndex + pageSize >= movies.length}
+                >
+                  Next ▶
+                </Button>
+              </div>
+            </div>
+          );
+        })}
+      </Container>
+    </AuthorizeView>
   );
 };
 
-export default LandingPage;
+export default MoviesPage;
+
