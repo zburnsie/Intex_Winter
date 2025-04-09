@@ -1,38 +1,151 @@
-.movie-card {
-  transition: transform 0.2s ease-in-out;
+/* Overall Page Theme */
+body, .movies-page {
+  background-color: #000;
+  color: #fff;
+  font-family: 'sans-serif';
+  min-height: 100vh;
+  overflow-x: hidden;
 }
 
-.movie-card:hover {
-  transform: scale(1.03);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
-}
-
-.image-wrapper {
-  height: 250px;
-  overflow: hidden;
-  border-radius: 8px 8px 0 0;
-  background-color: #f8f9fa;
-}
-
-.movie-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.container {
-  max-width: 1400px;
-}
-
+/* Headings */
 h2 {
-  font-weight: 600;
+  font-weight: 800;
+  font-size: 2rem;
+  text-align: center;
   margin-bottom: 1.5rem;
+  color: #fff;
 }
 
+/* Controls container */
 .movies-controls {
   max-width: 600px;
   width: 100%;
+  margin: 0 auto 2rem auto;
+  text-align: center;
+}
+
+/* Inputs */
+.movies-controls input,
+.movies-controls select {
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 0.6rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.movies-controls input[type="text"],
+.movies-controls input[type="text"]:focus {
+  background-color: #111 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+  box-shadow: none !important;
+  border-radius: 8px;
+}
+
+.movies-controls input::placeholder {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+/* Container and grid */
+.container {
+  max-width: 1400px;
+  padding: 0 1rem;
+  margin: 0 auto;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  margin: 0 -0.5rem; /* adjust based on .col padding */
 }
 
 
-  
+/* Poster Card Columns */
+.col {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 0.5rem;
+  flex: 1 1 216px;        /* Allows growth and shrink, but never below 216px */
+  min-width: 216px;       /* Prevents squishing below image size */
+  max-width: 100%;        /* Never exceeds container width */
+  box-sizing: border-box;
+}
+
+
+
+/* Hover effect for MovieCard images */
+.hover-effect {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Wrapper to track hover state */
+.movie-hover-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* Zoom + crisp white outline on hover */
+.zoomed .hover-effect {
+  transform: scale(1.1);
+  border: 5px solid white;
+  border-radius: 12px;
+  transition: transform 0.2s ease, border 0.2s ease;
+  z-index: 10;
+}
+
+/* Hover card popup */
+.hover-info-card {
+  position: absolute;
+  top: 0;
+  left: 105%;
+  background-color: #2a2a2a;  /* or try #1f1f1f for darker, #333 for medium */
+  border: 1px solid #555;
+  border-radius: 10px;
+  padding: 12px;
+  z-index: 999;
+  color: #fff;
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.25);
+  opacity: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* Description text trimming */
+.description-preview {
+  font-size: 0.85rem;
+  line-height: 1.2;
+  margin-top: 0.5rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 12;
+  -webkit-box-orient: vertical;
+}
+
+/* General box sizing */
+* {
+  box-sizing: border-box;
+}
+
+.movie-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(216px, 1fr));
+  column-gap: 2rem;  /* Wider horizontal spacing */
+  row-gap: 1.25rem;  /* Keep vertical spacing as is */
+  justify-items: center;
+  align-items: start;
+}
+
+
+.movie-grid-item {
+  width: 216px; /* Force consistent width */
+}
+
+

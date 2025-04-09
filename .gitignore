@@ -26,8 +26,8 @@ dist-ssr
 
 # Visual Studio
 .vs/
-bin/
-obj/
+**/bin/
+**/obj/
 *.user
 
 # Environment variables
@@ -45,3 +45,5 @@ obj/
 # Ignore Movie Posters folder
 # Ignore movie posters folder
 **/Movie Posters/
+.azure
+infra/

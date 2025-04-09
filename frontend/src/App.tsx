@@ -6,6 +6,10 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import AdminMoviePage from './pages/AdminMoviePage';
 import MoviesPage from './pages/MoviesPage';
+import PrivacyPage from './pages/PrivacyPage';
+import MovieDetailPage from './pages/MovieDetailPage';
+import './App.css';
+
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -15,12 +19,17 @@ const App: React.FC = () => {
     <>
       {/* Hide nav bar on landing page */}
       {!isLanding && (
-        <nav className="bg-gray-900 text-white p-4 flex gap-4 text-sm">
-          <Link to="/" className="hover:underline">Home</Link>
-          <Link to="/adminpage" className="hover:underline">Admin</Link>
-          <Link to="/movies" className="hover:underline">Movies</Link>
-          <Link to="/login" className="hover:underline">Login</Link>
-          <Link to="/register" className="hover:underline">Register</Link>
+        <nav className="custom-navbar">
+          <Link to="/" className="navbar-logo">
+            <span className="logo-red">CINE</span><span className="logo-white">NICHE</span>
+          </Link>
+          <div className="navbar-links">
+            <Link to="/">Home</Link>
+            <Link to="/adminpage">Admin</Link>
+            <Link to="/movies">Movies</Link>
+            <Link to="/login">Login</Link>
+            <Link to="/register">Register</Link>
+          </div>
         </nav>
       )}
 
@@ -30,9 +39,12 @@ const App: React.FC = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/adminpage" element={<AdminMoviePage />} />
         <Route path="/movies" element={<MoviesPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
+        <Route path="/movie/:showId" element={<MovieDetailPage />} /> {/* 👈 new route */}
       </Routes>
     </>
   );
 };
 
 export default App;
+

@@ -7,6 +7,7 @@ import EditMovieForm from '../components/EditMovieForm';
 import { getGenresFromMovie } from '../components/genreUtils';
 import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
 import Logout from '../components/Logout';
+import './AdminPage.css';
 
 const AdminMoviePage = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
