@@ -18,7 +18,6 @@ const MoviesPage: React.FC = () => {
       .normalize("NFD") // decompose unicode
       .replace(/\p{Diacritic}/gu, '') // remove diacritics
       .replace(/[^\w\s]/gu, '') // remove non-alphanumeric but preserve whitespace
-      // don't collapse spaces, leave any double spaces intact
       .trim();
   };
 
@@ -36,14 +35,20 @@ const MoviesPage: React.FC = () => {
           })
           .slice(0, visibleCount)
           .map((movie: any) => {
-            const normalizedTitle = normalizeTitleForPath(movie.title);
+            // Handle the edge case where we want to remove '#' only for AnneFrank title
+            const cleanedTitle = movie.title === "#AnneFrank - Parallel Stories"
+              ? "AnneFrank - Parallel Stories"
+              : movie.title;
+
+            const normalizedTitle = normalizeTitleForPath(cleanedTitle);
             const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
+
             return {
               ...movie,
-              imagePath,
+              title: cleanedTitle,
+              imagePath
             };
           });
-          
 
         setMovies(filtered);
       } catch (error) {
@@ -73,7 +78,7 @@ const MoviesPage: React.FC = () => {
   }, []);
 
   return (
-    <Container fluid className="px-4">
+    <Container fluid className="movies-page px-4">
       <div className="movies-controls mx-auto mb-4">
         <h2 className="text-center">Browse Movies</h2>
         <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
@@ -82,7 +87,11 @@ const MoviesPage: React.FC = () => {
       <Row className="gx-2 gy-3">
         {movies.map((movie) => (
           <Col key={movie.title} xs={6} sm={4} md={3} lg={2} className="d-flex">
-            <MovieCard title={movie.title} imagePath={movie.imagePath} />
+            <MovieCard
+              title={movie.title}
+              imagePath={movie.imagePath}
+              showId={movie.showId}
+            />
           </Col>
         ))}
       </Row>
@@ -91,3 +100,4 @@ const MoviesPage: React.FC = () => {
 };
 
 export default MoviesPage;
+

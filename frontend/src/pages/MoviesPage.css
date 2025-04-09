@@ -1,38 +1,103 @@
+/* Overall Page Theme */
+body, .movies-page {
+  background-color: #000;
+  color: #fff;
+  font-family: 'sans-serif';
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* Headings */
+h2 {
+  font-weight: 800;
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #fff;
+}
+
+/* Controls container */
+.movies-controls {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto 2rem auto;
+  text-align: center;
+}
+
+/* Movie card styling */
 .movie-card {
-  transition: transform 0.2s ease-in-out;
+  background-color: #1a1a1a;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  color: #fff;
 }
 
 .movie-card:hover {
   transform: scale(1.03);
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 20px rgba(255, 255, 255, 0.1);
 }
 
+/* Poster image wrapper */
 .image-wrapper {
   height: 250px;
   overflow: hidden;
-  border-radius: 8px 8px 0 0;
-  background-color: #f8f9fa;
+  border-radius: 12px 12px 0 0;
+  background-color: #222;
 }
 
 .movie-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  display: block;
 }
 
-.container {
-  max-width: 1400px;
-}
-
-h2 {
-  font-weight: 600;
-  margin-bottom: 1.5rem;
-}
-
-.movies-controls {
-  max-width: 600px;
+/* Inputs */
+.movies-controls input,
+.movies-controls select {
+  background-color: #111;
+  color: #fff;
+  border: 1px solid #444;
+  padding: 0.6rem 1rem;
+  margin-top: 0.5rem;
+  border-radius: 8px;
   width: 100%;
 }
 
+/* Container and grid */
+.container {
+  max-width: 1400px;
+  padding: 0 1rem;
+  margin: 0 auto;
+}
 
-  
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.col {
+  flex: 1 1 200px;
+  max-width: 200px;
+}
+
+.movies-controls input[type="text"],
+.movies-controls input[type="text"]:focus {
+  background-color: #111 !important;
+  color: #fff !important;
+  border: 1px solid #444 !important;
+  box-shadow: none !important;
+  border-radius: 8px;
+}
+
+.movies-controls input::placeholder {
+  color: #fff !important;
+  opacity: 1 !important;
+}
+
+
+

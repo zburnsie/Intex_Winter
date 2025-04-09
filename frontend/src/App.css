@@ -1,19 +1,26 @@
+/* GLOBAL LAYOUT FIX */
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  width: 100%;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
   text-align: center;
+  background-color: #000; /* Ensure full background is black */
+  color: #fff;
 }
 
+/* === Logo Styling === */
 .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
 }
+
 .logo:hover {
   filter: drop-shadow(0 0 2em #646cffaa);
 }
+
 .logo.react:hover {
   filter: drop-shadow(0 0 2em #61dafbaa);
 }
@@ -33,6 +40,7 @@
   }
 }
 
+/* === Card Utility === */
 .card {
   padding: 2em;
 }
@@ -40,3 +48,77 @@
 .read-the-docs {
   color: #888;
 }
+
+/* ========== NAVBAR STYLES ========== */
+.custom-navbar {
+  background-color: #000;
+  color: #fff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.navbar-logo {
+  font-size: 1.6rem;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.logo-red {
+  color: #e50914;
+}
+
+.logo-white {
+  color: white;
+}
+
+.navbar-links {
+  display: flex;
+  gap: 2rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.navbar-links a {
+  color: white;
+  font-weight: 500;
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.navbar-links a:hover {
+  color: #e50914;
+}
+
+/* ========== SCROLL ANIMATIONS ========== */
+@keyframes scrollFast {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+@keyframes scrollSlow {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-scrollFast {
+  animation: scrollFast 40s linear infinite;
+}
+
+.animate-scrollSlow {
+  animation: scrollSlow 60s linear infinite;
+}
+

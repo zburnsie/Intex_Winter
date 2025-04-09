@@ -1,0 +1,148 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@700&display=swap');
+
+.landing-container {
+  font-family: Arial, sans-serif;
+  background-color: black;
+  color: white;
+  overflow-x: hidden;
+}
+
+.hero-section {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background-image: url('../images/drive-hero.webp'); /* Adjust path if needed */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  display: flex;
+  justify-content: flex-start; /* Push content to the left */
+  align-items: center; /* Vertically center */
+  padding-left: 5%; /* Space from the left edge */
+}
+
+.hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    to right,
+    rgba(0, 0, 0, 0.95),
+    rgba(0, 0, 0, 0.1)
+  );
+  z-index: 1;
+}
+
+.hero-content {
+  position: relative;
+  z-index: 2;
+  color: white;
+  text-align: left;
+  padding: 20px;
+  max-width: 600px;
+}
+
+.hero-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.hero-subtitle {
+  font-size: 2rem; /* Headline style */
+  font-weight: 600; /* Strong but not overpowering */
+  margin-bottom: 20px;
+  color: #f1f1f1; /* Slightly lighter text */
+  line-height: 1.4;
+  text-align: left;
+}
+
+.hero-description {
+  font-size: 1.15rem;
+  font-weight: 300; /* Softer feel for description */
+  color: #cccccc; /* Muted white for less contrast */
+  line-height: 1.6;
+  max-width: 600px;
+  text-align: left;
+}
+.hero-buttons {
+  margin-top: 20px;
+}
+
+.hero-buttons button {
+  margin-right: 15px;
+  padding: 10px 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+}
+
+.hero-background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0;
+  transition: opacity 1s ease-in-out;
+  z-index: 0;
+}
+
+.hero-background.active {
+  opacity: 1;
+  z-index: 0;
+}
+
+.join-button {
+  background-color: white;
+  color: black;
+}
+
+.login-button {
+  background-color: transparent;
+  color: white;
+  border: 1px solid white;
+}
+
+.carousel-wrapper {
+  padding: 60px 30px;
+  background-color: black;
+}
+
+.collection-section {
+  text-align: center;
+  padding: 80px 20px;
+  background-color: black;
+}
+
+.poster-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 40px;
+}
+
+.footer {
+  text-align: center;
+  padding: 40px 20px;
+  background-color: black;
+  color: #aaa;
+}
+
+.footer-links a {
+  margin: 0 10px;
+  color: #aaa;
+  text-decoration: none;
+}
+
+.footer-links a:hover {
+  text-decoration: underline;
+}
