@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Intex.API.Controllers
 {
@@ -89,6 +90,7 @@ namespace Intex.API.Controllers
         }
 
         [HttpPost("AddMovie")]
+        [Authorize(Roles = "Admin")]
         public IActionResult AddMovie([FromBody] MoviesTitle movie)
         {
             try
@@ -128,6 +130,8 @@ namespace Intex.API.Controllers
         }
 
         [HttpPut("updateMovie/{showId}")]
+        [Authorize(Roles = "Admin")]
+
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
             var existingMovie = _context.Movies.FirstOrDefault(m => m.ShowId == showId);
@@ -183,6 +187,8 @@ namespace Intex.API.Controllers
         }
 
         [HttpDelete("deleteMovie/{showId}")]
+        [Authorize(Roles = "Admin")]
+
         public IActionResult DeleteMovie(string showId)
         {
             var movie = _context.Movies.FirstOrDefault(m => m.ShowId == showId);

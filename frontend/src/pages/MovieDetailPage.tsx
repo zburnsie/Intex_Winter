@@ -58,7 +58,7 @@ const MovieDetailPage: React.FC = () => {
           description: data.description || 'No description available.',
           imagePath: imagePath
         });
-        
+
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -77,24 +77,30 @@ const MovieDetailPage: React.FC = () => {
     <Container className="text-white mt-4">
       <Row>
         <Col md={4} className="text-center">
-          <img
-            src={movie.imagePath}
-            alt={movie.title}
-            style={{ width: '100%', borderRadius: '12px' }}
+        <img
+          src={movie.imagePath}
+          alt={movie.title}
+          style={{
+            width: '360px',
+            height: '531px',
+            objectFit: 'cover',
+            borderRadius: '12px',
+          }}
+
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = '/default-poster.jpg';
             }}
           />
         </Col>
-        <Col md={8}>
+        <Col md={8} className="text-start">
           <h2>{movie.title}</h2>
-          <p><strong>Director:</strong> {movie.director}</p>
-          <p><strong>Cast:</strong> {movie.cast}</p>
-          <p><strong>Country:</strong> {movie.country}</p>
-          <p><strong>Release Year:</strong> {movie.releaseYear}</p>
           <p><strong>Rating:</strong> {movie.rating}</p>
           <p><strong>Duration:</strong> {movie.duration}</p>
+          <p><strong>Release Year:</strong> {movie.releaseYear}</p>
+          <p><strong>Director:</strong> {movie.director}</p>
+          <p><strong>Country:</strong> {movie.country}</p>
+          <p><strong>Cast:</strong> {movie.cast}</p>
           <p><strong>Description:</strong> {movie.description}</p>
         </Col>
       </Row>
@@ -103,3 +109,4 @@ const MovieDetailPage: React.FC = () => {
 };
 
 export default MovieDetailPage;
+

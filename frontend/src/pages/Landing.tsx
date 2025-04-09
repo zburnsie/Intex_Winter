@@ -28,22 +28,41 @@ const LandingPage = () => {
   const baseImageUrl =
     'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
 
-
   const normalizeTitleForPath = (title: string): string => {
     return title
-      .normalize("NFD")
+      .normalize('NFD')
       .replace(/\p{Diacritic}/gu, '')
       .replace(/[^\w\s]/gu, '')
       .trim();
   };
 
+  const shuffleArray = (array: any[]) => {
+    let currentIndex = array.length,  randomIndex;
+
+    // While there remain elements to shuffle...
+    while (currentIndex !== 0) {
+
+      // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex--;
+
+      // And swap it with the current element.
+      [array[currentIndex], array[randomIndex]] = [
+        array[randomIndex], array[currentIndex]];
+    }
+
+    return array;
+  }
+
   useEffect(() => {
     const fetchPosters = async () => {
       try {
-        const response = await fetch('http://localhost:4000/api/movie/AllMovies');
+        const response = await fetch(
+          'http://localhost:4000/api/movie/AllMovies?pageSize=100'
+        );
         const data = await response.json();
 
-        const posters = data.movies
+        let posters = data.movies
           .map((movie: any) => `${normalizeTitleForPath(movie.title)}.jpg`)
 
           .filter(
@@ -51,7 +70,7 @@ const LandingPage = () => {
               self.indexOf(value) === index
           )
           .sort(() => Math.random() - 0.5)
-          .slice(0, 12);
+          .slice(0, 100);
 
         setPosterTitles(posters);
       } catch (error) {
@@ -71,7 +90,6 @@ const LandingPage = () => {
   }, []);
 
   return (
-
     <div className="landing-container">
       <section className="hero-section">
         {/* Fade-enabled background layers */}
@@ -97,7 +115,6 @@ const LandingPage = () => {
           <p className="hero-description">
             Stream award-winning documentaries, indie gems, and global cinema,
             anytime.
-
           </p>
           <div className="hero-buttons">
             <Link to="/register">
@@ -133,7 +150,6 @@ const LandingPage = () => {
           <a href="#">Help Center</a>
           <a href="#">Privacy</a>
           <a href="#">Terms</a>
-
         </div>
       </footer>
     </div>
