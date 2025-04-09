@@ -7,7 +7,7 @@ namespace Intex.API.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-[Authorize(Roles = "Admin")]
+//[Authorize(Roles = "Admin")]
 public class RoleController : Controller
 {
     private readonly RoleManager<IdentityRole> _roleManager;
@@ -91,5 +91,17 @@ public class RoleController : Controller
             return Ok($"Role '{roleName}' deleted successfully.");
 
         return StatusCode(500, string.Join(", ", result.Errors.Select(e => e.Description)));
+    }
+
+
+    //debug
+    [HttpGet("checkUserRoles")]
+    public async Task<IActionResult> CheckRoles(string email)
+    {
+        var user = await _userManager.FindByEmailAsync(email);
+        if (user == null) return NotFound("User not found");
+
+        var roles = await _userManager.GetRolesAsync(user);
+        return Ok(roles);
     }
 }
