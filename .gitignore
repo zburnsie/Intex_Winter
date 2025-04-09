@@ -42,6 +42,9 @@ dist-ssr
 **/*.pdb
 **/*.cache
 
+# .NET Publish output
+**/publish/
+
 # Ignore Movie Posters folder
 # Ignore movie posters folder
 **/Movie Posters/
