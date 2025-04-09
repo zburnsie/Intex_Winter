@@ -106,7 +106,7 @@ namespace Intex.API.Controllers
                     .Where(m => m.ShowId != null && m.ShowId.StartsWith("s"))
                     .Select(m =>
                     {
-                        var success = int.TryParse(m.ShowId.Substring(1), out var n);
+                        var success = int.TryParse(m.ShowId!.Substring(1), out var n);
                         return success ? n : 0;
                     })
                     .DefaultIfEmpty(0)
