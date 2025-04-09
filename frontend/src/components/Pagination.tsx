@@ -57,27 +57,40 @@ const Pagination = ({currentPage, totalPages, pageSize, onPageChange, onPageSize
     };
 
     return (
-        <div className="flex items-center justify-center mt-4">
-            <button disabled={currentPage === 1} onClick={() => onPageChange(currentPage - 1)}>Previous</button>
+        <div className="d-flex align-items-center gap-2">
+            <button
+                className="btn btn-outline-light btn-sm"
+                disabled={currentPage === 1} 
+                onClick={() => onPageChange(currentPage - 1)}
+            >
+                Previous
+            </button>
 
             {renderPageButtons()}
 
-            <button disabled={currentPage === safeTotalPages} onClick={() => onPageChange(currentPage + 1)}>Next</button>
-
-            <br />
-            <label>Results per page: 
-            <select 
-                value={pageSize} onChange = {(p) => {
-                    onPageSizeChange(Number(p.target.value));
-                    onPageChange(1);
-                }}
-                > 
-                <option value="50">50</option>
-                <option value="100">100</option>
-                <option value="200">200</option>
-            </select>
-            <br />
-            </label>
+            <button
+                className="btn btn-outline-light btn-sm"
+                disabled={currentPage === safeTotalPages} 
+                onClick={() => onPageChange(currentPage + 1)}
+            >
+                Next
+            </button>
+            <div>
+                <label className="me-2 mb-0">Results per page: 
+                    <select 
+                        className="form-select form-select-sm bg-dark text-white border-secondary"
+                        value={pageSize} 
+                        onChange = {(p) => {
+                            onPageSizeChange(Number(p.target.value));
+                            onPageChange(1);
+                        }}
+                        > 
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                        <option value="200">200</option>
+                    </select>
+                </label>
+            </div>
         </div>
     );
 }
