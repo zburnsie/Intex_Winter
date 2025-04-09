@@ -8,8 +8,9 @@ import AdminMoviePage from './pages/AdminMoviePage';
 import MoviesPage from './pages/MoviesPage';
 import PrivacyPage from './pages/PrivacyPage';
 import MovieDetailPage from './pages/MovieDetailPage';
+import AdminOnlyRoute from './components/AdminOnlyRoute';
 import './App.css';
-
+import AuthorizeView from './components/AuthorizeView';
 
 const App: React.FC = () => {
   const location = useLocation();
@@ -21,7 +22,8 @@ const App: React.FC = () => {
       {!isLanding && (
         <nav className="custom-navbar">
           <Link to="/" className="navbar-logo">
-            <span className="logo-red">CINE</span><span className="logo-white">NICHE</span>
+            <span className="logo-red">CINE</span>
+            <span className="logo-white">NICHE</span>
           </Link>
           <div className="navbar-links">
             <Link to="/">Home</Link>
@@ -32,19 +34,35 @@ const App: React.FC = () => {
           </div>
         </nav>
       )}
-
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-        <Route path="/adminpage" element={<AdminMoviePage />} />
-        <Route path="/movies" element={<MoviesPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
-        <Route path="/movie/:showId" element={<MovieDetailPage />} /> {/* 👈 new route */}
+        <Route path="/movie/:showId" element={<MovieDetailPage />} />
+
+        {/* Wrap only the protected routes */}
+        <Route
+          path="/movies"
+          element={
+            <AuthorizeView>
+              <MoviesPage />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/adminpage"
+          element={
+            <AuthorizeView>
+              <AdminOnlyRoute>
+                <AdminMoviePage />
+              </AdminOnlyRoute>
+            </AuthorizeView>
+          }
+        />
       </Routes>
     </>
   );
 };
 
 export default App;
-

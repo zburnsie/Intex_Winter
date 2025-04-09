@@ -124,7 +124,7 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
     return Results.Ok(new { message = "Logout successful" });
 }).RequireAuthorization();
 
-app.MapGet("/pingauth", (ClaimsPrincipal user) =>
+app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<IdentityUser> userManager) =>
 {
     if (!user.Identity?.IsAuthenticated ?? false)
     {
@@ -132,8 +132,16 @@ app.MapGet("/pingauth", (ClaimsPrincipal user) =>
     }
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
-    return Results.Json(new { email = email });
+    var identityUser = await userManager.FindByEmailAsync(email);
+    var roles = identityUser != null ? await userManager.GetRolesAsync(identityUser) : new List<string>();
+
+    return Results.Json(new
+    {
+        email = email,
+        roles = roles
+    });
 }).RequireAuthorization();
+
 
 // ... your endpoints and static files
 
