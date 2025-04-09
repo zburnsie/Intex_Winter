@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Intex.API;
 using Intex.API.Data;
 using Intex.API.Models;
 using Intex.API.Services;
@@ -55,6 +56,7 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
+builder.Services.AddScoped<RecommendationService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
