@@ -1,50 +1,55 @@
-// using Microsoft.AspNetCore.Mvc;
+using Intex.API.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-// namespace Intex.API.Controllers
-// {
-//     [Route("api/[controller]")]
-//     [ApiController]
-//     public class PredictionController : ControllerBase
-//     {
-//         private readonly IRecommendationService _recommendationService;
+[ApiController]
+[Route("api/[controller]")]
+public class PredictionController : ControllerBase
+{
+    private readonly RecommendContext _context;
 
-//         public PredictionController(IRecommendationService recommendationService)
-//         {
-//             _recommendationService = recommendationService;
-//         }
+    public PredictionController(RecommendContext context)
+    {
+        _context = context;
+    }
 
-//         [HttpGet("recommendations-db/{ShowId}")]
-//         public async Task<IActionResult> GetDbRecommendation(string ShowId)
-//         {
-//             var result = await _recommendationService.GetRecommendationByIdAsync(ShowId);
+    // GET: api/prediction/content-based
+    [HttpGet("content-based")]
+    public async Task<IActionResult> GetAllContentBased()
+    {
+        var data = await _context.ContentBasedRecommendations.ToListAsync();
+        return Ok(data);
+    }
 
-//             if (result is null)
-//             {
-//                 return NotFound($"No recommendation found for ID: {ShowId}");
-//             }
+    // GET: api/prediction/hybrid
+    [HttpGet("hybrid")]
+    public async Task<IActionResult> GetAllHybridWeighted()
+    {
+        var data = await _context.HybridWeightedRecommendations.ToListAsync();
+        return Ok(data);
+    }
 
-//             return Ok(new
-//                         {
-//                             result.ShowId,
-//                             result.Title,
-//                             result.Recommendation1,
-//                             result.Recommendation2,
-//                             result.Recommendation3,
-//                             result.Recommendation4,
-//                             result.Recommendation5
-//                         });
-//         }
-//         [HttpGet("recommendations-db-preview")]
-//         public async Task<IActionResult> GetDbRecommendationsPreview()
-//         {
-//             var sample = await _recommendationService.GetSampleRecommendationsAsync();
+    // GET: api/prediction/item-to-item
+    [HttpGet("item-to-item")]
+    public async Task<IActionResult> GetAllItemToItem()
+    {
+        var data = await _context.ItemToItemCollaborativeRecommendations.ToListAsync();
+        return Ok(data);
+    }
 
-//             return Ok(new
-//             {
-//                 message = "Database recommendations loaded successfully",
-//                 count = sample.Count,
-//                 sample
-//             });
-//         }
-//     }
-// }
+    // GET: api/prediction/popularity
+    [HttpGet("popularity")]
+    public async Task<IActionResult> GetAllPopularityBased()
+    {
+        var data = await _context.PopularityBasedRecommendations.ToListAsync();
+        return Ok(data);
+    }
+
+    // GET: api/prediction/user-based
+    [HttpGet("user-based")]
+    public async Task<IActionResult> GetAllUserBased()
+    {
+        var data = await _context.UserBasedCollaborativeRecommendations.ToListAsync();
+        return Ok(data);
+    }
+}
