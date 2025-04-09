@@ -84,10 +84,10 @@ const AdminMoviePage = () => {
       </span>
       <div className="container-fluid mt-4">
         <div className="row">
-          <div className="col px-3">
-            <h1 className="text-center">Admin Page</h1>
+          <div className="container mt-4">
+            <h1 className="text-center mb-4">Admin Page</h1>
             {!showForm && (
-              <div className="d-flex justify-content-between align-items-center mb-3">
+              <div className="d-flex justify-content-end align-items-center flex-wrap gap-2 mb-3">
                 <button
                   className="btn btn-success"
                   onClick={() => setShowForm(true)}
@@ -237,26 +237,21 @@ const AdminMoviePage = () => {
                 </div>
               </div>
             </div>
-            <div className="row mt-3 mb-5 align-items-center">
-              <div className="col-md-6">
-                <p className="mb-0">
-                  Showing {(pageNum - 1) * pageSize + 1} to{' '}
-                  {Math.min(pageNum * pageSize, movies.length)} of{' '}
-                  {movies.length} entries
-                </p>
+            <div className="d-flex flex-wrap justify-content-between align-items-center mt-4 mb-5">
+              <div className="text-white mb-2 mb-md-0">
+                Showing {(pageNum - 1) * pageSize + 1} to{' '}
+                {Math.min(pageNum * pageSize, movies.length)} of {movies.length} entries
               </div>
-              <div className="col-md-6 text-end">
-                <Pagination
-                  currentPage={pageNum}
-                  totalPages={totalPages}
-                  pageSize={pageSize}
-                  onPageChange={setPageNum}
-                  onPageSizeChange={(newSize) => {
-                    setPageSize(newSize);
-                    setPageNum(1);
-                  }}
-                />
-              </div>
+              <Pagination
+                currentPage={pageNum}
+                totalPages={totalPages}
+                pageSize={pageSize}
+                onPageChange={setPageNum}
+                onPageSizeChange={(newSize) => {
+                  setPageSize(newSize);
+                  setPageNum(1);
+                }}
+              />
             </div>
           </div>
         </div>
