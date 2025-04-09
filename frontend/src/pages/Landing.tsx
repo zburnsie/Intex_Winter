@@ -148,7 +148,7 @@ const LandingPage = () => {
         <div className="footer-links">
           <a href="#">About</a>
           <a href="#">Help Center</a>
-          <a href="#">Privacy</a>
+          <a href="/privacy">Privacy</a>
           <a href="#">Terms</a>
         </div>
       </footer>

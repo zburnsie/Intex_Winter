@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|c:\\users\\lukek\\onedrive\\byu\\winter 2025\\is 455\\intex_winter\\backend\\intex.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|solutionrelative:backend\\intex.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|c:\\users\\lukek\\onedrive\\byu\\winter 2025\\is 455\\intex_winter\\backend\\intex.api\\services\\customuserclaimsprincipalfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|solutionrelative:backend\\intex.api\\services\\customuserclaimsprincipalfactory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|c:\\users\\lukek\\onedrive\\byu\\winter 2025\\is 455\\intex_winter\\backend\\intex.api\\controllers\\moviecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|solutionrelative:backend\\intex.api\\controllers\\moviecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|c:\\users\\lukek\\onedrive\\byu\\winter 2025\\is 455\\intex_winter\\backend\\intex.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|solutionrelative:backend\\intex.api\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|c:\\users\\lukek\\onedrive\\byu\\winter 2025\\is 455\\intex_winter\\backend\\intex.api\\controllers\\rolecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -17,6 +17,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|c:\\users\\lukek\\onedrive\\byu\\winter 2025\\is 455\\intex_winter\\backend\\intex.api\\controllers\\posterscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|solutionrelative:backend\\intex.api\\controllers\\posterscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|c:\\users\\lukek\\onedrive\\byu\\winter 2025\\is 455\\intex_winter\\backend\\intex.api\\controllers\\moviecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|solutionrelative:backend\\intex.api\\controllers\\moviecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A3970CE0-5F4A-D722-BAC0-BE8E50815F02}|backend\\Intex.API\\Intex.API.csproj|c:\\users\\lukek\\onedrive\\byu\\winter 2025\\is 455\\intex_winter\\backend\\intex.api\\data\\noopemailsender.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -34,32 +38,19 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 0,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "NoOpEmailSender.cs",
-              "DocumentMoniker": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Data\\NoOpEmailSender.cs",
-              "RelativeDocumentMoniker": "backend\\Intex.API\\Data\\NoOpEmailSender.cs",
-              "ToolTip": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Data\\NoOpEmailSender.cs",
-              "RelativeToolTip": "backend\\Intex.API\\Data\\NoOpEmailSender.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAFAAAAAAAAAA==",
+              "DocumentIndex": 0,
+              "Title": "CustomUserClaimsPrincipalFactory.cs",
+              "DocumentMoniker": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Services\\CustomUserClaimsPrincipalFactory.cs",
+              "RelativeDocumentMoniker": "backend\\Intex.API\\Services\\CustomUserClaimsPrincipalFactory.cs",
+              "ToolTip": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Services\\CustomUserClaimsPrincipalFactory.cs",
+              "RelativeToolTip": "backend\\Intex.API\\Services\\CustomUserClaimsPrincipalFactory.cs",
+              "ViewState": "AgIAABUAAAAAAAAAAAAAACEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T00:23:14.732Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "RoleController.cs",
-              "DocumentMoniker": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Controllers\\RoleController.cs",
-              "RelativeDocumentMoniker": "backend\\Intex.API\\Controllers\\RoleController.cs",
-              "ToolTip": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Controllers\\RoleController.cs",
-              "RelativeToolTip": "backend\\Intex.API\\Controllers\\RoleController.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-09T00:14:08.827Z",
+              "WhenOpened": "2025-04-09T17:27:00.323Z",
               "EditorCaption": ""
             },
             {
@@ -76,13 +67,38 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 5,
+              "Title": "NoOpEmailSender.cs",
+              "DocumentMoniker": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Data\\NoOpEmailSender.cs",
+              "RelativeDocumentMoniker": "backend\\Intex.API\\Data\\NoOpEmailSender.cs",
+              "ToolTip": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Data\\NoOpEmailSender.cs",
+              "RelativeToolTip": "backend\\Intex.API\\Data\\NoOpEmailSender.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABQAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T00:23:14.732Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "RoleController.cs",
+              "DocumentMoniker": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Controllers\\RoleController.cs",
+              "RelativeDocumentMoniker": "backend\\Intex.API\\Controllers\\RoleController.cs",
+              "ToolTip": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Controllers\\RoleController.cs",
+              "RelativeToolTip": "backend\\Intex.API\\Controllers\\RoleController.cs",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAYwAcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-04-09T00:14:08.827Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "Program.cs",
               "DocumentMoniker": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Program.cs",
               "RelativeDocumentMoniker": "backend\\Intex.API\\Program.cs",
               "ToolTip": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Program.cs",
               "RelativeToolTip": "backend\\Intex.API\\Program.cs",
-              "ViewState": "AgIAAHEAAAAAAAAAAAAAAIIAAAAmAAAAAAAAAA==",
+              "ViewState": "AgIAAHEAAAAAAAAAAAAAACMAAAA6AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-07T18:26:56.852Z",
               "EditorCaption": ""
@@ -102,20 +118,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 4,
               "Title": "MovieController.cs",
               "DocumentMoniker": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Controllers\\MovieController.cs",
               "RelativeDocumentMoniker": "backend\\Intex.API\\Controllers\\MovieController.cs",
               "ToolTip": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Controllers\\MovieController.cs",
               "RelativeToolTip": "backend\\Intex.API\\Controllers\\MovieController.cs",
-              "ViewState": "AgIAAAEBAAAAAAAAAAAAwBIBAAABAAAAAAAAAA==",
+              "ViewState": "AgIAAAEBAAAAAAAAAAAAwAoBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-04-08T23:51:53.675Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "UserDbContext.cs",
               "DocumentMoniker": "C:\\Users\\lukek\\OneDrive\\BYU\\WINTER 2025\\IS 455\\Intex_Winter\\backend\\Intex.API\\Data\\UserDbContext.cs",
               "RelativeDocumentMoniker": "backend\\Intex.API\\Data\\UserDbContext.cs",
@@ -123,8 +139,7 @@
               "RelativeToolTip": "backend\\Intex.API\\Data\\UserDbContext.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-04-08T17:23:50.99Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-04-08T17:23:50.99Z"
             },
             {
               "$type": "Bookmark",
