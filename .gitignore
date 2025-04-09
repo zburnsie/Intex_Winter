@@ -26,6 +26,8 @@ dist-ssr
 
 # Visual Studio
 .vs/
+bin/
+obj/
 **/bin/
 **/obj/
 *.user
@@ -41,6 +43,7 @@ dist-ssr
 **/*.exe
 **/*.pdb
 **/*.cache
+**/*.pdb
 
 # Ignore Movie Posters folder
 # Ignore movie posters folder
