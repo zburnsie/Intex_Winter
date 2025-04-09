@@ -23,6 +23,8 @@ builder.Services.AddSwaggerGen();
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<MovieDbContext>(options =>
     options.UseSqlite(connectionString));
+builder.Services.AddDbContext<RecommendContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 var app = builder.Build();
 
