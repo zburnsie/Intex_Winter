@@ -3,7 +3,9 @@ import { Container, Row, Col } from 'react-bootstrap';
 import MovieCard from '../components/MovieCard';
 import SearchBar from '../components/SearchBar';
 import GenreFilter from '../components/GenreFilter';
-import "./MoviesPage.css";
+import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
+import Logout from '../components/Logout';
+import './MoviesPage.css';
 
 const MoviesPage: React.FC = () => {
   const [movies, setMovies] = useState<any[]>([]);
@@ -11,13 +13,14 @@ const MoviesPage: React.FC = () => {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [visibleCount, setVisibleCount] = useState(20);
 
-  const baseImageUrl = "https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/";
+  const baseImageUrl =
+    'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
 
   const normalizeTitleForPath = (title: string): string => {
     return title
-      .normalize("NFD")
-      .replace(/\p{Diacritic}/gu, '')
-      .replace(/[^\w\s]/gu, '')
+      .normalize('NFD') // decompose unicode
+      .replace(/\p{Diacritic}/gu, '') // remove diacritics
+      .replace(/[^\w\s]/gu, '') // remove non-alphanumeric but preserve whitespace
       .trim();
   };
 
@@ -30,8 +33,11 @@ const MoviesPage: React.FC = () => {
 
         const filtered = data.movies
           .filter((movie: any) => {
-            const matchesSearch = movie.title.toLowerCase().includes(searchQuery.toLowerCase());
-            const matchesGenre = selectedGenre === '' || movie.genre === selectedGenre;
+            const matchesSearch = movie.title
+              .toLowerCase()
+              .includes(searchQuery.toLowerCase());
+            const matchesGenre =
+              selectedGenre === '' || movie.genre === selectedGenre;
             return matchesSearch && matchesGenre;
           })
           .slice(0, visibleCount)
@@ -54,11 +60,10 @@ const MoviesPage: React.FC = () => {
               description: movie.description
             };
           });
-          
 
         setMovies(filtered);
       } catch (error) {
-        console.error("Failed to fetch movies:", error);
+        console.error('Failed to fetch movies:', error);
       }
     };
 
@@ -84,6 +89,13 @@ const MoviesPage: React.FC = () => {
   }, []);
 
   return (
+    
+<AuthorizeView>
+<span>
+  <Logout>
+    Logout <AuthorizedUser value="email" />
+  </Logout>
+</span>
     <Container fluid className="movies-page px-4">
       <div className="movies-controls mx-auto mb-4">
         <h2 className="text-center">Browse Movies</h2>
@@ -110,6 +122,7 @@ const MoviesPage: React.FC = () => {
 </div>
 
     </Container>
+  </AuthorizeView>
   );
 };
 
