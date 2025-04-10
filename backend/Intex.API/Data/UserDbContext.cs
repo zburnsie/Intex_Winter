@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.General;
 namespace Intex.API.Data;
 
-public class UserDbContext : IdentityDbContext<IdentityUser>
+public class UserDbContext : IdentityDbContext<ApplicationUser>
 {
     public UserDbContext(DbContextOptions<UserDbContext> options)
         : base(options)

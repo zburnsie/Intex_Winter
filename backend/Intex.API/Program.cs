@@ -31,19 +31,17 @@ builder.Services.AddDbContext<MovieDbContext>(options =>
 builder.Services.AddDbContext<UserDbContext>(options =>
     options.UseSqlite(userConnection));
 
+builder.Services.AddDbContext<RecommendContext>(options =>
+    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddAuthorization();
 
-
-builder.Services.AddIdentity<IdentityUser, IdentityRole>()
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<UserDbContext>()
     .AddDefaultTokenProviders();
 
-//builder.Services.AddIdentityApiEndpoints<IdentityUser>()
-//    .AddEntityFrameworkStores<UserDbContext>();
-
 builder.Services.Configure<IdentityOptions>(options =>
 {
-    // Better Password Policy
     options.Password.RequireDigit = true;
     options.Password.RequireLowercase = true;
     options.Password.RequireUppercase = true;
@@ -55,42 +53,35 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.ClaimsIdentity.UserNameClaimType = ClaimTypes.Email;
 });
 
-builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
+builder.Services.AddScoped<IUserClaimsPrincipalFactory<ApplicationUser>, CustomUserClaimsPrincipalFactory>();
 builder.Services.AddScoped<RecommendationService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
     options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
-    options.Cookie.SameSite = SameSiteMode.None; // change after adding https for production
+    options.Cookie.SameSite = SameSiteMode.None;
     options.Cookie.Name = ".AspNetCore.Identity.Application";
     options.LoginPath = "/login";
-    
+    options.Events.OnRedirectToLogin = context =>
+    {
+        context.Response.StatusCode = 401;
+        return Task.CompletedTask;
+    };
 });
 
-// -----------------------------
-// CORS Policy
-var allowedOrigins = "_allowedOrigins";
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: allowedOrigins, policy =>
+    options.AddPolicy("_allowedOrigins", policy =>
     {
-
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3000","https://nice-meadow-0d2951b1e.6.azurestaticapps.net")
-
+        policy.WithOrigins("http://localhost:3000", "https://localhost:3000", "https://nice-meadow-0d2951b1e.6.azurestaticapps.net")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
     });
 });
 
-
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-builder.Services.AddDbContext<MovieDbContext>(options =>
-    options.UseSqlite(connectionString));
-builder.Services.AddDbContext<RecommendContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
-builder.Services.AddSingleton<IEmailSender<IdentityUser>, NoOpEmailSender<IdentityUser>>();
+builder.Services.AddSingleton<IEmailSender<ApplicationUser>, NoOpEmailSender<ApplicationUser>>();
 
 var app = builder.Build();
 
@@ -106,24 +97,17 @@ app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseRouting();
-
-app.UseCors(allowedOrigins);         // ✅ MUST come after UseRouting, BEFORE anything else needing CORS
+app.UseCors("_allowedOrigins");
 
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseDeveloperExceptionPage();
 
-
-// 👇 These must come AFTER the middleware
 app.MapControllers();
-app.MapIdentityApi<IdentityUser>()
-    .RequireCors(allowedOrigins); // 👈 ADD this to apply CORS to /login
+app.MapIdentityApi<ApplicationUser>()
+   .RequireCors("_allowedOrigins");
 
-
-// -----------------------------
-// Custom Identity Endpoints
-// -----------------------------
-app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> signInManager) =>
+app.MapPost("/logout", async (HttpContext context, SignInManager<ApplicationUser> signInManager) =>
 {
     await signInManager.SignOutAsync();
     context.Response.Cookies.Delete(".AspNetCore.Identity.Application", new CookieOptions
@@ -135,7 +119,7 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
     return Results.Ok(new { message = "Logout successful" });
 }).RequireAuthorization();
 
-app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<IdentityUser> userManager) =>
+app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<ApplicationUser> userManager) =>
 {
     if (!user.Identity?.IsAuthenticated ?? false)
     {
@@ -145,16 +129,14 @@ app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<IdentityUser> u
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
     var identityUser = await userManager.FindByEmailAsync(email);
     var roles = identityUser != null ? await userManager.GetRolesAsync(identityUser) : new List<string>();
+    var recId = identityUser?.Rec_Id ?? -1;
 
     return Results.Json(new
     {
         email = email,
-        roles = roles
+        roles = roles,
+        recId = recId
     });
 }).RequireAuthorization();
 
-
-// ... your endpoints and static files
-
 app.Run();
-

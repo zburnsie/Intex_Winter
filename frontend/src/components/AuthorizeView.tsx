@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom';
 export interface User {
   email: string;
   roles: string[];
+  recId: number;
 }
 
 export const UserContext = createContext<User | null>(null);
@@ -14,7 +15,7 @@ function AuthorizeView(props: {
 }) {
   const [authorized, setAuthorized] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<User>({ email: '', roles: [] });
+  const [user, setUser] = useState<User>({ email: '', roles: [], recId: -1 });
 
   useEffect(() => {
     const fetchAuth = async () => {
@@ -35,7 +36,11 @@ function AuthorizeView(props: {
         const data = await response.json();
 
         if (data.email) {
-          const userObj = { email: data.email, roles: data.roles ?? [] };
+          const userObj = {
+            email: data.email,
+            roles: data.roles ?? [],
+            recId: data.recId ?? -1,
+          };
           setUser(userObj);
 
           if (

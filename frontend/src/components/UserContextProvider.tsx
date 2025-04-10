@@ -15,9 +15,13 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
           credentials: 'include',
         });
         const data = await response.json();
-        if (data.email) {
-            const username = data.email.split('@')[0];
-            setUser({ email: username, roles: data.roles ?? [] });
+        if (data.email && typeof data.recId === 'number' && data.recId !== -1) {
+          const username = data.email.split('@')[0];
+          setUser({
+            email: username,
+            roles: data.roles ?? [],
+            recId: data.recId,
+          });
         } else {
           setUser(null);
         }
@@ -34,11 +38,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   if (loading) return <p>Loading...</p>;
 
-  return (
-    <UserContext.Provider value={user}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
 
 export default UserProvider;
