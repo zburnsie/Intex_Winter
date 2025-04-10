@@ -19,10 +19,13 @@ function AuthorizeView(props: {
   useEffect(() => {
     const fetchAuth = async () => {
       try {
-        const response = await fetch('https://localhost:5000/pingauth', {
-          method: 'GET',
-          credentials: 'include',
-        });
+        const response = await fetch(
+          'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/pingauth',
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
 
         const contentType = response.headers.get('content-type');
         if (!contentType || !contentType.includes('application/json')) {
@@ -35,7 +38,6 @@ function AuthorizeView(props: {
           const userObj = { email: data.email, roles: data.roles ?? [] };
           setUser(userObj);
 
-          // ✅ Check role if required
           if (
             props.requiredRole &&
             !userObj.roles.includes(props.requiredRole)
@@ -59,7 +61,7 @@ function AuthorizeView(props: {
   }, [props.requiredRole]);
 
   if (loading) return <p>Loading...</p>;
-  if (!authorized) return <Navigate to="/unauthorized" />; // 👈 You can customize this route
+  if (!authorized) return <Navigate to="/unauthorized" />;
 
   return (
     <UserContext.Provider value={user}>{props.children}</UserContext.Provider>

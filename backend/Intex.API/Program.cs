@@ -61,10 +61,11 @@ builder.Services.AddScoped<RecommendationService>();
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.None; // change after adding https for production
     options.Cookie.Name = ".AspNetCore.Identity.Application";
     options.LoginPath = "/login";
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    
 });
 
 // -----------------------------
@@ -74,7 +75,9 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowedOrigins, policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3000", "https://nice-meadow-0d2951b1e.6.azurestaticapps.net")
+
+        policy.WithOrigins("http://localhost:3000", "https://localhost:3000","https://nice-meadow-0d2951b1e.6.azurestaticapps.net")
+
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -99,15 +102,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseStaticFiles();
+app.UseHttpsRedirection();
 
-// app.UseHttpsRedirection(); // Uncomment for production
-app.UseCors(allowedOrigins);
+app.UseRouting();
+
+app.UseCors(allowedOrigins);         // ✅ MUST come after UseRouting, BEFORE anything else needing CORS
+
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseDeveloperExceptionPage();
 
+
+// 👇 These must come AFTER the middleware
 app.MapControllers();
-app.MapIdentityApi<IdentityUser>();
-app.UseStaticFiles();
+app.MapIdentityApi<IdentityUser>()
+    .RequireCors(allowedOrigins); // 👈 ADD this to apply CORS to /login
+
 
 // -----------------------------
 // Custom Identity Endpoints
@@ -147,5 +158,3 @@ app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<IdentityUser> u
 
 app.Run();
 
-
-app.Run();

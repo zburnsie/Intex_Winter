@@ -15,13 +15,20 @@ function Logout({ children }: LogoutProps) {
     setError('');
 
     try {
-      const response = await fetch('https://localhost:5000/logout', {
+      const response = await fetch('https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/logout', {
         method: 'POST',
         credentials: 'include',
         headers: {
           'Content-Type': 'application/json',
         },
       });
+      // const response = await fetch('https://localhost:5000/logout', {
+      //   method: 'POST',
+      //   credentials: 'include', // Ensure cookies are sent
+      //   headers: {
+      //     'Content-Type': 'application/json',
+      //   },
+      // });
 
       if (response.ok) {
         navigate('/login');
