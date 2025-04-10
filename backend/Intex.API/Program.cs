@@ -130,6 +130,7 @@ app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<ApplicationUser
     var identityUser = await userManager.FindByEmailAsync(email);
     var roles = identityUser != null ? await userManager.GetRolesAsync(identityUser) : new List<string>();
     var recId = identityUser?.Rec_Id ?? -1;
+    Console.WriteLine($"PingAuth for {email}: recId = {identityUser?.Rec_Id}");
 
     return Results.Json(new
     {

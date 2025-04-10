@@ -7,6 +7,7 @@ import EditMovieForm from '../components/EditMovieForm';
 import { getGenresFromMovie } from '../components/genreUtils';
 import AuthorizeView from '../components/AuthorizeView';
 import './AdminPage.css';
+import { FaEdit, FaTrash } from 'react-icons/fa';
 
 const AdminMoviePage = () => {
   const [movies, setMovies] = useState<Movie[]>([]);
@@ -43,7 +44,7 @@ const AdminMoviePage = () => {
 
     try {
       await deleteMovie(movieToDelete.showId!);
-      setMovies(movies.filter((m) => m.showId !== movieToDelete.showId))
+      setMovies(movies.filter((m) => m.showId !== movieToDelete.showId));
     } catch (error) {
       console.error('Failed to delete movie:', (error as Error).message);
       setError('Failed to delete the movie. Please try again.');
@@ -214,18 +215,20 @@ const AdminMoviePage = () => {
                             <div className="d-flex justify-content-center gap-2">
                               <button
                                 onClick={() => setEditingMovie(movie)}
-                                className="btn btn-warning btn-sm"
+                                className="btn btn-sm btn-outline-warning d-flex align-items-center justify-content-center"
+                                title="Edit"
                               >
-                                Edit
+                                <FaEdit />
                               </button>
                               <button
                                 onClick={() => {
                                   setMovieToDelete(movie);
                                   setShowDeleteModal(true);
                                 }}
-                                className="btn btn-danger btn-sm"
+                                className="btn btn-sm btn-outline-danger d-flex align-items-center justify-content-center"
+                                title="Delete"
                               >
-                                Delete
+                                <FaTrash />
                               </button>
                             </div>
                           </td>
@@ -239,7 +242,8 @@ const AdminMoviePage = () => {
             <div className="d-flex flex-wrap justify-content-between align-items-center mt-4 mb-5">
               <div className="text-white mb-2 mb-md-0">
                 Showing {(pageNum - 1) * pageSize + 1} to{' '}
-                {Math.min(pageNum * pageSize, movies.length)} of {movies.length} entries
+                {Math.min(pageNum * pageSize, movies.length)} of {movies.length}{' '}
+                entries
               </div>
               <Pagination
                 currentPage={pageNum}
@@ -256,49 +260,120 @@ const AdminMoviePage = () => {
         </div>
       </div>
 
-        {showDeleteModal && movieToDelete && (
-          <div className="modal fade show d-block" tabIndex={-1} role="dialog" style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}>
-            <div className="modal-dialog" role="document" onClick={() => setShowDeleteModal(false)}>
-              <div className="modal-content text-black" style={{ backgroundColor: "#fff" }} onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                  <h5 className="modal-title">Confirm Deletion</h5>
-                  <button type="button" className="btn-close" onClick={() => setShowDeleteModal(false)}></button>
-                </div>
-                <div className="modal-body text-black" style={{ color: "#000", fontSize: "1rem", minHeight: "2rem", lineHeight: "1.5", whiteSpace: "normal" }}>
-                  <p className="m-0" style={{ color: "#000" }}>
-                    Are you sure you want to delete <strong>{movieToDelete?.title || 'this movie'}</strong>? This action cannot be undone.
-                  </p>
-                </div>
-                <div className="modal-footer">
-                  <button type="button" className="btn btn-secondary" onClick={() => setShowDeleteModal(false)}>Cancel</button>
-                  <button type="button" className="btn btn-danger" onClick={confirmDelete}>Delete</button>
-                </div>
+      {showDeleteModal && movieToDelete && (
+        <div
+          className="modal fade show d-block"
+          tabIndex={-1}
+          role="dialog"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
+        >
+          <div
+            className="modal-dialog"
+            role="document"
+            onClick={() => setShowDeleteModal(false)}
+          >
+            <div
+              className="modal-content text-black"
+              style={{ backgroundColor: '#fff' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h5 className="modal-title">Confirm Deletion</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowDeleteModal(false)}
+                ></button>
               </div>
-            </div>
-          </div>                 
-        )}
-
-        {showSuccessModal && (
-          <div className="modal fade show d-block" tabIndex={-1} role="dialog" style={{ backgroundColor: "rgba(0, 0, 0, 0.8)" }}>
-            <div className="modal-dialog" role="document" onClick={() => setShowSuccessModal(false)}>
-              <div className="modal-content text-black" style={{ backgroundColor: "#fff" }} onClick={(e) => e.stopPropagation()}>
-                <div className="modal-header">
-                  <h5 className="modal-title">Success</h5>
-                  <button type="button" className="btn-close" onClick={() => setShowSuccessModal(false)}></button>
-                </div>
-                <div className="modal-body text-black" style={{ color: "#000", fontSize: "1rem", minHeight: "2rem", lineHeight: "1.5", whiteSpace: "normal" }}>
-                  <p className="m-0" style={{ color: "#000" }}>
-                    Movie deleted successfully!
-                  </p>
-                </div>
-                  <div className="modal-footer">
-                    <button type="button" className="btn btn-primary" onClick={() => setShowSuccessModal(false)}>OK</button>
-                  </div>
+              <div
+                className="modal-body text-black"
+                style={{
+                  color: '#000',
+                  fontSize: '1rem',
+                  minHeight: '2rem',
+                  lineHeight: '1.5',
+                  whiteSpace: 'normal',
+                }}
+              >
+                <p className="m-0" style={{ color: '#000' }}>
+                  Are you sure you want to delete{' '}
+                  <strong>{movieToDelete?.title || 'this movie'}</strong>? This
+                  action cannot be undone.
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-secondary"
+                  onClick={() => setShowDeleteModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="button"
+                  className="btn btn-danger"
+                  onClick={confirmDelete}
+                >
+                  Delete
+                </button>
               </div>
             </div>
           </div>
-        )}
+        </div>
+      )}
 
+      {showSuccessModal && (
+        <div
+          className="modal fade show d-block"
+          tabIndex={-1}
+          role="dialog"
+          style={{ backgroundColor: 'rgba(0, 0, 0, 0.8)' }}
+        >
+          <div
+            className="modal-dialog"
+            role="document"
+            onClick={() => setShowSuccessModal(false)}
+          >
+            <div
+              className="modal-content text-black"
+              style={{ backgroundColor: '#fff' }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-header">
+                <h5 className="modal-title">Success</h5>
+                <button
+                  type="button"
+                  className="btn-close"
+                  onClick={() => setShowSuccessModal(false)}
+                ></button>
+              </div>
+              <div
+                className="modal-body text-black"
+                style={{
+                  color: '#000',
+                  fontSize: '1rem',
+                  minHeight: '2rem',
+                  lineHeight: '1.5',
+                  whiteSpace: 'normal',
+                }}
+              >
+                <p className="m-0" style={{ color: '#000' }}>
+                  Movie deleted successfully!
+                </p>
+              </div>
+              <div className="modal-footer">
+                <button
+                  type="button"
+                  className="btn btn-primary"
+                  onClick={() => setShowSuccessModal(false)}
+                >
+                  OK
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </AuthorizeView>
   );
 };
