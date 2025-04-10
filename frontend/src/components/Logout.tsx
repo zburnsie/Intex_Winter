@@ -74,5 +74,5 @@ const Logout = ({ children }: LogoutProps) => {
     </div>
   );
 };
-
+// this is just for fun
 export default Logout;
