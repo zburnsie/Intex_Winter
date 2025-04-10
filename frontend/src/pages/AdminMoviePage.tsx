@@ -5,8 +5,7 @@ import Pagination from '../components/Pagination';
 import NewMovieForm from '../components/NewMovieForm';
 import EditMovieForm from '../components/EditMovieForm';
 import { getGenresFromMovie } from '../components/genreUtils';
-import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
-import Logout from '../components/Logout';
+import AuthorizeView from '../components/AuthorizeView';
 import './AdminPage.css';
 
 const AdminMoviePage = () => {
