@@ -92,7 +92,7 @@ const AdminMoviePage = () => {
                   className="btn btn-success"
                   onClick={() => setShowForm(true)}
                 >
-                  Add New Movie
+                  Add New Content
                 </button>
                 <form
                   onSubmit={(e) => {
