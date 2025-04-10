@@ -6,6 +6,7 @@ import { getGenresFromMovie, genreMap } from "../components/genreUtils";
 interface EditMovieFormData {
     showId: string;
     title: string;
+    duration: string;
     director: string;
     releaseYear: number;
     rating: string;
@@ -25,6 +26,7 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieProps) => {
     const [formData, setFormData] = useState<EditMovieFormData>({
         showId: movie.showId!,
         title: movie.title ?? "",
+        duration: movie.duration ?? "",
         director: movie.director ?? "",
         releaseYear: movie.releaseYear ?? new Date().getFullYear(),
         rating: movie.rating ?? "",
@@ -55,7 +57,7 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieProps) => {
             country: movie.country,
             releaseYear: data.releaseYear,
             rating: data.rating,
-            duration: movie.duration,
+            duration: data.duration,
             description: data.description ?? movie.description ?? null,
             action: genreFlags.action ?? 0,
             adventure: genreFlags.adventure ?? 0,
@@ -138,6 +140,18 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieProps) => {
                     id="title"
                     name="title"
                     value={formData.title}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
+            <div className="mb-3">
+                <label htmlFor="title" className="form-label">Duration</label>
+                <input
+                    type="text"
+                    className="form-control"
+                    id="title"
+                    name="title"
+                    value={formData.duration}
                     onChange={handleChange}
                     required
                 />
