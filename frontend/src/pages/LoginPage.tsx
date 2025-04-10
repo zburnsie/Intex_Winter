@@ -1,19 +1,20 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Identity.css';
+import './identity.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+// ✅ Add this at the top
+const baseApiUrl =
+  'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net';
+// const baseApiUrl = 'https://localhost:5000';
+
 function LoginPage() {
-  // state variables for email and passwords
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [rememberme, setRememberme] = useState<boolean>(false);
-
-  // state variable for error messages
   const [error, setError] = useState<string>('');
   const navigate = useNavigate();
 
-  // handle change events for input fields
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, checked, value } = e.target;
     if (type === 'checkbox') {
@@ -29,10 +30,9 @@ function LoginPage() {
     navigate('/register');
   };
 
-  // handle submit event for the form
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(''); // Clear any previous errors
+    setError('');
 
     if (!email || !password) {
       setError('Please fill in all fields.');
@@ -40,18 +40,17 @@ function LoginPage() {
     }
 
     const loginUrl = rememberme
-      ? 'https://localhost:5000/login?useCookies=true'
-      : 'https://localhost:5000/login?useSessionCookies=true';
+      ? `${baseApiUrl}/login?useCookies=true`
+      : `${baseApiUrl}/login?useSessionCookies=true`;
 
     try {
       const response = await fetch(loginUrl, {
         method: 'POST',
-        credentials: 'include', // ✅ Ensures cookies are sent & received
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
 
-      // Ensure we only parse JSON if there is content
       let data = null;
       const contentLength = response.headers.get('content-length');
       if (contentLength && parseInt(contentLength, 10) > 0) {
@@ -62,7 +61,7 @@ function LoginPage() {
         throw new Error(data?.message || 'Invalid email or password.');
       }
 
-      navigate('/movies'); // Redirect to MoviesPage on successful login
+      window.location.href = '/movies'; // Redirect to MoviesPage on successful login
     } catch (error: any) {
       setError(error.message || 'Error logging in.');
       console.error('Fetch attempt failed:', error);

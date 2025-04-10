@@ -6,16 +6,31 @@ namespace Intex.API.Services
 {
     public class CustomUserClaimsPrincipalFactory : UserClaimsPrincipalFactory<IdentityUser>
     {
+        private readonly UserManager<IdentityUser> _userManager;
+
         public CustomUserClaimsPrincipalFactory(
-      UserManager<IdentityUser> userManager,
-      IOptions<IdentityOptions> optionsAccessor)
-      : base(userManager, optionsAccessor) { }
+            UserManager<IdentityUser> userManager,
+            IOptions<IdentityOptions> optionsAccessor)
+            : base(userManager, optionsAccessor)
+        {
+            _userManager = userManager;
+        }
 
         protected override async Task<ClaimsIdentity> GenerateClaimsAsync(IdentityUser user)
         {
             var identity = await base.GenerateClaimsAsync(user);
-            identity.AddClaim(new Claim(ClaimTypes.Email, user.Email ?? "")); // Ensure email claim is always present
+            var roles = await _userManager.GetRolesAsync(user);
+
+            Console.WriteLine($"Generating claims for {user.Email}: roles = {string.Join(", ", roles)}");
+
+            identity.AddClaim(new Claim(ClaimTypes.Email, user.Email ?? ""));
+            foreach (var role in roles)
+            {
+                identity.AddClaim(new Claim(ClaimTypes.Role, role));
+            }
+
             return identity;
         }
+
     }
 }

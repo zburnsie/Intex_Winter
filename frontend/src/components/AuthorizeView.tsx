@@ -1,73 +1,80 @@
-import React, { useState, useEffect, createContext } from 'react';
+import React, { useState, useEffect, createContext, useContext } from 'react';
 import { Navigate } from 'react-router-dom';
 
-const UserContext = createContext<User | null>(null);
-
-interface User {
+export interface User {
   email: string;
+  roles: string[];
 }
 
-function AuthorizeView(props: { children: React.ReactNode }) {
-  const [authorized, setAuthorized] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(true); // add a loading state
-  //const navigate = useNavigate();
-  let emptyuser: User = { email: '' };
+export const UserContext = createContext<User | null>(null);
 
-  const [user, setUser] = useState(emptyuser);
+function AuthorizeView(props: {
+  children: React.ReactNode;
+  requiredRole?: string;
+}) {
+  const [authorized, setAuthorized] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [user, setUser] = useState<User>({ email: '', roles: [] });
 
   useEffect(() => {
-    async function fetchWithRetry(url: string, options: any) {
+    const fetchAuth = async () => {
       try {
-        const response = await fetch(url, options);
-        //console.log('AuthorizeView: Raw Response:', response);
+        const response = await fetch(
+          'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/pingauth',
+          {
+            method: 'GET',
+            credentials: 'include',
+          }
+        );
 
         const contentType = response.headers.get('content-type');
-
-        // Ensure response is JSON before parsing
         if (!contentType || !contentType.includes('application/json')) {
-          throw new Error('Invalid response format from server');
+          throw new Error('Invalid response from server');
         }
 
         const data = await response.json();
 
         if (data.email) {
-          setUser({ email: data.email });
-          setAuthorized(true);
+          const userObj = { email: data.email, roles: data.roles ?? [] };
+          setUser(userObj);
+
+          if (
+            props.requiredRole &&
+            !userObj.roles.includes(props.requiredRole)
+          ) {
+            setAuthorized(false);
+          } else {
+            setAuthorized(true);
+          }
         } else {
-          throw new Error('Invalid user session');
+          setAuthorized(false);
         }
-      } catch (error) {
+      } catch (err) {
+        console.error('Auth check failed:', err);
         setAuthorized(false);
       } finally {
         setLoading(false);
       }
-    }
+    };
 
-    fetchWithRetry('https://localhost:5000/pingauth', {
-      method: 'GET',
-      credentials: 'include',
-    });
-  }, []);
+    fetchAuth();
+  }, [props.requiredRole]);
 
-  if (loading) {
-    return <p>Loading...</p>;
-  }
+  if (loading) return <p>Loading...</p>;
+  if (!authorized) return <Navigate to="/unauthorized" />;
 
-  if (authorized) {
-    return (
-      <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
-    );
-  }
-
-  return <Navigate to="/login" />;
+  return (
+    <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
+  );
 }
 
-export function AuthorizedUser(props: { value: string }) {
-  const user = React.useContext(UserContext);
+export function AuthorizedUser(props: { value: 'email' | 'roles' }) {
+  const user = useContext(UserContext);
+  if (!user) return null;
 
-  if (!user) return null; // Prevents errors if context is null
-
-  return props.value === 'email' ? <>{user.email}</> : null;
+  if (props.value === 'email') return <>{user.email}</>;
+  if (props.value === 'roles') return <>{user.roles.join(', ')}</>;
+  return null;
 }
 
 export default AuthorizeView;

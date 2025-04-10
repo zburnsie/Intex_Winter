@@ -1,4 +1,5 @@
 using System.Security.Claims;
+using Intex.API;
 using Intex.API.Data;
 using Intex.API.Models;
 using Intex.API.Services;
@@ -55,14 +56,16 @@ builder.Services.Configure<IdentityOptions>(options =>
 });
 
 builder.Services.AddScoped<IUserClaimsPrincipalFactory<IdentityUser>, CustomUserClaimsPrincipalFactory>();
+builder.Services.AddScoped<RecommendationService>();
 
 builder.Services.ConfigureApplicationCookie(options =>
 {
     options.Cookie.HttpOnly = true;
+    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
     options.Cookie.SameSite = SameSiteMode.None; // change after adding https for production
     options.Cookie.Name = ".AspNetCore.Identity.Application";
     options.LoginPath = "/login";
-    options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+    
 });
 
 // -----------------------------
@@ -72,7 +75,7 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy(name: allowedOrigins, policy =>
     {
-        policy.WithOrigins("http://localhost:3000", "https://localhost:3000")
+        policy.WithOrigins("http://localhost:3000", "https://localhost:3000","https://nice-meadow-0d2951b1e.6.azurestaticapps.net")
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -97,15 +100,23 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseStaticFiles();
+app.UseHttpsRedirection();
 
-// app.UseHttpsRedirection(); // Uncomment for production
-app.UseCors(allowedOrigins);
+app.UseRouting();
+
+app.UseCors(allowedOrigins);         // ✅ MUST come after UseRouting, BEFORE anything else needing CORS
+
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseDeveloperExceptionPage();
 
+
+// 👇 These must come AFTER the middleware
 app.MapControllers();
-app.MapIdentityApi<IdentityUser>();
-app.UseStaticFiles();
+app.MapIdentityApi<IdentityUser>()
+    .RequireCors(allowedOrigins); // 👈 ADD this to apply CORS to /login
+
 
 // -----------------------------
 // Custom Identity Endpoints
@@ -122,7 +133,7 @@ app.MapPost("/logout", async (HttpContext context, SignInManager<IdentityUser> s
     return Results.Ok(new { message = "Logout successful" });
 }).RequireAuthorization();
 
-app.MapGet("/pingauth", (ClaimsPrincipal user) =>
+app.MapGet("/pingauth", async (ClaimsPrincipal user, UserManager<IdentityUser> userManager) =>
 {
     if (!user.Identity?.IsAuthenticated ?? false)
     {
@@ -130,12 +141,18 @@ app.MapGet("/pingauth", (ClaimsPrincipal user) =>
     }
 
     var email = user.FindFirstValue(ClaimTypes.Email) ?? "unknown@example.com";
-    return Results.Json(new { email = email });
+    var identityUser = await userManager.FindByEmailAsync(email);
+    var roles = identityUser != null ? await userManager.GetRolesAsync(identityUser) : new List<string>();
+
+    return Results.Json(new
+    {
+        email = email,
+        roles = roles
+    });
 }).RequireAuthorization();
+
 
 // ... your endpoints and static files
 
 app.Run();
 
-
-app.Run();

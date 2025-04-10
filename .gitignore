@@ -1,4 +1,6 @@
+# --------------------------------------
 # Logs
+# --------------------------------------
 logs
 *.log
 npm-debug.log*
@@ -7,43 +9,69 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
-# Dependencies
-node_modules
-dist
-dist-ssr
+# --------------------------------------
+# Dependency directories
+# --------------------------------------
+node_modules/
+package-lock.json
+yarn.lock
+pnpm-lock.yaml
+dist/
+dist-ssr/
 *.local
 
-# Editor directories and files
-.vscode/*
-!.vscode/extensions.json
-.idea
-.DS_Store
-*.suo
-*.ntvs*
-*.njsproj
-*.sln
-*.sw?
-
-# Visual Studio
-.vs/
-**/bin/
-**/obj/
-*.user
-
-# Environment variables
+# --------------------------------------
+# Environment files
+# --------------------------------------
 .env
 .env.local
 .env.*.local
 
-# Static web assets from ASP.NET
-**/staticwebassets.build.json
-**/staticwebassets.*.json
+# --------------------------------------
+# Build Artifacts (.NET, ASP.NET, etc.)
+# --------------------------------------
+bin/
+obj/
+**/bin/
+**/obj/
+**/*.dll
 **/*.exe
 **/*.pdb
 **/*.cache
+*.suo
+*.user
+*.ntvs*
+*.njsproj
+
+# .NET Publish output
+**/publish/
 
 # Ignore Movie Posters folder
 # Ignore movie posters folder
+# Static Web Assets from ASP.NET
+**/staticwebassets.build.json
+**/staticwebassets.*.json
+
+# --------------------------------------
+# IDE & Editor settings
+# --------------------------------------
+.vscode/
+!.vscode/extensions.json
+.idea/
+*.sw?
+
+# Visual Studio project settings
+.vs/
+
+# --------------------------------------
+# OS & Miscellaneous Files
+# --------------------------------------
+.DS_Store
+Thumbs.db
+
+# --------------------------------------
+# Project-specific
+# --------------------------------------
 **/Movie Posters/
-.azure
 infra/
+.azure/

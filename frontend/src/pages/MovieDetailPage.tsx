@@ -17,6 +17,14 @@ interface MovieDetail {
   imagePath: string;
 }
 
+// 🔁 Easily switch between environments here
+const baseApiUrl =
+  'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net';
+// const baseApiUrl = 'http://localhost:4000';
+
+const baseImageUrl =
+  'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
+
 const MovieDetailPage: React.FC = () => {
   const { showId } = useParams<{ showId: string }>();
   const [movie, setMovie] = useState<MovieDetail | null>(null);
@@ -24,11 +32,9 @@ const MovieDetailPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [averageRating, setAverageRating] = useState<number | null>(null);
 
-  const baseImageUrl = "https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/";
-
   const normalizeTitleForPath = (title: string): string => {
     return title
-      .normalize("NFD")
+      .normalize('NFD')
       .replace(/\p{Diacritic}/gu, '')
       .replace(/[^\w\s]/gu, '')
       .trim();
@@ -37,44 +43,45 @@ const MovieDetailPage: React.FC = () => {
   useEffect(() => {
     const fetchMovieDetail = async () => {
       try {
-        const response = await fetch(`http://localhost:4000/api/movie/${showId}`);
+        const response = await fetch(`${baseApiUrl}/api/Movie/${showId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch movie details');
         }
         const data = await response.json();
 
         const normalizedTitle = normalizeTitleForPath(data.title || 'Unknown');
-        const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
+        const imagePath = `${baseImageUrl}${encodeURIComponent(
+          normalizedTitle
+        )}.jpg`;
 
         const fetchRatings = async () => {
           try {
             const res = await fetch('https://localhost:5000/api/rating/allratings');
             const data = await res.json();
-        
+
             const ratingsForMovie = data.filter((r: any) => r.showId === showId);
             if (ratingsForMovie.length > 0) {
               const total = ratingsForMovie.reduce((sum: number, r: any) => sum + r.rating, 0);
               const avg = total / ratingsForMovie.length;
               setAverageRating(avg);
             } else {
-              setAverageRating(null); // No ratings
+              setAverageRating(3.5); // Default rating when no ratings found
             }
           } catch (error) {
             console.error('Error fetching ratings:', error);
-            setAverageRating(null);
+            setAverageRating(3.5); // Default rating
           }
         };
-        
+
         fetchRatings(); // Call it inside useEffect
-        
 
         setMovie({
           title:
-            data.title === "#AnneFrank - Parallel Stories"
-              ? "AnneFrank - Parallel Stories"
-              : data.title === "#Selfie"
-              ? "Selfie"
-              : data.title || "Unknown",
+            data.title === '#AnneFrank - Parallel Stories'
+              ? 'AnneFrank - Parallel Stories'
+              : data.title === '#Selfie'
+              ? 'Selfie'
+              : data.title || 'Unknown',
           director: data.director || '—',
           cast: data.cast || '—',
           country: data.country || '—',
@@ -82,9 +89,8 @@ const MovieDetailPage: React.FC = () => {
           rating: data.rating || '—',
           duration: data.duration || '—',
           description: data.description || 'No description available.',
-          imagePath: imagePath
+          imagePath: imagePath,
         });
-
       } catch (err) {
         setError((err as Error).message);
       } finally {
@@ -95,7 +101,12 @@ const MovieDetailPage: React.FC = () => {
     fetchMovieDetail();
   }, [showId]);
 
-  if (loading) return <div className="text-center mt-5"><Spinner animation="border" variant="light" /></div>;
+  if (loading)
+    return (
+      <div className="text-center mt-5">
+        <Spinner animation="border" variant="light" />
+      </div>
+    );
   if (error) return <p className="text-danger text-center">Error: {error}</p>;
   if (!movie) return <p className="text-center">Movie not found</p>;
 
@@ -107,9 +118,9 @@ const MovieDetailPage: React.FC = () => {
             src={movie.imagePath}
             alt={movie.title}
             style={{
-              width: '100%',
-              maxWidth: '500px',
-              height: 'auto',
+              width: '360px',
+              height: '531px',
+              objectFit: 'cover',
               borderRadius: '12px',
             }}
             onError={(e) => {
@@ -118,32 +129,45 @@ const MovieDetailPage: React.FC = () => {
             }}
           />
 
-            {averageRating !== null && (
+          {averageRating !== null && (
             <div className="mt-3 d-flex flex-column align-items-center">
-            <StarRating rating={averageRating} />
-            <p style={{ fontSize: '1rem', marginTop: '4px' }}>
-              {averageRating.toFixed(1)} / 5
-            </p>
+              <StarRating rating={averageRating} />
+              <p style={{ fontSize: '1rem', marginTop: '4px' }}>
+                {averageRating.toFixed(1)} / 5
+              </p>
             </div>
-            )}
-
+          )}
         </Col>
-  
+
         <Col md={8} className="text-start d-flex flex-column justify-content-start">
           <h2>{movie.title}</h2>
-          <p><strong>Rating:</strong> {movie.rating}</p>
-          <p><strong>Duration:</strong> {movie.duration}</p>
-          <p><strong>Release Year:</strong> {movie.releaseYear}</p>
-          <p><strong>Director:</strong> {movie.director}</p>
-          <p><strong>Country:</strong> {movie.country}</p>
-          <p><strong>Cast:</strong> {movie.cast}</p>
-          <p><strong>Description:</strong> {movie.description}</p>
-  
+          <p>
+            <strong>Rating:</strong> {movie.rating}
+          </p>
+          <p>
+            <strong>Duration:</strong> {movie.duration}
+          </p>
+          <p>
+            <strong>Release Year:</strong> {movie.releaseYear}
+          </p>
+          <p>
+            <strong>Director:</strong> {movie.director}
+          </p>
+          <p>
+            <strong>Country:</strong> {movie.country}
+          </p>
+          <p>
+            <strong>Cast:</strong> {movie.cast}
+          </p>
+          <p>
+            <strong>Description:</strong> {movie.description}
+          </p>
+
           {/* 🔁 Content-Based Recommendations */}
           <div className="mt-3 mb-2">
             <ContentRecommendationRow showId={showId ?? ''} />
           </div>
-  
+
           {/* 👥 Hybrid-Weighted Recommendations */}
           <div className="mt-2">
             <HybridRecommendationRow showId={showId ?? ''} />
@@ -152,12 +176,6 @@ const MovieDetailPage: React.FC = () => {
       </Row>
     </Container>
   );
-  
-  
 };
 
 export default MovieDetailPage;
-
-
-
-
