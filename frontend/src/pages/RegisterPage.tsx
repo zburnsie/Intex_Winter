@@ -65,80 +65,84 @@ function Register() {
   };
 
   return (
-    <div className="container">
-      <div className="row">
-        <div className="card border-0 shadow rounded-3">
-          <div className="card-body p-4 p-sm-5">
-            <h5 className="card-title text-center mb-5 fw-light fs-5">
-              Register
-            </h5>
-            <form onSubmit={handleSubmit}>
-              <div className="form-floating mb-3">
-                <input
-                  className="form-control"
-                  type="email"
-                  id="email"
-                  name="email"
-                  value={email}
-                  onChange={handleChange}
-                />
-                <label htmlFor="email">Email address</label>
-              </div>
-              <div className="form-floating mb-3">
-                <input
-                  className="form-control"
-                  type="password"
-                  id="password"
-                  name="password"
-                  value={password}
-                  onChange={handleChange}
-                />
-                <label htmlFor="password">Password</label>
-              </div>
-              <div className="form-floating mb-3">
-                <input
-                  className="form-control"
-                  type="password"
-                  id="confirmPassword"
-                  name="confirmPassword"
-                  value={confirmPassword}
-                  onChange={handleChange}
-                />
-                <label htmlFor="confirmPassword">Confirm Password</label>
-              </div>
-
-              <div className="d-grid mb-2">
-                <button
-                  className="btn btn-primary btn-login text-uppercase fw-bold"
-                  type="submit"
-                >
-                  Register
-                </button>
-              </div>
-              <div className="d-grid mb-2">
-                <button
-                  type="button"
-                  className="btn btn-secondary btn-login text-uppercase fw-bold"
-                  onClick={handleLoginClick}
-                >
-                  Go to Login
-                </button>
-              </div>
-            </form>
-
-            {/* Feedback messages */}
-            {success && (
-              <div className="alert alert-success mt-3" role="alert">
-                {success}
-              </div>
-            )}
-            {error && (
-              <div className="alert alert-danger mt-3" role="alert">
-                {error}
-              </div>
-            )}
+    <div className="position-absolute top-50 start-50 translate-middle w-100 d-flex justify-content-center bg-black text-white">
+      <div
+        className="card bg-dark border-0 shadow p-4"
+        style={{ maxWidth: '360px', width: '100%' }}
+      >
+        <h5
+          className="text-center mb-4 fw-bold text-white"
+        >
+          Register
+        </h5>
+        <form onSubmit={handleSubmit}>
+          <div className="form-floating mb-3">
+            <input
+              className="form-control"
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Email"
+              value={email}
+              onChange={handleChange}
+            />
+            <label htmlFor="email">Email address</label>
           </div>
-        </div>
+          <div className="form-floating mb-3">
+            <input
+              className="form-control"
+              type="password"
+              id="password"
+              name="password"
+              placeholder="Password"
+              value={password}
+              onChange={handleChange}
+            />
+            <label htmlFor="password">Password</label>
+          </div>
+          <div className="form-floating mb-3">
+            <input
+              className="form-control"
+              type="password"
+              id="confirmPassword"
+              name="confirmPassword"
+              placeholder="Confirm Password"
+              value={confirmPassword}
+              onChange={handleChange}
+            />
+            <label htmlFor="confirmPassword">Confirm Password</label>
+          </div>
+  
+          <div className="d-grid mb-2">
+            <button
+              className="btn btn-danger btn-login fw-bold text-uppercase"
+              type="submit"
+            >
+              Register
+            </button>
+          </div>
+          <div className="d-grid mb-2">
+            <button
+              type="button"
+              className="btn btn-outline-light btn-login fw-bold text-uppercase"
+              onClick={handleLoginClick}
+            >
+              Go to Login
+            </button>
+          </div>
+        </form>
+  
+        {/* Feedback messages */}
+        {success && (
+          <div className="alert alert-success mt-3" role="alert">
+            {success}
+          </div>
+        )}
+        {error && (
+          <div className="alert alert-danger mt-3" role="alert">
+            {error}
+          </div>
+        )}
       </div>
     </div>
   );
