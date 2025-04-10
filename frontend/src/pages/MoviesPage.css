@@ -61,9 +61,8 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
-  margin: 0 -0.5rem; /* adjust based on .col padding */
+  margin: 0 -0.5rem;
 }
-
 
 /* Poster Card Columns */
 .col {
@@ -71,26 +70,23 @@ h2 {
   justify-content: center;
   align-items: flex-start;
   padding: 0.5rem;
-  flex: 1 1 216px;        /* Allows growth and shrink, but never below 216px */
-  min-width: 216px;       /* Prevents squishing below image size */
-  max-width: 100%;        /* Never exceeds container width */
+  flex: 1 1 216px;
+  min-width: 216px;
+  max-width: 100%;
   box-sizing: border-box;
 }
-
-
 
 /* Hover effect for MovieCard images */
 .hover-effect {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Wrapper to track hover state */
 .movie-hover-wrapper {
   position: relative;
   display: inline-block;
 }
 
-/* Zoom + crisp white outline on hover */
+/* Zoom + white outline on hover */
 .zoomed .hover-effect {
   transform: scale(1.1);
   border: 5px solid white;
@@ -99,12 +95,11 @@ h2 {
   z-index: 10;
 }
 
-/* Hover card popup */
 .hover-info-card {
   position: absolute;
   top: 0;
   left: 105%;
-  background-color: #2a2a2a;  /* or try #1f1f1f for darker, #333 for medium */
+  background-color: #2a2a2a;
   border: 1px solid #555;
   border-radius: 10px;
   padding: 12px;
@@ -116,6 +111,7 @@ h2 {
   flex-direction: column;
   justify-content: space-between;
 }
+
 
 /* Description text trimming */
 .description-preview {
@@ -134,18 +130,86 @@ h2 {
   box-sizing: border-box;
 }
 
+/* Grid layout for infinite scroll page */
 .movie-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(216px, 1fr));
-  column-gap: 2rem;  /* Wider horizontal spacing */
-  row-gap: 1.25rem;  /* Keep vertical spacing as is */
+  column-gap: 2rem;
+  row-gap: 1.25rem;
   justify-items: center;
   align-items: start;
 }
 
-
 .movie-grid-item {
-  width: 216px; /* Force consistent width */
+  width: 216px;
 }
+
+/* Horizontal scrolling row layout (for MovieRow) */
+.genre-section {
+  position: relative;
+  padding: 0 40px;
+}
+
+.scroll-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding-top: 2.5rem; /* keep your buffer */
+  overflow: visible; /* this is the critical fix */
+  z-index: 100;
+}
+
+
+.genre-row {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  gap: 20px;
+  scroll-behavior: smooth;
+  padding: 10px 0;
+}
+
+.genre-row::-webkit-scrollbar {
+  display: none; /* Hide scrollbar for cleaner look */
+}
+
+.scroll-button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 24px;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.scroll-button.left {
+  position: absolute;
+  left: 0;
+}
+
+.scroll-button.right {
+  position: absolute;
+  right: 0;
+}
+.hover-info-card h5 {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+
+.genre-row,
+.movie-hover-wrapper {
+  overflow: visible !important;
+}
+
+
+
+
 
 

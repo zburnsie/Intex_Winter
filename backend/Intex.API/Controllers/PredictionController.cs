@@ -7,10 +7,12 @@ using Microsoft.EntityFrameworkCore;
 public class PredictionController : ControllerBase
 {
     private readonly RecommendContext _context;
+    private readonly MovieDbContext _movieContext;
 
-    public PredictionController(RecommendContext context)
+    public PredictionController(RecommendContext context, MovieDbContext movieContext)
     {
         _context = context;
+        _movieContext = movieContext;
     }
 
     // GET: api/prediction/content-based
@@ -21,13 +23,56 @@ public class PredictionController : ControllerBase
         return Ok(data);
     }
 
-    // GET: api/prediction/hybrid
-    [HttpGet("hybrid")]
-    public async Task<IActionResult> GetAllHybridWeighted()
+    // GET: api/prediction/content-based/{showId}
+    [HttpGet("content-based/{showId}")]
+    public async Task<IActionResult> GetContentBasedRecommendationsForShow(string showId)
     {
-        var data = await _context.HybridWeightedRecommendations.ToListAsync();
-        return Ok(data);
+        var rec = await _context.ContentBasedRecommendations
+            .FirstOrDefaultAsync(r => r.ShowId == showId);
+
+        if (rec == null)
+        {
+            return NotFound(new { Message = $"No recommendations found for showId {showId}" });
+        }
+
+        var recommendedIds = new List<string?>
+        {
+            rec.Rec1, rec.Rec2, rec.Rec3, rec.Rec4, rec.Rec5
+        }.Where(id => !string.IsNullOrEmpty(id)).ToList();
+
+        var recommendedMovies = await _movieContext.Movies
+            .Where(m => recommendedIds.Contains(m.ShowId))
+            .ToListAsync();
+
+        return Ok(recommendedMovies);
     }
+
+   [HttpGet("hybrid-weighted/{showId}")]
+    public async Task<IActionResult> GetHybridRecommendations(string showId)
+    {
+        var rec = await _context.HybridWeightedRecommendations
+            .FirstOrDefaultAsync(r => r.ShowId == showId);
+
+        if (rec == null)
+        {
+            return NotFound(new { Message = $"No hybrid recommendations found for showId {showId}" });
+        }
+
+        var recommendedIds = new List<string?>
+        {
+            rec.Rec1, rec.Rec2, rec.Rec3, rec.Rec4, rec.Rec5
+        }.Where(id => !string.IsNullOrEmpty(id)).ToList();
+
+        var recommendedMovies = await _movieContext.Movies
+            .Where(m => recommendedIds.Contains(m.ShowId))
+            .ToListAsync();
+
+        return Ok(recommendedMovies);
+    }
+
+
+
+
 
     // GET: api/prediction/item-to-item
     [HttpGet("item-to-item")]
@@ -41,8 +86,15 @@ public class PredictionController : ControllerBase
     [HttpGet("popularity")]
     public async Task<IActionResult> GetAllPopularityBased()
     {
-        var data = await _context.PopularityBasedRecommendations.ToListAsync();
-        return Ok(data);
+        var popularShowIds = await _context.PopularityBasedRecommendations
+            .Select(p => p.ShowId)
+            .ToListAsync();
+
+        var movies = await _movieContext.Movies
+            .Where(m => popularShowIds.Contains(m.ShowId))
+            .ToListAsync();
+
+        return Ok(movies);
     }
 
     // GET: api/prediction/user-based

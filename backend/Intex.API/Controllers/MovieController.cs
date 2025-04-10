@@ -83,11 +83,24 @@ namespace Intex.API.Controllers
             return Ok(someObject);
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetMovieById(int id)
+        [HttpGet("{showId}")]
+        public IActionResult GetMovieById(string showId)
         {
-            return Ok(new { Message = $"Details for movie with ID {id} will go here." });
+            Console.WriteLine($"Movie detail request received for: {showId}");
+
+            var movie = _context.Movies.FirstOrDefault(m => m.ShowId == showId);
+
+            if (movie == null)
+            {
+                Console.WriteLine($"Movie not found: {showId}");
+                return NotFound(new { Message = $"Movie with ShowId {showId} not found." });
+            }
+
+            Console.WriteLine($"Movie found: {movie.Title}");
+            return Ok(movie);
         }
+
+
 
         [HttpPost("AddMovie")]
         [Authorize(Roles = "Admin")]
