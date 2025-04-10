@@ -43,6 +43,11 @@ obj/
 *.ntvs*
 *.njsproj
 
+# .NET Publish output
+**/publish/
+
+# Ignore Movie Posters folder
+# Ignore movie posters folder
 # Static Web Assets from ASP.NET
 **/staticwebassets.build.json
 **/staticwebassets.*.json

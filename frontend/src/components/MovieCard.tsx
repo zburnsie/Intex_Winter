@@ -22,9 +22,6 @@ const MovieCard: React.FC<MovieCardProps> = ({
   releaseYear,
   rating,
   description,
-  director,
-  cast,
-  country,
   duration,
 }) => {
   const [hovered, setHovered] = useState(false);

@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+// ✅ Add this at the top
+const baseApiUrl =
+  'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net';
+// const baseApiUrl = 'https://localhost:5000';
+
 function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -36,7 +41,7 @@ function Register() {
       setError('');
       setSuccess('');
 
-      fetch('https://localhost:5000/register', {
+      fetch(`${baseApiUrl}/register`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -119,6 +124,7 @@ function Register() {
               type="submit"
             >
               Register
+
             </button>
           </div>
           <div className="d-grid mb-2">
@@ -141,6 +147,7 @@ function Register() {
         {error && (
           <div className="alert alert-danger mt-3" role="alert">
             {error}
+
           </div>
         )}
       </div>

@@ -36,29 +36,31 @@ const LandingPage = () => {
       .trim();
   };
 
-  const shuffleArray = (array: any[]) => {
-    let currentIndex = array.length,  randomIndex;
+  // const shuffleArray = (array: any[]) => {
+  //   let currentIndex = array.length,
+  //     randomIndex;
 
-    // While there remain elements to shuffle...
-    while (currentIndex !== 0) {
+  //   // While there remain elements to shuffle...
+  //   while (currentIndex !== 0) {
+  //     // Pick a remaining element...
+  //     randomIndex = Math.floor(Math.random() * currentIndex);
+  //     currentIndex--;
 
-      // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
+  //     // And swap it with the current element.
+  //     [array[currentIndex], array[randomIndex]] = [
+  //       array[randomIndex],
+  //       array[currentIndex],
+  //     ];
+  //   }
 
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
-    }
-
-    return array;
-  }
+  //   return array;
+  // };
 
   useEffect(() => {
     const fetchPosters = async () => {
       try {
         const response = await fetch(
-          'http://localhost:4000/api/movie/AllMovies?pageSize=100'
+          'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Movie/AllMovies?pageSize=100'
         );
         const data = await response.json();
 
