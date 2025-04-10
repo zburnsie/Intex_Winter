@@ -3,8 +3,7 @@ import { Container } from 'react-bootstrap';
 import MovieCard from '../components/MovieCard';
 import SearchBar from '../components/SearchBar';
 import GenreFilter from '../components/GenreFilter';
-import AuthorizeView, { AuthorizedUser } from '../components/AuthorizeView';
-import Logout from '../components/Logout';
+import AuthorizeView from '../components/AuthorizeView';
 import './MoviesPage.css';
 
 const baseApiUrl =

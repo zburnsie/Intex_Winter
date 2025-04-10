@@ -1,5 +1,3 @@
-// components/UserProvider.tsx
-
 import React, { useEffect, useState } from 'react';
 import { User, UserContext } from './AuthorizeView';
 
@@ -10,7 +8,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {
     const fetchAuth = async () => {
       try {
-        const response = await fetch('https://localhost:5000/pingauth', {
+        const response = await fetch('https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/pingauth', {
           method: 'GET',
           credentials: 'include',
         });
@@ -36,7 +34,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     fetchAuth();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return null;
 
   return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
