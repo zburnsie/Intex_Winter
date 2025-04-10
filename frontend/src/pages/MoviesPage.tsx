@@ -101,9 +101,9 @@ const MoviesPage: React.FC = () => {
   return (
     <AuthorizeView>
       <span>
-        <Logout>
+        {/* <Logout>
           Logout <AuthorizedUser value="email" />
-        </Logout>
+        </Logout> */}
       </span>
       <Container fluid className="movies-page px-4">
         <div className="movies-controls mx-auto mb-4">

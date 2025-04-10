@@ -78,9 +78,9 @@ const AdminMoviePage = () => {
   return (
     <AuthorizeView>
       <span>
-        <Logout>
+        {/* <Logout>
           Logout <AuthorizedUser value="email" />
-        </Logout>
+        </Logout> */}
       </span>
       <div className="container-fluid mt-4">
         <div className="row">
@@ -92,7 +92,7 @@ const AdminMoviePage = () => {
                   className="btn btn-success"
                   onClick={() => setShowForm(true)}
                 >
-                  Add New Movie
+                  Add New Content
                 </button>
                 <form
                   onSubmit={(e) => {
