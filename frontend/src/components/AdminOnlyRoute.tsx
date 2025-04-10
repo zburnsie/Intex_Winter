@@ -3,9 +3,9 @@ import { Navigate } from 'react-router-dom';
 import { UserContext } from './AuthorizeView';
 
 const AdminOnlyRoute = ({ children }: { children: React.ReactNode }) => {
-  const user = useContext(UserContext);
+  const [user] = useContext(UserContext);
 
-  if (!user || !user.roles.includes('Admin')) {
+  if (!user?.roles?.includes('Admin')) {
     return <Navigate to="/login" />;
   }
 
