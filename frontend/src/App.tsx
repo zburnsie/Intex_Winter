@@ -14,7 +14,7 @@ import AuthorizeView, { AuthorizedUser, UserContext } from './components/Authori
 import Logout from './components/Logout';
 
 const App: React.FC = () => {
-  const user = useContext(UserContext);
+  const [user] = useContext(UserContext);
   const location = useLocation();
   const isLanding = location.pathname === '/';
   const isLogin = location.pathname === '/login';
@@ -32,15 +32,26 @@ const App: React.FC = () => {
             </Link>
             <div className="navbar-links">
               <Link to="/">Home</Link>
-              <Link to="/adminpage">Admin</Link>
-              <Link to="/movies">Movies</Link>
-              <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link>
+              {/* <Link to="/adminpage">Admin</Link>
+              <Link to="/movies">Movies</Link> */}
+              {/* <Link to="/login">Login</Link>
+              <Link to="/register">Register</Link> */}
+              {user.email ? (
+                <>
+                  <Link to="/adminpage">Admin</Link>
+                  <Link to="/movies">Movies</Link>
+                </>
+              ) : (
+                <>
+                  <Link to="/login">Login</Link>
+                  <Link to="/register">Register</Link>
+                </>
+              )}
             </div>
           </nav>
             {/* Logout button below navbar */}
             {/* Logout only shows when logged in AND not on login/register/landing pages */}
-            {user && !isLanding && !isLogin && !isRegister && (
+            {user.email && !isLanding && !isLogin && !isRegister && (
               <div className="container-fluid">
                 <div className="d-flex justify-content-end pe-4 mt-2">
                   <Logout>

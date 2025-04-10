@@ -37,7 +37,7 @@ const PosterCard = ({
           display: 'block',
         }}
         onError={(e) => {
-          e.currentTarget.src = '/images/fallback.jpg';
+          e.currentTarget.src = '/default-poster.jpg';
         }}
       />
       {/* Optional hover overlay */}

@@ -1,29 +1,35 @@
-// components/UserProvider.tsx
-
 import React, { useEffect, useState } from 'react';
 import { User, UserContext } from './AuthorizeView';
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<User>({ email: '', roles: [] });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchAuth = async () => {
       try {
-        const response = await fetch('https://localhost:5000/pingauth', {
+        const response = await fetch('https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/pingauth', {
           method: 'GET',
           credentials: 'include',
         });
-        const data = await response.json();
+        if (!response.ok) {
+          throw new Error(`Auth request failed: ${response.status}`);
+        }
+        const text = await response.text();
+        if (!text) {
+          setUser({ email: '', roles: [] });
+          return;
+        }
+        const data = JSON.parse(text);
         if (data.email) {
             const username = data.email.split('@')[0];
             setUser({ email: username, roles: data.roles ?? [] });
         } else {
-          setUser(null);
+          setUser({ email: '', roles: [] });
         }
       } catch (err) {
         console.error('Auth fetch error:', err);
-        setUser(null);
+        setUser({ email: '', roles: [] });
       } finally {
         setLoading(false);
       }
@@ -32,10 +38,10 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
     fetchAuth();
   }, []);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return null;
 
   return (
-    <UserContext.Provider value={user}>
+    <UserContext.Provider value={[user, setUser]}>
       {children}
     </UserContext.Provider>
   );

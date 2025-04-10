@@ -1,14 +1,16 @@
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
+import { UserContext } from './AuthorizeView';
 
 type LogoutProps = {
   children?: React.ReactNode;
 };
 
-function Logout({ children }: LogoutProps) {
+const Logout = ({ children }: LogoutProps) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [, setUser] = useContext(UserContext);
 
   const handleLogout = async () => {
     setLoading(true);
@@ -22,15 +24,10 @@ function Logout({ children }: LogoutProps) {
           'Content-Type': 'application/json',
         },
       });
-      // const response = await fetch('https://localhost:5000/logout', {
-      //   method: 'POST',
-      //   credentials: 'include', // Ensure cookies are sent
-      //   headers: {
-      //     'Content-Type': 'application/json',
-      //   },
-      // });
 
       if (response.ok) {
+        setUser({ email: '', roles: [] });
+        window.dispatchEvent(new CustomEvent('user-logged-out'));
         navigate('/login');
       } else {
         console.error('Logout failed:', response.status);

@@ -6,7 +6,7 @@ export interface User {
   roles: string[];
 }
 
-export const UserContext = createContext<User | null>(null);
+export const UserContext = createContext<[User, React.Dispatch<React.SetStateAction<User>>]>([{ email: '', roles: [] }, () => {}]);
 
 function AuthorizeView(props: {
   children: React.ReactNode;
@@ -64,13 +64,15 @@ function AuthorizeView(props: {
   if (!authorized) return <Navigate to="/unauthorized" />;
 
   return (
-    <UserContext.Provider value={user}>{props.children}</UserContext.Provider>
+    <UserContext.Provider value={[user, setUser]}>
+      {props.children}
+    </UserContext.Provider>
   );
 }
 
 export function AuthorizedUser(props: { value: 'email' | 'roles' }) {
-  const user = useContext(UserContext);
-  if (!user) return null;
+  const [user] = useContext(UserContext);
+  if (!user.email) return null;
 
   if (props.value === 'email') return <>{user.email}</>;
   if (props.value === 'roles') return <>{user.roles.join(', ')}</>;
