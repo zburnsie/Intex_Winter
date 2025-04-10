@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import StarRating from './StarRating';
 
 interface MovieCardProps {
   title: string;
@@ -13,6 +14,7 @@ interface MovieCardProps {
   cast?: string;
   country?: string;
   duration?: string;
+  averageRating?: number;
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({
@@ -22,28 +24,22 @@ const MovieCard: React.FC<MovieCardProps> = ({
   releaseYear,
   rating,
   description,
-  director,
-  cast,
-  country,
   duration,
+  averageRating,
 }) => {
   const [hovered, setHovered] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
   const [imgHeight, setImgHeight] = useState<number>(324);
   const [openLeft, setOpenLeft] = useState(false);
 
   useEffect(() => {
-    if (hovered && cardRef.current) {
-      const rect = cardRef.current.getBoundingClientRect();
-      const buffer = 250; // estimated hover card width
+    if (hovered && wrapperRef.current) {
+      const rect = wrapperRef.current.getBoundingClientRect();
+      const hoverCardWidth = 250;
       const viewportWidth = window.innerWidth;
 
-      if (rect.right + buffer > viewportWidth) {
-        setOpenLeft(true);
-      } else {
-        setOpenLeft(false);
-      }
+      setOpenLeft(rect.right + hoverCardWidth > viewportWidth);
 
       if (imgRef.current) {
         setImgHeight(imgRef.current.clientHeight);
@@ -56,7 +52,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
       className={`movie-hover-wrapper ${hovered ? 'zoomed' : ''}`}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
-      ref={cardRef}
+      ref={wrapperRef}
       style={{ position: 'relative', display: 'inline-block' }}
     >
       <Link to={`/movie/${showId}`} style={{ textDecoration: 'none' }}>
@@ -100,6 +96,15 @@ const MovieCard: React.FC<MovieCardProps> = ({
           <h5 className="text-white mb-2">
             <strong>{title}</strong>
           </h5>
+
+          <div style={{ marginBottom: '0.5rem' }}>
+  <StarRating rating={typeof averageRating === 'number' && !isNaN(averageRating) ? averageRating : 3.5} />
+  <p className="text-white small">
+    {(typeof averageRating === 'number' && !isNaN(averageRating) ? averageRating : 3.5).toFixed(1)} / 5
+  </p>
+</div>
+
+
           <p className="text-white mb-1">Release: {releaseYear ?? '—'}</p>
           <p className="text-white mb-1">Rated: {rating ?? '—'}</p>
           <p className="text-white mb-1">Length: {duration ?? '—'}</p>
@@ -113,3 +118,6 @@ const MovieCard: React.FC<MovieCardProps> = ({
 };
 
 export default MovieCard;
+
+
+

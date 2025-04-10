@@ -15,7 +15,7 @@ export default defineConfig({
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdn.jsdelivr.net;",
         "font-src 'self' https://fonts.gstatic.com https://cdn.jsdelivr.net;",
         "img-src 'self' data: http://localhost:4000 https://localhost:4000 https://cdn.jsdelivr.net https://mlworkspace1318558619.blob.core.windows.net;", // ✅ Added blob storage
-        "connect-src 'self' http://localhost:4000 https://localhost:4000 https://localhost:5000 https://api.yourdomain.com https://oauth2.googleapis.com;",
+        "connect-src 'self' http://localhost:4000 https://localhost:4000 http://localhost:5000 https://localhost:5000 https://api.yourdomain.com https://oauth2.googleapis.com;",
         "frame-src 'self' https://accounts.google.com;",
         "object-src 'none';",
         "base-uri 'self';",

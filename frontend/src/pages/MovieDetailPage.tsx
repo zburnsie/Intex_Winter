@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Container, Row, Col, Spinner } from 'react-bootstrap';
+import ContentRecommendationRow from '../components/ContentRecommendationRow';
+import HybridRecommendationRow from '../components/HybridRecommendationRow';
+import StarRating from '../components/StarRating';
 
 interface MovieDetail {
   title: string;
@@ -19,6 +22,7 @@ const MovieDetailPage: React.FC = () => {
   const [movie, setMovie] = useState<MovieDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [averageRating, setAverageRating] = useState<number | null>(null);
 
   const baseImageUrl = "https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/";
 
@@ -41,6 +45,28 @@ const MovieDetailPage: React.FC = () => {
 
         const normalizedTitle = normalizeTitleForPath(data.title || 'Unknown');
         const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
+
+        const fetchRatings = async () => {
+          try {
+            const res = await fetch('https://localhost:5000/api/rating/allratings');
+            const data = await res.json();
+        
+            const ratingsForMovie = data.filter((r: any) => r.showId === showId);
+            if (ratingsForMovie.length > 0) {
+              const total = ratingsForMovie.reduce((sum: number, r: any) => sum + r.rating, 0);
+              const avg = total / ratingsForMovie.length;
+              setAverageRating(avg);
+            } else {
+              setAverageRating(null); // No ratings
+            }
+          } catch (error) {
+            console.error('Error fetching ratings:', error);
+            setAverageRating(null);
+          }
+        };
+        
+        fetchRatings(); // Call it inside useEffect
+        
 
         setMovie({
           title:
@@ -74,26 +100,36 @@ const MovieDetailPage: React.FC = () => {
   if (!movie) return <p className="text-center">Movie not found</p>;
 
   return (
-    <Container className="text-white mt-4">
+    <Container fluid className="text-white mt-4 px-4">
       <Row>
         <Col md={4} className="text-center">
-        <img
-          src={movie.imagePath}
-          alt={movie.title}
-          style={{
-            width: '360px',
-            height: '531px',
-            objectFit: 'cover',
-            borderRadius: '12px',
-          }}
-
+          <img
+            src={movie.imagePath}
+            alt={movie.title}
+            style={{
+              width: '100%',
+              maxWidth: '500px',
+              height: 'auto',
+              borderRadius: '12px',
+            }}
             onError={(e) => {
               e.currentTarget.onerror = null;
               e.currentTarget.src = '/default-poster.jpg';
             }}
           />
+
+            {averageRating !== null && (
+            <div className="mt-3 d-flex flex-column align-items-center">
+            <StarRating rating={averageRating} />
+            <p style={{ fontSize: '1rem', marginTop: '4px' }}>
+              {averageRating.toFixed(1)} / 5
+            </p>
+            </div>
+            )}
+
         </Col>
-        <Col md={8} className="text-start">
+  
+        <Col md={8} className="text-start d-flex flex-column justify-content-start">
           <h2>{movie.title}</h2>
           <p><strong>Rating:</strong> {movie.rating}</p>
           <p><strong>Duration:</strong> {movie.duration}</p>
@@ -102,11 +138,26 @@ const MovieDetailPage: React.FC = () => {
           <p><strong>Country:</strong> {movie.country}</p>
           <p><strong>Cast:</strong> {movie.cast}</p>
           <p><strong>Description:</strong> {movie.description}</p>
+  
+          {/* 🔁 Content-Based Recommendations */}
+          <div className="mt-3 mb-2">
+            <ContentRecommendationRow showId={showId ?? ''} />
+          </div>
+  
+          {/* 👥 Hybrid-Weighted Recommendations */}
+          <div className="mt-2">
+            <HybridRecommendationRow showId={showId ?? ''} />
+          </div>
         </Col>
       </Row>
     </Container>
   );
+  
+  
 };
 
 export default MovieDetailPage;
+
+
+
 
