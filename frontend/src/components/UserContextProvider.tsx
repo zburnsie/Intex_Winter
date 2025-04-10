@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { User, UserContext } from './AuthorizeView';
 
 const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const [user, setUser] = useState<User>({ email: '', roles: [] });
+  const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -12,24 +12,20 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
           method: 'GET',
           credentials: 'include',
         });
-        if (!response.ok) {
-          throw new Error(`Auth request failed: ${response.status}`);
-        }
-        const text = await response.text();
-        if (!text) {
-          setUser({ email: '', roles: [] });
-          return;
-        }
-        const data = JSON.parse(text);
-        if (data.email) {
-            const username = data.email.split('@')[0];
-            setUser({ email: username, roles: data.roles ?? [] });
+        const data = await response.json();
+        if (data.email && typeof data.recId === 'number' && data.recId !== -1) {
+          const username = data.email.split('@')[0];
+          setUser({
+            email: username,
+            roles: data.roles ?? [],
+            recId: data.recId,
+          });
         } else {
-          setUser({ email: '', roles: [] });
+          setUser(null);
         }
       } catch (err) {
         console.error('Auth fetch error:', err);
-        setUser({ email: '', roles: [] });
+        setUser(null);
       } finally {
         setLoading(false);
       }
@@ -40,11 +36,7 @@ const UserProvider = ({ children }: { children: React.ReactNode }) => {
 
   if (loading) return null;
 
-  return (
-    <UserContext.Provider value={[user, setUser]}>
-      {children}
-    </UserContext.Provider>
-  );
+  return <UserContext.Provider value={user}>{children}</UserContext.Provider>;
 };
 
 export default UserProvider;
