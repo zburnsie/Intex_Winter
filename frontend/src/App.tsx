@@ -5,7 +5,7 @@ import LandingPage from './pages/Landing';
 import MoviesPage from './pages/MoviesPage';
 import MovieDetailPage from './pages/MovieDetailPage';
 import './App.css';
-import AuthorizeView, {
+import {
   AuthorizedUser,
   UserContext,
 } from './components/AuthorizeView';

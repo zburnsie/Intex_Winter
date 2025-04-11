@@ -5,7 +5,7 @@ import GenreFilter from '../components/GenreFilter';
 import AuthorizeView from '../components/AuthorizeView';
 import MovieRow from '../components/MovieRow';
 import PopularRow from '../components/PopularRow';
-import MovieCard from '../components/MovieCard';
+//import MovieCard from '../components/MovieCard';
 import './MoviesPage.css';
 
 const MoviesPage: React.FC = () => {
