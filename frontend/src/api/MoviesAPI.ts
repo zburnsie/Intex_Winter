@@ -44,6 +44,7 @@ export const fetchMovies = async (
 
 export const addMovie = async (newMovie: Movie): Promise<Movie> => {
   try {
+    console.log("Payload being sent to API: ", JSON.stringify(newMovie, null, 2));
     const response = await fetch(`${API_URL}/AddMovie`, {
       method: 'POST',
       headers: {

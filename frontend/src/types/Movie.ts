@@ -1,5 +1,5 @@
 export interface Movie {
-    showId: string | null;
+    showId?: string | null;
     type: string | null;
     title: string | null;
     director: string | null;

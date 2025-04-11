@@ -68,7 +68,10 @@ function LoginPage() {
   };
 
   return (
-    <div className="position-absolute top-50 start-50 translate-middle w-100 d-flex justify-content-center text-white bg-black">
+    <div
+      className="position-absolute start-50 translate-middle w-100 d-flex justify-content-center text-white bg-black"
+      style={{ top: '55%', paddingTop: '1rem' }}
+    >
       <div className="card bg-dark border-0 shadow p-4" style={{ maxWidth: '360px', width: '100%' }}>
         <h5 className="text-center mb-3 fw-bold text-white">Sign In</h5>
         <form onSubmit={handleSubmit}>

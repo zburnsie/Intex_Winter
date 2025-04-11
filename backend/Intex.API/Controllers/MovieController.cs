@@ -133,12 +133,14 @@ namespace Intex.API.Controllers
                 _context.Movies.Add(movie);
                 _context.SaveChanges();
 
-                return CreatedAtAction(nameof(GetMovieById), new { id = movie.ShowId }, movie);
+                return CreatedAtAction(nameof(GetMovieById), new { showId = movie.ShowId }, movie);
             }
             catch (Exception ex)
             {
                 Console.WriteLine("Error adding movie: " + ex.ToString());
-                return StatusCode(500, "An error occurred while saving the movie.");
+                Console.WriteLine("Error adding movie: " + ex.Message);
+                Console.WriteLine("Stack Trace: " + ex.StackTrace);
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
 
@@ -155,6 +157,7 @@ namespace Intex.API.Controllers
 
             existingMovie.Title = updatedMovie.Title;
             existingMovie.Director = updatedMovie.Director;
+            existingMovie.Type = updatedMovie.Type;
             existingMovie.Cast = updatedMovie.Cast;
             existingMovie.Country = updatedMovie.Country;
             existingMovie.ReleaseYear = updatedMovie.ReleaseYear;

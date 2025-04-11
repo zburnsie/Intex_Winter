@@ -5,7 +5,6 @@ import GenreFilter from '../components/GenreFilter';
 import AuthorizeView from '../components/AuthorizeView';
 import MovieRow from '../components/MovieRow';
 import PopularRow from '../components/PopularRow';
-//import MovieCard from '../components/MovieCard';
 import './MoviesPage.css';
 import RecommendedRow from '../components/RecommendedRow';
 
@@ -14,38 +13,33 @@ const MoviesPage: React.FC = () => {
   const [selectedGenre, setSelectedGenre] = useState('');
   const [showCookieBanner, setShowCookieBanner] = useState(false);
 
-  const genres = [
-    'Action/Adventure',
-    'AnimeSeriesInternationalTvShows',
-    'BritishTvShowsDocuseriesInternationalTvShows',
-    'Children',
-    'Comedies',
-    'ComediesDramasInternationalMovies',
-    'ComediesInternationalMovies',
-    'ComediesRomanticMovies',
-    'CrimeTvShowsDocuseries',
-    'Documentaries',
-    'DocumentariesInternationalMovies',
-    'Docuseries',
-    'Dramas',
-    'DramasInternationalMovies',
-    'DramasRomanticMovies',
-    'FamilyMovies',
-    'Fantasy',
-    'HorrorMovies',
-    'InternationalMoviesThrillers',
-    'InternationalTvShowsRomanticTvShowsTvDramas',
-    'KidsTv',
-    'LanguageTvShows',
-    'Musicals',
-    'NatureTv',
-    'RealityTv',
-    'Spirituality',
-    'TvAction',
-    'TvComedies',
-    'TvDramas',
-    'TalkShowsTvComedies',
-    'Thrillers',
+  const genreRows = [
+    { label: 'Action/Adventure', genres: ['Action/Adventure', 'TvAction'] },
+    { label: 'Anime', genres: ['AnimeSeriesInternationalTvShows'] },
+    { label: 'British TV', genres: ['BritishTvShowsDocuseriesInternationalTvShows'] },
+    { label: 'Family Friendly', genres: ['Children', 'FamilyMovies', 'KidsTv'] },
+    { label: 'Comedies', genres: ['Comedies', 'TalkShowsTvComedies', 'TvComedies'] },
+    {
+      label: 'International',
+      genres: [
+        'ComediesDramasInternationalMovies',
+        'ComediesInternationalMovies',
+        'InternationalTvShowsRomanticTvShowsTvDramas',
+        'DramasInternationalMovies',
+        'LanguageTvShows'
+      ]
+    },
+    { label: 'Romantic Comedies', genres: ['ComediesRomanticMovies', 'DramasRomanticMovies'] },
+    { label: 'True Crime', genres: ['CrimeTvShowsDocuseries'] },
+    { label: 'Documentaries', genres: ['Documentaries', 'DocumentariesInternationalMovies'] },
+    { label: 'Dramas', genres: ['Dramas'] },
+    { label: 'Fantasy', genres: ['Fantasy'] },
+    { label: 'Horror', genres: ['HorrorMovies'] },
+    { label: 'Thrillers', genres: ['Thrillers', 'InternationalMoviesThrillers'] },
+    { label: 'Musicals', genres: ['Musicals'] },
+    { label: 'Nature', genres: ['NatureTv'] },
+    { label: 'Reality TV', genres: ['RealityTv'] },
+    { label: 'Spirituality', genres: ['Spirituality'] }
   ];
 
   const handleAcceptCookies = () => setShowCookieBanner(false);
@@ -71,12 +65,11 @@ const MoviesPage: React.FC = () => {
         <PopularRow />
 
         {/* ✅ Genre Rows */}
-        {genres.map((genre) => (
-          <MovieRow key={genre} genre={genre} searchQuery={searchQuery} />
+        {genreRows.map(({ label, genres }) => (
+          <MovieRow key={label} genre={genres.join('/')} searchQuery={searchQuery} displayLabel={label} />
         ))}
       </Container>
 
-      {/* ✅ Cookie Banner */}
       {showCookieBanner && (
         <div
           className="position-fixed bottom-0 start-0 end-0 bg-white text-dark p-3 d-flex justify-content-between align-items-center border-top shadow"
