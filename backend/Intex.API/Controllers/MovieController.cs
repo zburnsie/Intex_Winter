@@ -68,11 +68,14 @@ namespace Intex.API.Controllers
 
             var totalMovies = query.Count();
 
+            var random = new Random();
             var something = query
-                .OrderBy(m => m.Title)
+                .AsEnumerable()
+                .OrderBy(_ => random.Next())
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
+
 
             var someObject = new
             {
