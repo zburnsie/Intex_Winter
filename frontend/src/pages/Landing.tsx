@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import TestimonialsSection from '../components/TestimonialsSection';
 import FeaturedCarousel from '../components/FeaturedCarousel';
 import RotatingPoster from '../components/RotatingPoster';
 import './Landing.css';
@@ -59,7 +60,7 @@ const LandingPage = () => {
     const fetchPosters = async () => {
       try {
         const response = await fetch(
-          'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/'
+          'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Movie/AllMovies?pageSize=100'
         );
         const data = await response.json();
 
@@ -140,6 +141,8 @@ const LandingPage = () => {
           )}
         </div>
       </section>
+
+      <TestimonialsSection />
 
       <footer className="footer">
         <p>&copy; 2025 CineNiche. All rights reserved.</p>

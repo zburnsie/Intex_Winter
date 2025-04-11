@@ -115,7 +115,9 @@ const MovieCard: React.FC<MovieCardProps> = ({
             }}
           >
             <StarRating rating={averageRating} />
-            <span className="text-white small">({averageRating.toFixed(1)})</span>
+            <span className="text-white small">
+              ({averageRating.toFixed(1)})
+            </span>
           </div>
 
           <p className="text-white mb-1">Release: {releaseYear ?? '—'}</p>

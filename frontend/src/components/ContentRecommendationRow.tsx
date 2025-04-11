@@ -24,8 +24,8 @@ const ContentRecommendationRow: React.FC<ContentRecommendationRowProps> = ({ sho
     const fetchRecommendations = async () => {
       try {
         const [movieRes, ratingRes] = await Promise.all([
-            fetch(`https://localhost:5000/api/Prediction/content-based/${showId}`),
-          fetch(`https://localhost:5000/api/rating/allratings`),
+            fetch(`'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Prediction/content-based/${showId}`),
+          fetch(`https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Rating/AllRatings`),
         ]);
 
         const movieData = await movieRes.json();

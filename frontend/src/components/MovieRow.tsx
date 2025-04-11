@@ -33,9 +33,9 @@ const MovieRow: React.FC<MovieRowProps> = ({ genre, searchQuery }) => {
 
         const [movieRes, ratingRes] = await Promise.all([
           fetch(
-            `https://localhost:5000/api/movie/AllMovies?pageSize=25&pageNum=1&${movieGenreParams}`
+            `https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/movie/AllMovies?pageSize=25&pageNum=1&${movieGenreParams}`
           ),
-          fetch(`https://localhost:5000/api/rating/allratings`),
+          fetch(`https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Rating/AllRatings`),
         ]);
 
         const movieData = await movieRes.json();

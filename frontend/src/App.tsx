@@ -2,10 +2,15 @@ import React, { useContext } from 'react';
 import { Routes, Route, Link, useLocation } from 'react-router-dom';
 
 import LandingPage from './pages/Landing';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import AdminMoviePage from './pages/AdminMoviePage';
 import MoviesPage from './pages/MoviesPage';
+import PrivacyPage from './pages/PrivacyPage';
 import MovieDetailPage from './pages/MovieDetailPage';
+import AdminOnlyRoute from './components/AdminOnlyRoute';
 import './App.css';
-import {
+import AuthorizeView, {
   AuthorizedUser,
   UserContext,
 } from './components/AuthorizeView';
@@ -71,9 +76,30 @@ const App: React.FC = () => {
 
       <Routes>
         <Route path="/" element={<LandingPage />} />
+        <Route path="/login" element={<LoginPage />} />
+        <Route path="/register" element={<RegisterPage />} />
         <Route path="/movie/:showId" element={<MovieDetailPage />} />
-        <Route path="/movies" element={<MoviesPage />} />
+        <Route path="/privacy" element={<PrivacyPage />} />
         {/* You can add more routes here */}
+                {/* Wrap only the protected routes */}
+                <Route
+          path="/movies"
+          element={
+            <AuthorizeView>
+              <MoviesPage />
+            </AuthorizeView>
+          }
+        />
+        <Route
+          path="/adminpage"
+          element={
+            <AuthorizeView>
+              <AdminOnlyRoute>
+                <AdminMoviePage />
+              </AdminOnlyRoute>
+            </AuthorizeView>
+          }
+        />
       </Routes>
     </>
   );

@@ -20,7 +20,7 @@ const PopularRow: React.FC = () => {
   useEffect(() => {
     const fetchPopularMovies = async () => {
       try {
-        const response = await fetch('https://localhost:5000/api/prediction/popularity');
+        const response = await fetch('https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net//api/Prediction/popularity');
         
         const data = await response.json();
 
