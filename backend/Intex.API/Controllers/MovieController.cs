@@ -7,6 +7,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Globalization;
 using Microsoft.AspNetCore.Authorization;
+using System.Text.Json;
 
 namespace Intex.API.Controllers
 {
@@ -140,7 +141,7 @@ namespace Intex.API.Controllers
                 Console.WriteLine("Error adding movie: " + ex.ToString());
                 Console.WriteLine("Error adding movie: " + ex.Message);
                 Console.WriteLine("Stack Trace: " + ex.StackTrace);
-                return StatusCode(500, $"Internal server error: {ex.Message}");
+                return StatusCode(500, $"Internal server error: { JsonSerializer.Serialize(movie)}");
             }
         }
 

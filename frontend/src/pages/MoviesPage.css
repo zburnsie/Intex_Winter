@@ -1,5 +1,6 @@
 /* Overall Page Theme */
-body, .movies-page {
+body,
+.movies-page {
   background-color: #000;
   color: #fff;
   font-family: 'sans-serif';
@@ -36,8 +37,8 @@ h2 {
   width: 100%;
 }
 
-.movies-controls input[type="text"],
-.movies-controls input[type="text"]:focus {
+.movies-controls input[type='text'],
+.movies-controls input[type='text']:focus {
   background-color: #111 !important;
   color: #fff !important;
   border: 1px solid #444 !important;
@@ -112,7 +113,6 @@ h2 {
   justify-content: space-between;
 }
 
-
 /* Description text trimming */
 .description-preview {
   font-size: 0.85rem;
@@ -141,7 +141,7 @@ h2 {
 }
 
 .movie-grid-item {
-  flex: 0 0 auto;               /* 🔥 required */
+  flex: 0 0 auto; /* 🔥 required */
   width: 216px;
 }
 /* Horizontal scrolling row layout (for MovieRow) */
@@ -159,19 +159,17 @@ h2 {
   z-index: auto; /* OR remove this entirely */
 }
 
-
-
 .genre-row {
   display: flex;
   flex-direction: row;
-  flex-wrap: nowrap;            /* 🔥 required */
+  flex-wrap: nowrap; /* 🔥 required */
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
   gap: 20px;
   scroll-behavior: smooth;
   padding: 10px 0;
-  width: 100%;                  /* 🔥 required */
+  width: 100%; /* 🔥 required */
 }
 
 .genre-row::-webkit-scrollbar {
@@ -194,7 +192,6 @@ h2 {
   pointer-events: auto; /* just to be explicit */
 }
 
-
 .scroll-button.left {
   position: absolute;
   left: 0;
@@ -214,7 +211,6 @@ h2 {
   line-height: 1.2;
 }
 
-
 .genre-row,
 .movie-hover-wrapper {
   overflow: visible !important;
@@ -227,7 +223,6 @@ h2 {
   flex-wrap: nowrap;
 }
 
-
 .scrolling-row {
   display: flex;
   flex-direction: row;
@@ -239,12 +234,12 @@ h2 {
   gap: 20px;
   padding: 10px 0;
   width: 100%;
-  scrollbar-width: none;          /* Firefox */
-  -ms-overflow-style: none; 
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none;
 }
 
 .scrolling-row::-webkit-scrollbar {
-  display: none;                  /* Chrome, Safari */
+  display: none; /* Chrome, Safari */
 }
 
 .movie-grid-item {
@@ -252,9 +247,37 @@ h2 {
   width: 216px;
 }
 
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
+}
 
-
-
-
-
-
+.cookie-banner {
+  animation: slide-up 0.4s ease-in-out;
+}
+.cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #111;
+  color: #fff;
+  padding: 1rem;
+  text-align: center;
+  z-index: 1000;
+}
+.cookie-banner button {
+  background-color: #444;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 1rem;
+}
