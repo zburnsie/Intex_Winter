@@ -118,6 +118,7 @@ const MoviesPage: React.FC = () => {
           </>
         ) : (
           <>
+            <RecommendedRow />
             <PopularRow />
             {genreRows.map(({ label, genres }) => (
               <MovieRow
@@ -131,7 +132,7 @@ const MoviesPage: React.FC = () => {
         )}
 
         {/* Always render this after either results or genre grid */}
-        <RecommendedRow />
+       
 
         {showCookieBanner && (
           <div
