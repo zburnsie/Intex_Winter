@@ -4,9 +4,12 @@ import { Navigate } from 'react-router-dom';
 export interface User {
   email: string;
   roles: string[];
+  recId?: number;
 }
-// This is the context that will be used to provide the user object to the rest of the app
-export const UserContext = createContext<[User, React.Dispatch<React.SetStateAction<User>>]>([{ email: '', roles: [] }, () => {}]);
+
+export const UserContext = createContext<
+  [User, React.Dispatch<React.SetStateAction<User>>, boolean]
+>([{ email: '', roles: [], recId: -1 }, () => {}, true]);
 
 function AuthorizeView(props: {
   children: React.ReactNode;
@@ -14,7 +17,7 @@ function AuthorizeView(props: {
 }) {
   const [authorized, setAuthorized] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(true);
-  const [user, setUser] = useState<User>({ email: '', roles: [] });
+  const [user, setUser] = useState<User>({ email: '', roles: [], recId: -1 });
 
   useEffect(() => {
     const fetchAuth = async () => {
@@ -35,7 +38,11 @@ function AuthorizeView(props: {
         const data = await response.json();
 
         if (data.email) {
-          const userObj = { email: data.email, roles: data.roles ?? [] };
+          const userObj = {
+            email: data.email,
+            roles: data.roles ?? [],
+            recId: data.recId ?? -1,
+          };
           setUser(userObj);
 
           if (
@@ -64,7 +71,7 @@ function AuthorizeView(props: {
   if (!authorized) return <Navigate to="/unauthorized" />;
 
   return (
-    <UserContext.Provider value={[user, setUser]}>
+    <UserContext.Provider value={[user, setUser, loading]}>
       {props.children}
     </UserContext.Provider>
   );
