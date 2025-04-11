@@ -95,6 +95,12 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHsts(); // enables HSTS for production
+}
+
+
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 
