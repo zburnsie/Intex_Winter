@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './identity.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
 // ✅ Add this at the top
