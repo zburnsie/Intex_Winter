@@ -82,9 +82,9 @@ const AdminMoviePage = () => {
           Logout <AuthorizedUser value="email" />
         </Logout> */}
       </span>
-      <div className="container-fluid mt-4">
+      <div className="container-fluid mt-0">
         <div className="row">
-          <div className="container mt-4">
+          <div className="container mt-1">
             <h1 className="text-center mb-4">Admin Page</h1>
             {!showForm && (
               <div className="d-flex justify-content-end align-items-center flex-wrap gap-2 mb-3">

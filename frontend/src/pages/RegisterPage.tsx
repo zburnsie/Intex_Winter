@@ -70,7 +70,10 @@ function Register() {
   };
 
   return (
-    <div className="position-absolute top-50 start-50 translate-middle w-100 d-flex justify-content-center bg-black text-white">
+    <div
+    className="position-absolute start-50 translate-middle w-100 d-flex justify-content-center text-white bg-black"
+    style={{ top: '55%', paddingTop: '1rem' }}
+    >
       <div
         className="card bg-dark border-0 shadow p-4"
         style={{ maxWidth: '360px', width: '100%' }}

@@ -149,8 +149,8 @@ const EditMovieForm = ({ movie, onSuccess, onCancel }: EditMovieProps) => {
                 <input
                     type="text"
                     className="form-control"
-                    id="title"
-                    name="title"
+                    id="duration"
+                    name="duration"
                     value={formData.duration}
                     onChange={handleChange}
                     required

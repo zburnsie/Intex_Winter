@@ -49,6 +49,11 @@ const App: React.FC = () => {
                 <>
                   <Link to="/adminpage">Admin</Link>
                   <Link to="/movies">Movies</Link>
+                  <span className="navbar-links">
+                  <Logout className="align-self-center">
+                    Logout <AuthorizedUser value="email" />
+                  </Logout>
+                  </span>
                 </>
               ) : (
                 <>
@@ -58,14 +63,12 @@ const App: React.FC = () => {
               )}
             </div>
           </nav>
-
-          {/* Logout button below navbar */}
           {user.email && !isLanding && !isLogin && !isRegister && (
             <div className="container-fluid">
               <div className="d-flex justify-content-end pe-4 mt-2">
-                <Logout>
+                {/* <Logout>
                   Logout <AuthorizedUser value="email" />
-                </Logout>
+                </Logout> */}
               </div>
             </div>
           )}

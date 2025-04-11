@@ -4,9 +4,10 @@ import { UserContext } from './AuthorizeView';
 
 type LogoutProps = {
   children?: React.ReactNode;
+  className?: string;
 };
 
-const Logout = ({ children }: LogoutProps) => {
+const Logout = ({ children, className= '' }: LogoutProps) => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -49,8 +50,7 @@ const Logout = ({ children }: LogoutProps) => {
       <button
         onClick={handleLogout}
         disabled={loading}
-        className="btn btn-link text-white text-decoration-none p-0"
-        style={{ background: 'none', border: 'none' }}
+        className={`navbar-link-button ${className}`}
       >
         {loading ? (
           <>
