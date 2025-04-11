@@ -114,19 +114,18 @@ namespace Intex.API.Controllers
                     return BadRequest(ModelState);
                 }
 
-                // var lastId = _context.Movies
-                //     .AsEnumerable()
-                //     .Where(m => m.ShowId != null && m.ShowId.StartsWith("s"))
-                //     .Select(m =>
-                //     {
-                //         var success = int.TryParse(m.ShowId!.Substring(1), out var n);
-                //         return success ? n : 0;
-                //     })
-                //     .DefaultIfEmpty(0)
-                //     .Max();
+                var lastId = _context.Movies
+                    .AsEnumerable()
+                    .Where(m => m.ShowId != null && m.ShowId.StartsWith("s"))
+                    .Select(m =>
+                    {
+                        var success = int.TryParse(m.ShowId!.Substring(1), out var n);
+                        return success ? n : 0;
+                    })
+                    .DefaultIfEmpty(0)
+                    .Max();
 
-                // movie.ShowId = "s" + (lastId + 1);
-                movie.ShowId = "s9999999";
+                movie.ShowId = "s" + (lastId + 1);
 
                 Console.WriteLine("Assigned ShowId: " + movie.ShowId);
                 Console.WriteLine("Final Movie Object: " + System.Text.Json.JsonSerializer.Serialize(movie));
