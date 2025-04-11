@@ -176,7 +176,6 @@ const MoviesPage: React.FC = () => {
           </button>
         </div>
       )}
-      </Container>
     </AuthorizeView>
   );
 };
