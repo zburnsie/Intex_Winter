@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react';
 import { deleteMovie, fetchMovies } from '../api/MoviesAPI';
 import { Movie } from '../types/Movie';
-import Pagination from '../components/Pagination';
+import Pagination from './Pagination';
 import NewMovieForm from '../components/NewMovieForm';
 import EditMovieForm from '../components/EditMovieForm';
-import { getGenresFromMovie } from '../components/genreUtils';
+import { getGenresFromMovie } from './genreUtils';
 import AuthorizeView from '../components/AuthorizeView';
 import './AdminPage.css';
 

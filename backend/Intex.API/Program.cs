@@ -1,8 +1,11 @@
+using System.Security.Claims;
 using Intex.API;
 using Intex.API.Data;
 using Intex.API.Models;
 using Intex.API.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -17,6 +20,7 @@ builder.Services.AddSwaggerGen();
 // Connection Strings
 // -----------------------------
 var movieConnection = builder.Configuration.GetConnectionString("DefaultConnection");
+var userConnection = builder.Configuration.GetConnectionString("IdentityConnection");
 
 // -----------------------------
 // Database Contexts
