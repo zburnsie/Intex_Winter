@@ -69,12 +69,16 @@ namespace Intex.API.Controllers
             var totalMovies = query.Count();
 
             var random = new Random();
-            var something = query
-                .AsEnumerable()
-                .OrderBy(_ => random.Next())
+            var allFilteredMovies = query.ToList(); // fetch all matching movies
+
+            var totalMovies = allFilteredMovies.Count;
+
+            var something = allFilteredMovies
+                .OrderBy(_ => random.Next()) // shuffle all
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
+
 
 
             var someObject = new
