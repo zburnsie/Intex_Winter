@@ -20,12 +20,11 @@ const normalizeTitleForPath = (title: string): string => {
 
 const MovieRow: React.FC<MovieRowProps> = ({ genre, searchQuery }) => {
   const [movies, setMovies] = useState<any[]>([]);
-  const rowRef = useRef<HTMLDivElement>(null);
+  const rowRef = useRef<HTMLDivElement>(null); // ✅ proper ref
 
   useEffect(() => {
     const fetchMoviesAndRatings = async () => {
       try {
-        // Build genre query string (e.g., Action/Adventure -> movieGenres=Action&movieGenres=Adventure)
         const movieGenreParams = genre
           .split('/')
           .map((g) => `movieGenres=${encodeURIComponent(g.trim())}`)
@@ -35,7 +34,7 @@ const MovieRow: React.FC<MovieRowProps> = ({ genre, searchQuery }) => {
           fetch(
             `https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/movie/AllMovies?pageSize=25&pageNum=1&${movieGenreParams}`
           ),
-          fetch(`https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Rating/AllRatings`),
+          fetch('https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Rating/AllRatings'),
         ]);
 
         const movieData = await movieRes.json();
@@ -101,7 +100,8 @@ const MovieRow: React.FC<MovieRowProps> = ({ genre, searchQuery }) => {
           ◀
         </button>
 
-        <div className="genre-row" ref={rowRef}>
+        <div className="scrolling-row" ref={rowRef}>
+
           {movies.map((movie) => (
             <div className="movie-grid-item" key={movie.showId}>
               <MovieCard
@@ -130,4 +130,5 @@ const MovieRow: React.FC<MovieRowProps> = ({ genre, searchQuery }) => {
 };
 
 export default MovieRow;
+
 

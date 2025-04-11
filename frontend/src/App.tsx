@@ -15,6 +15,7 @@ import AuthorizeView, {
   UserContext,
 } from './components/AuthorizeView';
 import Logout from './components/Logout';
+import BackToTop from './components/BackToTop'; // ✅ added import
 
 const App: React.FC = () => {
   const [user, , loading] = useContext(UserContext);
@@ -34,12 +35,13 @@ const App: React.FC = () => {
       {!isLanding && (
         <>
           <nav className="custom-navbar">
-            {/* <Link to="/" className="navbar-logo">
-              <span className="logo-red">CINE</span>
-              <span className="logo-white">NICHE</span>
-            </Link> */}
             <Link to="/" className="navbar-logo">
-              <img src="/newlogo.png" alt="CineNiche Logo" className="logo-image" style={{ height: '120px', width: 'auto', display: 'block' }}/>
+              <img
+                src="/newlogo.png"
+                alt="CineNiche Logo"
+                className="logo-image"
+                style={{ height: '120px', width: 'auto', display: 'block' }}
+              />
             </Link>
             <div className="navbar-links">
               <Link to="/">Home</Link>
@@ -79,9 +81,7 @@ const App: React.FC = () => {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/movie/:showId" element={<MovieDetailPage />} />
         <Route path="/privacy" element={<PrivacyPage />} />
-        {/* You can add more routes here */}
-                {/* Wrap only the protected routes */}
-                <Route
+        <Route
           path="/movies"
           element={
             <AuthorizeView>
@@ -100,9 +100,11 @@ const App: React.FC = () => {
           }
         />
       </Routes>
+
+      {/* ✅ Back to Top Button */}
+      <BackToTop />
     </>
   );
 };
 
 export default App;
-

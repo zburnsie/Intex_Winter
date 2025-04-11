@@ -80,7 +80,7 @@ const PopularRow: React.FC = () => {
           ◀
         </button>
 
-        <div className="genre-row" ref={rowRef}>
+        <div className="scrolling-row" ref={rowRef}>
           {movies.map((movie) => (
             <div className="movie-grid-item" key={movie.showId}>
               <MovieCard
