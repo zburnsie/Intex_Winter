@@ -310,7 +310,9 @@ h2 {
   transition: transform 0.2s ease-out;
   transform-style: preserve-3d;
   will-change: transform;
+}
 
+/* Keyframes defined separately */
 @keyframes slide-up {
   from {
     transform: translateY(100%);
@@ -321,6 +323,7 @@ h2 {
     opacity: 1;
   }
 }
+
 
 .cookie-banner {
   animation: slide-up 0.4s ease-in-out;
