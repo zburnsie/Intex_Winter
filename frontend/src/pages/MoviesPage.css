@@ -141,9 +141,9 @@ h2 {
 }
 
 .movie-grid-item {
+  flex: 0 0 auto;               /* 🔥 required */
   width: 216px;
 }
-
 /* Horizontal scrolling row layout (for MovieRow) */
 .genre-section {
   position: relative;
@@ -154,21 +154,24 @@ h2 {
   position: relative;
   display: flex;
   align-items: center;
-  padding-top: 2.5rem; /* keep your buffer */
-  overflow: visible; /* this is the critical fix */
-  z-index: 100;
+  padding-top: 2.5rem;
+  overflow: visible;
+  z-index: auto; /* OR remove this entirely */
 }
+
 
 
 .genre-row {
   display: flex;
   flex-direction: row;
+  flex-wrap: nowrap;            /* 🔥 required */
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
   gap: 20px;
   scroll-behavior: smooth;
   padding: 10px 0;
+  width: 100%;                  /* 🔥 required */
 }
 
 .genre-row::-webkit-scrollbar {
@@ -181,8 +184,16 @@ h2 {
   color: white;
   font-size: 24px;
   cursor: pointer;
-  z-index: 2;
+  z-index: 2000; /* ⬆ bump this high */
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.5); /* optional contrast */
+  border-radius: 50%;
+  pointer-events: auto; /* just to be explicit */
 }
+
 
 .scroll-button.left {
   position: absolute;
@@ -194,6 +205,7 @@ h2 {
   right: 0;
 }
 .hover-info-card h5 {
+  pointer-events: none;
   white-space: normal;
   word-wrap: break-word;
   overflow-wrap: break-word;
@@ -207,6 +219,39 @@ h2 {
 .movie-hover-wrapper {
   overflow: visible !important;
 }
+
+.genre-row {
+  min-width: 100%;
+  overflow-x: auto;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+
+.scrolling-row {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+  gap: 20px;
+  padding: 10px 0;
+  width: 100%;
+  scrollbar-width: none;          /* Firefox */
+  -ms-overflow-style: none; 
+}
+
+.scrolling-row::-webkit-scrollbar {
+  display: none;                  /* Chrome, Safari */
+}
+
+.movie-grid-item {
+  flex: 0 0 auto;
+  width: 216px;
+}
+
 
 
 
