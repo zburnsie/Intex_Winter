@@ -120,5 +120,16 @@ public class PredictionController : ControllerBase
         return Ok(recommendedShowIds);
     }
 
+    [HttpGet("by-ids")]
+    public async Task<IActionResult> GetMoviesByIds([FromQuery] string ids)
+    {
+        var idList = ids.Split(',').ToList();
+        var movies = await _movieContext.Movies
+            .Where(m => idList.Contains(m.ShowId))
+            .ToListAsync();
+
+        return Ok(movies);
+    }
+
 
 }
