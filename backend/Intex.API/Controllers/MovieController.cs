@@ -114,7 +114,17 @@ namespace Intex.API.Controllers
             _context.Movies.Add(movie);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(GetMovieById), new { showId = movie.ShowId }, movie);
+
+                return CreatedAtAction(nameof(GetMovieById), new { showId = movie.ShowId }, movie);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Error adding movie: " + ex.ToString());
+                Console.WriteLine("Error adding movie: " + ex.Message);
+                Console.WriteLine("Stack Trace: " + ex.StackTrace);
+                return CreatedAtAction(nameof(GetMovieById), new { showId = movie.ShowId }, movie);
+            }
+
         }
 
         [HttpPut("updateMovie/{showId}")]

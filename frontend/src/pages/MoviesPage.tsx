@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Container } from 'react-bootstrap';
 import SearchBar from '../components/SearchBar';
 import GenreFilter from '../components/GenreFilter';
@@ -14,6 +14,7 @@ interface GenreRow {
   genres: string[];
 }
 
+
 const MoviesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
@@ -23,9 +24,18 @@ const MoviesPage: React.FC = () => {
   const genreRows: GenreRow[] = [
     { label: 'Action/Adventure', genres: ['Action/Adventure', 'TvAction'] },
     { label: 'Anime', genres: ['AnimeSeriesInternationalTvShows'] },
-    { label: 'British TV', genres: ['BritishTvShowsDocuseriesInternationalTvShows'] },
-    { label: 'Family Friendly', genres: ['Children', 'FamilyMovies', 'KidsTv'] },
-    { label: 'Comedies', genres: ['Comedies', 'TalkShowsTvComedies', 'TvComedies'] },
+    {
+      label: 'British TV',
+      genres: ['BritishTvShowsDocuseriesInternationalTvShows'],
+    },
+    {
+      label: 'Family Friendly',
+      genres: ['Children', 'FamilyMovies', 'KidsTv'],
+    },
+    {
+      label: 'Comedies',
+      genres: ['Comedies', 'TalkShowsTvComedies', 'TvComedies'],
+    },
     {
       label: 'International',
       genres: [
@@ -36,19 +46,41 @@ const MoviesPage: React.FC = () => {
         'LanguageTvShows',
       ],
     },
-    { label: 'Romantic Comedies', genres: ['ComediesRomanticMovies', 'DramasRomanticMovies'] },
+    {
+      label: 'Romantic Comedies',
+      genres: ['ComediesRomanticMovies', 'DramasRomanticMovies'],
+    },
     { label: 'True Crime', genres: ['CrimeTvShowsDocuseries'] },
-    { label: 'Documentaries', genres: ['Documentaries', 'DocumentariesInternationalMovies'] },
+    {
+      label: 'Documentaries',
+      genres: ['Documentaries', 'DocumentariesInternationalMovies'],
+    },
     { label: 'Dramas', genres: ['Dramas'] },
     { label: 'Fantasy', genres: ['Fantasy'] },
     { label: 'Horror', genres: ['HorrorMovies'] },
-    { label: 'Thrillers', genres: ['Thrillers', 'InternationalMoviesThrillers'] },
+    {
+      label: 'Thrillers',
+      genres: ['Thrillers', 'InternationalMoviesThrillers'],
+    },
     { label: 'Musicals', genres: ['Musicals'] },
     { label: 'Nature', genres: ['NatureTv'] },
     { label: 'Reality TV', genres: ['RealityTv'] },
     { label: 'Spirituality', genres: ['Spirituality'] },
   ];
 
+
+  useEffect(() => {
+    const accepted = localStorage.getItem('cookiesAccepted');
+    if (!accepted) {
+      setShowCookieBanner(true);
+    }
+  }, []);
+
+  const handleAcceptCookies = () => {
+    setShowCookieBanner(false);
+    localStorage.setItem('cookiesAccepted', 'true');
+  };
+    
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
 
@@ -92,7 +124,6 @@ const MoviesPage: React.FC = () => {
     setSearchResults([]);
   };
 
-  const handleAcceptCookies = () => setShowCookieBanner(false);
 
   return (
     <AuthorizeView>
@@ -124,29 +155,27 @@ const MoviesPage: React.FC = () => {
               <MovieRow
                 key={label}
                 genre={genres.join('/')}
-                searchQuery=""
+                searchQuery={searchQuery}
                 displayLabel={label}
               />
             ))}
           </>
         )}
+      </Container>
 
-        {/* Always render this after either results or genre grid */}
-       
-
-        {showCookieBanner && (
-          <div
-            className="position-fixed bottom-0 start-0 end-0 bg-white text-dark p-3 d-flex justify-content-between align-items-center border-top shadow"
-            style={{ zIndex: 1050 }}
-          >
-            <span>
-              🍪 This site uses cookies to improve your experience. By continuing, you agree.
-            </span>
-            <button className="btn btn-light btn-sm" onClick={handleAcceptCookies}>
-              Got it!
-            </button>
-          </div>
-        )}
+      {showCookieBanner && (
+        <div
+          className="cookie-banner position-fixed bottom-0 start-0 end-0 bg-white text-dark p-3 d-flex justify-content-between align-items-center border-top shadow"
+          style={{ zIndex: 1050 }}
+        >
+          <span>
+            🍪 This site uses cookies to improve your experience. By continuing, you agree.
+          </span>
+          <button className="btn btn-light btn-sm" onClick={handleAcceptCookies}>
+            Got it!
+          </button>
+        </div>
+      )}
       </Container>
     </AuthorizeView>
   );
