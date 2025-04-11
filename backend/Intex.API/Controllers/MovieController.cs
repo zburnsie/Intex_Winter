@@ -66,225 +66,87 @@ namespace Intex.API.Controllers
                 );
             }
 
-            var totalMovies = query.Count();
-
-            var random = new Random();
-            var allFilteredMovies = query.ToList(); // fetch all matching movies
-
+            var allFilteredMovies = query.ToList();
             var totalMovies = allFilteredMovies.Count;
 
-            var something = allFilteredMovies
-                .OrderBy(_ => random.Next()) // shuffle all
+            var random = new Random();
+            var paged = allFilteredMovies
+                .OrderBy(x => random.Next())
                 .Skip((pageNum - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
 
-
-
-            var someObject = new
+            var result = new
             {
-                Movies = something,
+                Movies = paged,
                 TotalMovies = totalMovies,
             };
 
-            return Ok(someObject);
+            return Ok(result);
         }
 
         [HttpGet("{showId}")]
         public IActionResult GetMovieById(string showId)
         {
-            Console.WriteLine($"Movie detail request received for: {showId}");
-
             var movie = _context.Movies.FirstOrDefault(m => m.ShowId == showId);
-
             if (movie == null)
-            {
-                Console.WriteLine($"Movie not found: {showId}");
                 return NotFound(new { Message = $"Movie with ShowId {showId} not found." });
-            }
 
-            Console.WriteLine($"Movie found: {movie.Title}");
             return Ok(movie);
         }
-
-
 
         [HttpPost("AddMovie")]
         [Authorize(Roles = "Admin")]
         public IActionResult AddMovie([FromBody] MoviesTitle movie)
         {
-            try
-            {
-                if (!ModelState.IsValid)
-                {
-                    Console.WriteLine("Model state is invalid.");
-                    return BadRequest(ModelState);
-                }
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
-                var lastId = _context.Movies
-                    .AsEnumerable()
-                    .Where(m => m.ShowId != null && m.ShowId.StartsWith("s"))
-                    .Select(m =>
-                    {
-                        var success = int.TryParse(m.ShowId!.Substring(1), out var n);
-                        return success ? n : 0;
-                    })
-                    .DefaultIfEmpty(0)
-                    .Max();
+            var lastId = _context.Movies
+                .AsEnumerable()
+                .Where(m => m.ShowId != null && m.ShowId.StartsWith("s"))
+                .Select(m => int.TryParse(m.ShowId!.Substring(1), out var n) ? n : 0)
+                .DefaultIfEmpty(0)
+                .Max();
 
-                movie.ShowId = "s" + (lastId + 1);
+            movie.ShowId = "s" + (lastId + 1);
 
-                Console.WriteLine("Assigned ShowId: " + movie.ShowId);
-                Console.WriteLine("Final Movie Object: " + System.Text.Json.JsonSerializer.Serialize(movie));
+            _context.Movies.Add(movie);
+            _context.SaveChanges();
 
-                _context.Movies.Add(movie);
-                _context.SaveChanges();
-
-                return CreatedAtAction(nameof(GetMovieById), new { showId = movie.ShowId }, movie);
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine("Error adding movie: " + ex.ToString());
-                Console.WriteLine("Error adding movie: " + ex.Message);
-                Console.WriteLine("Stack Trace: " + ex.StackTrace);
-                return StatusCode(500, $"Internal server error: {ex.Message}");
-            }
+            return CreatedAtAction(nameof(GetMovieById), new { showId = movie.ShowId }, movie);
         }
 
         [HttpPut("updateMovie/{showId}")]
         [Authorize(Roles = "Admin")]
-
         public IActionResult UpdateMovie(string showId, [FromBody] MoviesTitle updatedMovie)
         {
             var existingMovie = _context.Movies.FirstOrDefault(m => m.ShowId == showId);
             if (existingMovie == null)
-            {
                 return NotFound(new { Message = $"Movie with ShowId {showId} not found." });
+
+            foreach (var prop in typeof(MoviesTitle).GetProperties())
+            {
+                var newValue = prop.GetValue(updatedMovie);
+                prop.SetValue(existingMovie, newValue);
             }
 
-            existingMovie.Title = updatedMovie.Title;
-            existingMovie.Director = updatedMovie.Director;
-            existingMovie.Type = updatedMovie.Type;
-            existingMovie.Cast = updatedMovie.Cast;
-            existingMovie.Country = updatedMovie.Country;
-            existingMovie.ReleaseYear = updatedMovie.ReleaseYear;
-            existingMovie.Rating = updatedMovie.Rating;
-            existingMovie.Duration = updatedMovie.Duration;
-            existingMovie.Description = updatedMovie.Description;
-            existingMovie.Action = updatedMovie.Action;
-            existingMovie.Adventure = updatedMovie.Adventure;
-            existingMovie.AnimeSeriesInternationalTvShows = updatedMovie.AnimeSeriesInternationalTvShows;
-            existingMovie.BritishTvShowsDocuseriesInternationalTvShows = updatedMovie.BritishTvShowsDocuseriesInternationalTvShows;
-            existingMovie.Children = updatedMovie.Children;
-            existingMovie.Comedies = updatedMovie.Comedies;
-            existingMovie.ComediesDramasInternationalMovies = updatedMovie.ComediesDramasInternationalMovies;
-            existingMovie.ComediesInternationalMovies = updatedMovie.ComediesInternationalMovies;
-            existingMovie.ComediesRomanticMovies = updatedMovie.ComediesRomanticMovies;
-            existingMovie.CrimeTvShowsDocuseries = updatedMovie.CrimeTvShowsDocuseries;
-            existingMovie.Documentaries = updatedMovie.Documentaries;
-            existingMovie.DocumentariesInternationalMovies = updatedMovie.DocumentariesInternationalMovies;
-            existingMovie.Docuseries = updatedMovie.Docuseries;
-            existingMovie.Dramas = updatedMovie.Dramas;
-            existingMovie.DramasInternationalMovies = updatedMovie.DramasInternationalMovies;
-            existingMovie.DramasRomanticMovies = updatedMovie.DramasRomanticMovies;
-            existingMovie.FamilyMovies = updatedMovie.FamilyMovies;
-            existingMovie.Fantasy = updatedMovie.Fantasy;
-            existingMovie.HorrorMovies = updatedMovie.HorrorMovies;
-            existingMovie.InternationalMoviesThrillers = updatedMovie.InternationalMoviesThrillers;
-            existingMovie.InternationalTvShowsRomanticTvShowsTvDramas = updatedMovie.InternationalTvShowsRomanticTvShowsTvDramas;
-            existingMovie.KidsTv = updatedMovie.KidsTv;
-            existingMovie.LanguageTvShows = updatedMovie.LanguageTvShows;
-            existingMovie.Musicals = updatedMovie.Musicals;
-            existingMovie.NatureTv = updatedMovie.NatureTv;
-            existingMovie.RealityTv = updatedMovie.RealityTv;
-            existingMovie.Spirituality = updatedMovie.Spirituality;
-            existingMovie.TvAction = updatedMovie.TvAction;
-            existingMovie.TvComedies = updatedMovie.TvComedies;
-            existingMovie.TvDramas = updatedMovie.TvDramas;
-            existingMovie.TalkShowsTvComedies = updatedMovie.TalkShowsTvComedies;
-            existingMovie.Thrillers = updatedMovie.Thrillers;
-
             _context.SaveChanges();
-
             return Ok(new { Message = $"Movie with ShowId {showId} updated successfully." });
         }
 
         [HttpDelete("deleteMovie/{showId}")]
         [Authorize(Roles = "Admin")]
-
         public IActionResult DeleteMovie(string showId)
         {
             var movie = _context.Movies.FirstOrDefault(m => m.ShowId == showId);
             if (movie == null)
-            {
                 return NotFound(new { Message = $"Movie with ShowId {showId} not found." });
-            }
 
             _context.Movies.Remove(movie);
             _context.SaveChanges();
 
             return Ok(new { Message = $"Movie with ShowId {showId} deleted successfully." });
-        }
-
-        private string NormalizeTitle(string title)
-        {
-            if (string.IsNullOrWhiteSpace(title)) return "";
-
-            var normalized = title.Normalize(NormalizationForm.FormD);
-            var sb = new StringBuilder();
-
-            foreach (var c in normalized)
-            {
-                var uc = CharUnicodeInfo.GetUnicodeCategory(c);
-                if (uc != UnicodeCategory.NonSpacingMark && (char.IsLetterOrDigit(c) || char.IsWhiteSpace(c)))
-                    sb.Append(c);
-            }
-
-            var cleaned = Regex.Replace(sb.ToString(), "[^A-Za-z0-9 ]+", "");
-            cleaned = Regex.Replace(cleaned, @"\s+", " ").Trim();
-
-            return cleaned;
-        }
-
-        private static string GetFirstGenre(MoviesTitle movie)
-        {
-            var genreMap = new Dictionary<string, int?>
-            {
-                {"Action", movie.Action},
-                {"Adventure", movie.Adventure},
-                {"AnimeSeriesInternationalTvShows", movie.AnimeSeriesInternationalTvShows},
-                {"BritishTvShowsDocuseriesInternationalTvShows", movie.BritishTvShowsDocuseriesInternationalTvShows},
-                {"Children", movie.Children},
-                {"Comedies", movie.Comedies},
-                {"ComediesDramasInternationalMovies", movie.ComediesDramasInternationalMovies},
-                {"ComediesInternationalMovies", movie.ComediesInternationalMovies},
-                {"ComediesRomanticMovies", movie.ComediesRomanticMovies},
-                {"CrimeTvShowsDocuseries", movie.CrimeTvShowsDocuseries},
-                {"Documentaries", movie.Documentaries},
-                {"DocumentariesInternationalMovies", movie.DocumentariesInternationalMovies},
-                {"Docuseries", movie.Docuseries},
-                {"Dramas", movie.Dramas},
-                {"DramasInternationalMovies", movie.DramasInternationalMovies},
-                {"DramasRomanticMovies", movie.DramasRomanticMovies},
-                {"FamilyMovies", movie.FamilyMovies},
-                {"Fantasy", movie.Fantasy},
-                {"HorrorMovies", movie.HorrorMovies},
-                {"InternationalMoviesThrillers", movie.InternationalMoviesThrillers},
-                {"InternationalTvShowsRomanticTvShowsTvDramas", movie.InternationalTvShowsRomanticTvShowsTvDramas},
-                {"KidsTv", movie.KidsTv},
-                {"LanguageTvShows", movie.LanguageTvShows},
-                {"Musicals", movie.Musicals},
-                {"NatureTv", movie.NatureTv},
-                {"RealityTv", movie.RealityTv},
-                {"Spirituality", movie.Spirituality},
-                {"TvAction", movie.TvAction},
-                {"TvComedies", movie.TvComedies},
-                {"TvDramas", movie.TvDramas},
-                {"TalkShowsTvComedies", movie.TalkShowsTvComedies},
-                {"Thrillers", movie.Thrillers},
-            };
-
-            return genreMap.FirstOrDefault(g => g.Value == 1).Key ?? "Unknown";
         }
     }
 }
