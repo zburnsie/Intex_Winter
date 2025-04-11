@@ -5,7 +5,7 @@ export interface User {
   email: string;
   roles: string[];
 }
-
+// This is the context that will be used to provide the user object to the rest of the app
 export const UserContext = createContext<[User, React.Dispatch<React.SetStateAction<User>>]>([{ email: '', roles: [] }, () => {}]);
 
 function AuthorizeView(props: {
