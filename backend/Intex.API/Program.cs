@@ -3,9 +3,9 @@ using Intex.API;
 using Intex.API.Data;
 using Intex.API.Models;
 using Intex.API.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -76,8 +76,8 @@ builder.Services.AddCors(options =>
     {
         policy.WithOrigins("http://localhost:3000", "https://localhost:3000", "https://nice-meadow-0d2951b1e.6.azurestaticapps.net")
               .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+              .AllowAnyMethod();
+              // .AllowCredentials(); // Enable only if needed for auth
     });
 });
 
@@ -90,9 +90,11 @@ var app = builder.Build();
 // -----------------------------
 if (app.Environment.IsDevelopment())
 {
+    app.UseDeveloperExceptionPage(); // Good to have early
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+
 app.UseStaticFiles();
 app.UseHttpsRedirection();
 

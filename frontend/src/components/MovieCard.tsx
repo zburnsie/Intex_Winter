@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Card } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
+import StarRating from './StarRating';
 
 interface MovieCardProps {
   title: string;
@@ -13,6 +14,7 @@ interface MovieCardProps {
   cast?: string;
   country?: string;
   duration?: string;
+  averageRating?: number; // Accept average rating as a prop
 }
 
 const MovieCard: React.FC<MovieCardProps> = ({
@@ -23,6 +25,7 @@ const MovieCard: React.FC<MovieCardProps> = ({
   rating,
   description,
   duration,
+  averageRating = Math.random() * (5 - 3) + 3, // Random rating if missing
 }) => {
   const [hovered, setHovered] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -69,8 +72,11 @@ const MovieCard: React.FC<MovieCardProps> = ({
             src={imagePath}
             alt={title}
             onError={(e) => {
-              e.currentTarget.onerror = null;
-              e.currentTarget.src = '/default-poster.jpg';
+              const img = e.currentTarget;
+              if (!img.dataset.hasTriedFallback) {
+                img.src = '/default-poster.jpg'; // Adjust if needed
+                img.dataset.hasTriedFallback = 'true';
+              }
             }}
             style={{
               width: '216px',
@@ -97,6 +103,21 @@ const MovieCard: React.FC<MovieCardProps> = ({
           <h5 className="text-white mb-2">
             <strong>{title}</strong>
           </h5>
+
+          {/* Centered Rating and Number */}
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              marginBottom: '8px',
+            }}
+          >
+            <StarRating rating={averageRating} />
+            <span className="text-white small">({averageRating.toFixed(1)})</span>
+          </div>
+
           <p className="text-white mb-1">Release: {releaseYear ?? '—'}</p>
           <p className="text-white mb-1">Rated: {rating ?? '—'}</p>
           <p className="text-white mb-1">Length: {duration ?? '—'}</p>

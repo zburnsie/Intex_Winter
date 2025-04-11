@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Movie } from "../types/Movie";
 import { updateMovie } from "../api/MoviesAPI";
-import { getGenresFromMovie, genreMap } from "../components/genreUtils";
+import { getGenresFromMovie, genreMap } from "./genreUtils";
 
 interface EditMovieFormData {
     showId: string;
