@@ -7,6 +7,7 @@ import MovieRow from '../components/MovieRow';
 import PopularRow from '../components/PopularRow';
 //import MovieCard from '../components/MovieCard';
 import './MoviesPage.css';
+import RecommendedRow from '../components/RecommendedRow';
 
 const MoviesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -54,9 +55,17 @@ const MoviesPage: React.FC = () => {
       <Container fluid className="movies-page px-4">
         <div className="movies-controls mx-auto mb-4">
           <h2 className="text-center">Browse Movies</h2>
-          <SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />
-          <GenreFilter selectedGenre={selectedGenre} setSelectedGenre={setSelectedGenre} />
+          <SearchBar
+            searchQuery={searchQuery}
+            setSearchQuery={setSearchQuery}
+          />
+          <GenreFilter
+            selectedGenre={selectedGenre}
+            setSelectedGenre={setSelectedGenre}
+          />
         </div>
+
+        <RecommendedRow />
 
         {/* ✅ Trending Row */}
         <PopularRow />
@@ -74,9 +83,13 @@ const MoviesPage: React.FC = () => {
           style={{ zIndex: 1050 }}
         >
           <span>
-            🍪 This site uses cookies to improve your experience. By continuing, you agree.
+            🍪 This site uses cookies to improve your experience. By continuing,
+            you agree.
           </span>
-          <button className="btn btn-light btn-sm" onClick={handleAcceptCookies}>
+          <button
+            className="btn btn-light btn-sm"
+            onClick={handleAcceptCookies}
+          >
             Got it!
           </button>
         </div>
@@ -86,7 +99,3 @@ const MoviesPage: React.FC = () => {
 };
 
 export default MoviesPage;
-
-
-
-
