@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import MovieCard from './MovieCard';
 import { UserContext } from './AuthorizeView';
 import '../pages/MoviesPage.css';
@@ -17,20 +17,18 @@ const normalizeTitleForPath = (title: string): string => {
 const RecommendedRow: React.FC = () => {
   const [user] = useContext(UserContext);
   const [movies, setMovies] = useState<any[]>([]);
-  const rowRef = useRef<HTMLDivElement>(null);
+  const [tilts, setTilts] = useState<{ [key: number]: string }>({});
 
   useEffect(() => {
     const fetchRecommendedMovies = async () => {
       if (!user?.recId || user.recId === -1) return;
 
       try {
-        // Step 1: Get show IDs
         const idsResponse = await fetch(
           `https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/prediction/user-based?recId=${user.recId}`
         );
         const showIds: string[] = await idsResponse.json();
 
-        // Step 2: Fetch movie details from /prediction/by-ids
         const movieResponse = await fetch(
           `https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/prediction/by-ids?ids=${showIds.join(
             ','
@@ -77,53 +75,69 @@ const RecommendedRow: React.FC = () => {
     fetchRecommendedMovies();
   }, [user]);
 
-  const scrollLeft = () => {
-    rowRef.current?.scrollBy({ left: -1000, behavior: 'smooth' });
+  const handleMouseMove = (
+    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    index: number
+  ) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const x = e.clientX - rect.left; // x position within the card
+    const y = e.clientY - rect.top; // y position within the card
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const rotateX = ((y - centerY) / centerY) * -6; // vertical tilt
+    const rotateY = ((x - centerX) / centerX) * 6; // horizontal tilt
+
+    setTilts((prev) => ({
+      ...prev,
+      [index]: `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.15)`,
+    }));
   };
 
-  const scrollRight = () => {
-    rowRef.current?.scrollBy({ left: 1000, behavior: 'smooth' });
+  const resetTilt = (index: number) => {
+    setTilts((prev) => ({
+      ...prev,
+      [index]: 'rotateX(0deg) rotateY(0deg) scale(1)',
+    }));
   };
 
   if (movies.length === 0) return null;
 
   return (
-    <div className="genre-section mb-5">
-      <h3 className="text-white mb-3" style={{ marginTop: '40px' }}>
-        Recommended For You
-      </h3>
+    <div className="recommended-row-wrapper">
+      <h3 className="text-white text-center mt-4 mb-5">Recommended For You</h3>
 
-      <div className="scroll-wrapper">
-        <button className="scroll-button left" onClick={scrollLeft}>
-          ◀
-        </button>
-
-        <div className="genre-row" ref={rowRef}>
-          {movies.map((movie) => (
-            <div className="movie-grid-item" key={movie.showId}>
-              <MovieCard
-                title={movie.title}
-                imagePath={movie.imagePath}
-                showId={movie.showId}
-                releaseYear={movie.releaseYear}
-                rating={movie.rating}
-                description={movie.description}
-                director={movie.director}
-                cast={movie.cast}
-                country={movie.country}
-                duration={movie.duration}
-                averageRating={movie.averageRating}
-              />
-            </div>
-          ))}
-        </div>
-
-        <button className="scroll-button right" onClick={scrollRight}>
-          ▶
-        </button>
+      <div className="recommended-row">
+        {movies.map((movie, index) => (
+          <div
+            className="movie-grid-item position-relative parallax-tilt"
+            key={movie.showId}
+            onMouseMove={(e) => handleMouseMove(e, index)}
+            onMouseLeave={() => resetTilt(index)}
+            style={{
+              transform: tilts[index] || 'rotateX(0deg) rotateY(0deg)',
+            }}
+          >
+            <div className="overlay-number">{index + 1}</div>
+            <MovieCard
+              title={movie.title}
+              imagePath={movie.imagePath}
+              showId={movie.showId}
+              releaseYear={movie.releaseYear}
+              rating={movie.rating}
+              description={movie.description}
+              director={movie.director}
+              cast={movie.cast}
+              country={movie.country}
+              duration={movie.duration}
+              averageRating={movie.averageRating}
+            />
+          </div>
+        ))}
       </div>
     </div>
   );
 };
-//to trigger deploy
+
 export default RecommendedRow;
