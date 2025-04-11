@@ -43,14 +43,15 @@ const App: React.FC = () => {
             </Link>
             <div className="navbar-links">
               <Link to="/">Home</Link>
-              {/* <Link to="/adminpage">Admin</Link>
-              <Link to="/movies">Movies</Link> */}
-              {/* <Link to="/login">Login</Link>
-              <Link to="/register">Register</Link> */}
               {user.email ? (
                 <>
                   <Link to="/adminpage">Admin</Link>
                   <Link to="/movies">Movies</Link>
+                  <span className="navbar-links">
+                  <Logout className="align-self-center">
+                    Logout <AuthorizedUser value="email" />
+                  </Logout>
+                  </span>
                 </>
               ) : (
                 <>
@@ -60,14 +61,12 @@ const App: React.FC = () => {
               )}
             </div>
           </nav>
-          {/* Logout button below navbar */}
-          {/* Logout only shows when logged in AND not on login/register/landing pages */}
           {user.email && !isLanding && !isLogin && !isRegister && (
             <div className="container-fluid">
               <div className="d-flex justify-content-end pe-4 mt-2">
-                <Logout>
+                {/* <Logout>
                   Logout <AuthorizedUser value="email" />
-                </Logout>
+                </Logout> */}
               </div>
             </div>
           )}
