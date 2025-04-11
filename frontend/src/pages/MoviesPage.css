@@ -1,5 +1,4 @@
-/* Overall Page Theme */
-body,
+/* Scoped to .movies-page to prevent global overrides */
 .movies-page {
   background-color: #000;
   color: #fff;
@@ -8,8 +7,7 @@ body,
   overflow-x: hidden;
 }
 
-/* Headings */
-h2 {
+.movies-page h2 {
   font-weight: 800;
   font-size: 2rem;
   text-align: center;
@@ -17,17 +15,15 @@ h2 {
   color: #fff;
 }
 
-/* Controls container */
-.movies-controls {
+.movies-page .movies-controls {
   max-width: 600px;
   width: 100%;
   margin: 0 auto 2rem auto;
   text-align: center;
 }
 
-/* Inputs */
-.movies-controls input,
-.movies-controls select {
+.movies-page .movies-controls input,
+.movies-page .movies-controls select {
   background-color: #111;
   color: #fff;
   border: 1px solid #444;
@@ -37,8 +33,8 @@ h2 {
   width: 100%;
 }
 
-.movies-controls input[type='text'],
-.movies-controls input[type='text']:focus {
+.movies-page .movies-controls input[type='text'],
+.movies-page .movies-controls input[type='text']:focus {
   background-color: #111 !important;
   color: #fff !important;
   border: 1px solid #444 !important;
@@ -46,26 +42,25 @@ h2 {
   border-radius: 8px;
 }
 
-.movies-controls input::placeholder {
+.movies-page .movies-controls input::placeholder {
   color: #fff !important;
   opacity: 1 !important;
 }
 
-/* Container and grid */
-.container {
+.movies-page .container {
   max-width: 1400px;
   padding: 0 1rem;
   margin: 0 auto;
 }
 
-.row {
+.movies-page .row {
   display: flex;
   flex-wrap: wrap;
   justify-content: flex-start;
   margin: 0 -0.5rem;
 }
 
-.col {
+.movies-page .col {
   display: flex;
   justify-content: center;
   align-items: flex-start;
@@ -76,17 +71,16 @@ h2 {
   box-sizing: border-box;
 }
 
-/* Hover effect for MovieCard images */
-.hover-effect {
+.movies-page .hover-effect {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.movie-hover-wrapper {
+.movies-page .movie-hover-wrapper {
   position: relative;
   display: inline-block;
 }
 
-.zoomed .hover-effect {
+.movies-page .zoomed .hover-effect {
   transform: scale(1.1);
   border: 5px solid white;
   border-radius: 12px;
@@ -94,7 +88,7 @@ h2 {
   z-index: 10;
 }
 
-.hover-info-card {
+.movies-page .hover-info-card {
   position: absolute;
   top: 0;
   left: 105%;
@@ -111,7 +105,17 @@ h2 {
   justify-content: space-between;
 }
 
-.description-preview {
+.movies-page .hover-info-card h5 {
+  pointer-events: none;
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  hyphens: auto;
+  font-size: 1rem;
+  line-height: 1.2;
+}
+
+.movies-page .description-preview {
   font-size: 0.85rem;
   line-height: 1.2;
   margin-top: 0.5rem;
@@ -122,12 +126,7 @@ h2 {
   -webkit-box-orient: vertical;
 }
 
-* {
-  box-sizing: border-box;
-}
-
-/* Grid layout */
-.movie-grid {
+.movies-page .movie-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(216px, 1fr));
   column-gap: 2rem;
@@ -136,27 +135,17 @@ h2 {
   align-items: start;
 }
 
-.movie-grid-item {
+.movies-page .movie-grid-item {
   flex: 0 0 auto;
   width: 216px;
 }
 
-/* Ensure posters scale properly */
-.movie-grid-item img {
-  width: 100%;
-  height: auto;
-  object-fit: cover;
-  aspect-ratio: 2 / 3;
-  border-radius: 8px;
-  display: block;
-}
-
-.genre-section {
+.movies-page .genre-section {
   position: relative;
   padding: 0 40px;
 }
 
-.scroll-wrapper {
+.movies-page .scroll-wrapper {
   position: relative;
   display: flex;
   align-items: center;
@@ -165,7 +154,7 @@ h2 {
   z-index: auto;
 }
 
-.genre-row {
+.movies-page .genre-row {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -178,11 +167,11 @@ h2 {
   width: 100%;
 }
 
-.genre-row::-webkit-scrollbar {
+.movies-page .genre-row::-webkit-scrollbar {
   display: none;
 }
 
-.scroll-button {
+.movies-page .scroll-button {
   background: none;
   border: none;
   color: white;
@@ -195,39 +184,23 @@ h2 {
   padding: 10px;
   background-color: rgba(0, 0, 0, 0.5);
   border-radius: 50%;
+  pointer-events: auto;
 }
 
-.scroll-button.left {
+.movies-page .scroll-button.left {
   left: 0;
 }
 
-.scroll-button.right {
+.movies-page .scroll-button.right {
   right: 0;
 }
 
-.hover-info-card h5 {
-  pointer-events: none;
-  white-space: normal;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  hyphens: auto;
-  font-size: 1rem;
-  line-height: 1.2;
-}
-
-.genre-row,
-.movie-hover-wrapper {
+.movies-page .genre-row,
+.movies-page .movie-hover-wrapper {
   overflow: visible !important;
 }
 
-.genre-row {
-  min-width: 100%;
-  overflow-x: auto;
-  display: flex;
-  flex-wrap: nowrap;
-}
-
-.scrolling-row {
+.movies-page .scrolling-row {
   display: flex;
   flex-direction: row;
   flex-wrap: nowrap;
@@ -242,63 +215,40 @@ h2 {
   -ms-overflow-style: none;
 }
 
-.scrolling-row::-webkit-scrollbar {
+.movies-page .scrolling-row::-webkit-scrollbar {
   display: none;
 }
 
-/* 🔥 Recommended Row Styles */
-.recommended-row-wrapper {
-  background: radial-gradient(circle at center, #1a1a1a, #000);
-  padding: 3rem 2rem;
-  border-top: 2px solid #ff4d4d;
-  border-bottom: 2px solid #ff4d4d;
-  margin-bottom: 3rem;
-  border-radius: 12px;
+.movies-page .cookie-banner {
+  animation: slide-up 0.4s ease-in-out;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: #111;
+  color: #fff;
+  padding: 1rem;
   text-align: center;
+  z-index: 1000;
 }
 
-.recommended-row {
-  display: flex;
-  justify-content: center;
-  gap: 40px;
-  flex-wrap: wrap;
-  margin-top: 2rem;
+.movies-page .cookie-banner button {
+  background-color: #444;
+  color: #fff;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-left: 1rem;
 }
 
-.recommended-row .movie-grid-item {
-  width: 270px;
-  position: relative;
-  transition: transform 0.4s ease, box-shadow 0.4s ease;
-  z-index: 2;
-}
-
-.recommended-row .movie-grid-item:hover {
-  transform: scale(1.12);
-  z-index: 10;
-  box-shadow: 0 20px 40px rgba(255, 255, 255, 0.15);
-}
-
-.overlay-number {
-  position: absolute;
-  top: 20px;
-  left: 15px;
-  font-size: 9rem;
-  font-weight: 900;
-  color: rgba(255, 255, 255, 0.12); /* more visible */
-  z-index: 1;
-  pointer-events: none;
-  user-select: none;
-  line-height: 1;
-}
-
-.movie-grid-item:hover .overlay-number {
-  color: rgba(255, 255, 255, 0.18);
-  transform: scale(1.05);
-  transition: all 0.2s ease;
-}
-
-.parallax-tilt {
-  transition: transform 0.2s ease-out;
-  transform-style: preserve-3d;
-  will-change: transform;
+@keyframes slide-up {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0%);
+    opacity: 1;
+  }
 }
