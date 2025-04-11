@@ -4,10 +4,12 @@ import { Navigate } from 'react-router-dom';
 export interface User {
   email: string;
   roles: string[];
-  recId: number;
+  recId?: number;
 }
 
-export const UserContext = createContext<[User, React.Dispatch<React.SetStateAction<User>>]>([{ email: '', roles: [] }, () => {}]);
+export const UserContext = createContext<
+  [User, React.Dispatch<React.SetStateAction<User>>, boolean]
+>([{ email: '', roles: [], recId: -1 }, () => {}, true]);
 
 function AuthorizeView(props: {
   children: React.ReactNode;
@@ -69,7 +71,7 @@ function AuthorizeView(props: {
   if (!authorized) return <Navigate to="/unauthorized" />;
 
   return (
-    <UserContext.Provider value={[user, setUser]}>
+    <UserContext.Provider value={[user, setUser, loading]}>
       {props.children}
     </UserContext.Provider>
   );

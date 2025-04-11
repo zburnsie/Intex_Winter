@@ -10,15 +10,23 @@ import PrivacyPage from './pages/PrivacyPage';
 import MovieDetailPage from './pages/MovieDetailPage';
 import AdminOnlyRoute from './components/AdminOnlyRoute';
 import './App.css';
-import AuthorizeView, { AuthorizedUser, UserContext } from './components/AuthorizeView';
+import AuthorizeView, {
+  AuthorizedUser,
+  UserContext,
+} from './components/AuthorizeView';
 import Logout from './components/Logout';
 
 const App: React.FC = () => {
-  const [user] = useContext(UserContext);
+  const [user, , loading] = useContext(UserContext);
   const location = useLocation();
   const isLanding = location.pathname === '/';
   const isLogin = location.pathname === '/login';
   const isRegister = location.pathname === '/register';
+
+  if (loading && !isLanding && !isLogin && !isRegister) {
+    console.log('Waiting for user to load...');
+    return <p>Loading user info...</p>;
+  }
 
   return (
     <>
@@ -49,17 +57,17 @@ const App: React.FC = () => {
               )}
             </div>
           </nav>
-            {/* Logout button below navbar */}
-            {/* Logout only shows when logged in AND not on login/register/landing pages */}
-            {user.email && !isLanding && !isLogin && !isRegister && (
-              <div className="container-fluid">
-                <div className="d-flex justify-content-end pe-4 mt-2">
-                  <Logout>
-                    Logout <AuthorizedUser value="email" />
-                  </Logout>
-                </div>
+          {/* Logout button below navbar */}
+          {/* Logout only shows when logged in AND not on login/register/landing pages */}
+          {user.email && !isLanding && !isLogin && !isRegister && (
+            <div className="container-fluid">
+              <div className="d-flex justify-content-end pe-4 mt-2">
+                <Logout>
+                  Logout <AuthorizedUser value="email" />
+                </Logout>
               </div>
-            )}
+            </div>
+          )}
         </>
       )}
       <Routes>

@@ -95,7 +95,7 @@ td {
 
 /* Form */
 .form-control,
-input[type="text"],
+input[type='text'],
 select,
 textarea {
   background-color: #111;
@@ -120,20 +120,22 @@ textarea {
 }
 
 /* Kill global spacing that may be causing the white bar */
-body, html, #root {
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Override the root padding set in App.css */
-  #root {
-    padding: 0 !important;
-    max-width: 100%;
-    text-align: inherit;
-  }
+body,
+html,
+#root {
+  margin: 0;
+  padding: 0;
+}
 
-  .form-control:focus,
-input[type="text"]:focus,
+/* Override the root padding set in App.css */
+#root {
+  padding: 0 !important;
+  max-width: 100%;
+  text-align: inherit;
+}
+
+.form-control:focus,
+input[type='text']:focus,
 select:focus,
 textarea:focus {
   background-color: #111 !important;
@@ -143,9 +145,17 @@ textarea:focus {
 }
 
 .form-control::placeholder,
-input[type="text"]::placeholder {
+input[type='text']::placeholder {
   color: #fff !important;
   opacity: 1; /* Ensures the white actually appears bright */
 }
 
-  
+.btn-sm svg {
+  font-size: 1rem;
+}
+
+.btn-outline-warning:hover,
+.btn-outline-danger:hover {
+  transform: scale(1.1);
+  transition: transform 0.15s ease-in-out;
+}
