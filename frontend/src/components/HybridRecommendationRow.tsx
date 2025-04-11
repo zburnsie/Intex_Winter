@@ -24,7 +24,7 @@ const HybridRecommendationRow: React.FC<HybridRecommendationRowProps> = ({ showI
     const fetchRecommendations = async () => {
       try {
         const [movieRes, ratingRes] = await Promise.all([
-          fetch(`https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Prediction/hybrid/${showId}`),
+          fetch(`https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Prediction/hybrid-weighted/${showId}`),
           fetch('https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Rating/AllRatings')
           
         ]);
