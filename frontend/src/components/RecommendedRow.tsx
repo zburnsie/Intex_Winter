@@ -20,7 +20,6 @@ const RecommendedRow: React.FC = () => {
   const rowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    console.log('User context:', user);
     const fetchRecommendedMovies = async () => {
       if (!user?.recId || user.recId === -1) return;
 
@@ -31,12 +30,19 @@ const RecommendedRow: React.FC = () => {
         );
         const showIds: string[] = await idsResponse.json();
 
-        // Step 2: Fetch full movie data using the same logic as PopularRow
+        // Step 2: Fetch movie details from /prediction/by-ids
         const movieResponse = await fetch(
-          `https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/movies/by-ids?ids=${showIds.join(
+          `https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/prediction/by-ids?ids=${showIds.join(
             ','
           )}`
         );
+
+        if (!movieResponse.ok) {
+          throw new Error(
+            'Movie details fetch failed with status ' + movieResponse.status
+          );
+        }
+
         const data = await movieResponse.json();
 
         const mapped = data.map((movie: any) => {
