@@ -32,52 +32,55 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieProps) => {
 
     const toFullMovie = (data: NewMovieFormData): Movie => {
         const hasGenre = (genre: string) => data.genres.includes(genre);
-
+      
         return {
-            showId: null,
-            type: data.type,
-            title: data.title,
-            director: data.director,
-            cast: null,
-            country: null,
-            releaseYear: data.releaseYear ?? null,
-            rating: data.rating,
-            duration: data.duration ?? null,
-            description: data.description ?? null,
-            action: hasGenre("Action") ? 1 : 0,
-            adventure: hasGenre("Adventure") ? 1 : 0,
-            animeSeriesInternationalTvShows: hasGenre("Anime") ? 1 : 0,
-            britishTvShowsDocuseriesInternationalTvShows: null,
-            children: hasGenre("Kids") ? 1 : 0,
-            comedies: hasGenre("Comedy") ? 1 : 0,
-            comediesDramasInternationalMovies: null,
-            comediesInternationalMovies: null,
-            comediesRomanticMovies: (hasGenre("Romance") && hasGenre("Comedy")) ? 1 : 0,
-            crimeTvShowsDocuseries: hasGenre("Crime") ? 1 : 0,
-            documentaries: hasGenre("Documentary") ? 1 : 0,
-            documentariesInternationalMovies: null,
-            docuseries: null,
-            dramas: hasGenre("Drama") ? 1 : 0,
-            dramasInternationalMovies: null,
-            dramasRomanticMovies: (hasGenre("Romance") && hasGenre("Drama")) ? 1 : 0,
-            familyMovies: hasGenre("Family") ? 1 : 0,
-            fantasy: hasGenre("Fantasy") ? 1 : 0,
-            horrorMovies: hasGenre("Horror") ? 1 : 0,
-            internationalMoviesThrillers: (hasGenre("International") && hasGenre("Thriller")) ? 1 : 0,
-            internationalTvShowsRomanticTvShowsTvDramas: (hasGenre("International") && hasGenre("Romance")) ? 1 : 0,
-            kidsTv: hasGenre("Kids") ? 1 : 0,
-            languageTvShows: null,
-            musicals: hasGenre("Musical") ? 1 : 0,
-            natureTv: hasGenre("Nature") ? 1 : 0,
-            realityTv: hasGenre("Reality") ? 1 : 0,
-            spirituality: hasGenre("Spiritual") ? 1 : 0,
-            tvAction: (hasGenre("TV") && hasGenre("Action")) ? 1 : 0,
-            tvComedies: (hasGenre("TV") && hasGenre("Comedy")) ? 1 : 0,
-            tvDramas: (hasGenre("TV") && hasGenre("Drama")) ? 1 : 0,
-            talkShowsTvComedies: null,
-            thrillers: hasGenre("Thriller") ? 1 : 0,
+          showId: undefined,
+          type: data.type || "",
+          title: data.title || "",
+          director: data.director || "",
+          cast: "", // avoid null
+          country: "",
+          releaseYear: data.releaseYear ?? 0,
+          rating: data.rating || "",
+          duration: data.duration || "",
+          description: data.description || "",
+      
+          // All genre flags MUST default to 0 instead of null
+          action: hasGenre("Action") ? 1 : 0,
+          adventure: hasGenre("Adventure") ? 1 : 0,
+          animeSeriesInternationalTvShows: hasGenre("Anime") ? 1 : 0,
+          britishTvShowsDocuseriesInternationalTvShows: 0,
+          children: hasGenre("Kids") ? 1 : 0,
+          comedies: hasGenre("Comedy") ? 1 : 0,
+          comediesDramasInternationalMovies: 0,
+          comediesInternationalMovies: 0,
+          comediesRomanticMovies: hasGenre("Romance") && hasGenre("Comedy") ? 1 : 0,
+          crimeTvShowsDocuseries: hasGenre("Crime") ? 1 : 0,
+          documentaries: hasGenre("Documentary") ? 1 : 0,
+          documentariesInternationalMovies: 0,
+          docuseries: 0,
+          dramas: hasGenre("Drama") ? 1 : 0,
+          dramasInternationalMovies: 0,
+          dramasRomanticMovies: hasGenre("Romance") && hasGenre("Drama") ? 1 : 0,
+          familyMovies: hasGenre("Family") ? 1 : 0,
+          fantasy: hasGenre("Fantasy") ? 1 : 0,
+          horrorMovies: hasGenre("Horror") ? 1 : 0,
+          internationalMoviesThrillers: hasGenre("International") && hasGenre("Thriller") ? 1 : 0,
+          internationalTvShowsRomanticTvShowsTvDramas: hasGenre("International") && hasGenre("Romance") ? 1 : 0,
+          kidsTv: hasGenre("Kids") ? 1 : 0,
+          languageTvShows: 0,
+          musicals: hasGenre("Musical") ? 1 : 0,
+          natureTv: hasGenre("Nature") ? 1 : 0,
+          realityTv: hasGenre("Reality") ? 1 : 0,
+          spirituality: hasGenre("Spiritual") ? 1 : 0,
+          tvAction: hasGenre("TV") && hasGenre("Action") ? 1 : 0,
+          tvComedies: hasGenre("TV") && hasGenre("Comedy") ? 1 : 0,
+          tvDramas: hasGenre("TV") && hasGenre("Drama") ? 1 : 0,
+          talkShowsTvComedies: 0,
+          thrillers: hasGenre("Thriller") ? 1 : 0
         };
-    };
+      };
+      
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value, type } = e.target;
@@ -137,8 +140,8 @@ const NewMovieForm = ({ onSuccess, onCancel }: NewMovieProps) => {
                 <input
                     type="text"
                     className="form-control"
-                    id="title"
-                    name="title"
+                    id="duration"
+                    name="duration"
                     value={formData.duration}
                     onChange={handleChange}
                     required

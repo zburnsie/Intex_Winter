@@ -97,11 +97,39 @@ public class PredictionController : ControllerBase
         return Ok(movies);
     }
 
-    // GET: api/prediction/user-based
     [HttpGet("user-based")]
-    public async Task<IActionResult> GetAllUserBased()
+    public async Task<IActionResult> GetUserRecommendations([FromQuery] int recId)
     {
-        var data = await _context.UserBasedCollaborativeRecommendations.ToListAsync();
-        return Ok(data);
+        var recs = await _context.UserBasedCollaborativeRecommendations
+            .FirstOrDefaultAsync(r => r.UserId == recId);
+
+        if (recs == null)
+            return NotFound();
+
+        var recommendedShowIds = new List<string?>
+        {
+            recs.Recommendation1,
+            recs.Recommendation2,
+            recs.Recommendation3,
+            recs.Recommendation4,
+            recs.Recommendation5
+        }
+        .Where(id => !string.IsNullOrEmpty(id)) // filter out nulls
+        .ToList();
+
+        return Ok(recommendedShowIds);
     }
+
+    [HttpGet("by-ids")]
+    public async Task<IActionResult> GetMoviesByIds([FromQuery] string ids)
+    {
+        var idList = ids.Split(',').ToList();
+        var movies = await _movieContext.Movies
+            .Where(m => idList.Contains(m.ShowId))
+            .ToListAsync();
+
+        return Ok(movies);
+    }
+
+
 }

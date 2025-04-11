@@ -6,6 +6,7 @@ import AuthorizeView from '../components/AuthorizeView';
 import MovieRow from '../components/MovieRow';
 import PopularRow from '../components/PopularRow';
 import SearchResultsGrid from '../components/SearchResultsGrid';
+import RecommendedRow from '../components/RecommendedRow';
 import './MoviesPage.css';
 
 interface GenreRow {
@@ -129,6 +130,9 @@ const MoviesPage: React.FC = () => {
           </>
         )}
 
+        {/* Always render this after either results or genre grid */}
+        <RecommendedRow />
+
         {showCookieBanner && (
           <div
             className="position-fixed bottom-0 start-0 end-0 bg-white text-dark p-3 d-flex justify-content-between align-items-center border-top shadow"
@@ -148,11 +152,5 @@ const MoviesPage: React.FC = () => {
 };
 
 export default MoviesPage;
-
-
-
-
-
-
 
 
