@@ -18,7 +18,8 @@ interface MovieDetail {
   averageRating?: number;
 }
 
-const baseApiUrl = 'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Movie';
+const baseApiUrl =
+  'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Movie';
 
 const baseImageUrl =
   'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
@@ -40,7 +41,7 @@ const MovieDetailPage: React.FC = () => {
   useEffect(() => {
     const fetchMovieDetail = async () => {
       try {
-        const response = await fetch(`${baseApiUrl}/api/Movie/${showId}`);
+        const response = await fetch(`${baseApiUrl}/${showId}`);
         if (!response.ok) {
           throw new Error('Failed to fetch movie details');
         }
@@ -48,7 +49,9 @@ const MovieDetailPage: React.FC = () => {
         const data = await response.json();
 
         const normalizedTitle = normalizeTitleForPath(data.title || 'Unknown');
-        const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
+        const imagePath = `${baseImageUrl}${encodeURIComponent(
+          normalizedTitle
+        )}.jpg`;
 
         setMovie({
           title:
@@ -104,8 +107,17 @@ const MovieDetailPage: React.FC = () => {
         }}
       >
         {/* Poster & Title */}
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', flexShrink: 0 }}>
-          <h2 className="text-center mb-3" style={{ fontSize: '2rem' }}>{movie.title}</h2>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            flexShrink: 0,
+          }}
+        >
+          <h2 className="text-center mb-3" style={{ fontSize: '2rem' }}>
+            {movie.title}
+          </h2>
           <img
             src={movie.imagePath}
             alt={`Poster for ${movie.title}`}
@@ -138,11 +150,21 @@ const MovieDetailPage: React.FC = () => {
             textAlign: 'left',
           }}
         >
-          <p><strong>Rating:</strong> {movie.rating}</p>
-          <p><strong>Duration:</strong> {movie.duration}</p>
-          <p><strong>Release Year:</strong> {movie.releaseYear}</p>
-          <p><strong>Director:</strong> {movie.director}</p>
-          <p><strong>Country:</strong> {movie.country}</p>
+          <p>
+            <strong>Rating:</strong> {movie.rating}
+          </p>
+          <p>
+            <strong>Duration:</strong> {movie.duration}
+          </p>
+          <p>
+            <strong>Release Year:</strong> {movie.releaseYear}
+          </p>
+          <p>
+            <strong>Director:</strong> {movie.director}
+          </p>
+          <p>
+            <strong>Country:</strong> {movie.country}
+          </p>
           <p>
             <strong>Cast:</strong>{' '}
             {movie.cast
@@ -156,10 +178,18 @@ const MovieDetailPage: React.FC = () => {
               .slice(0, 2)
               .join(', ')}
           </p>
-          <p className="mt-3"><strong>Description:</strong> {movie.description}</p>
+          <p className="mt-3">
+            <strong>Description:</strong> {movie.description}
+          </p>
 
           {/* Content Recommendation Row aligned with poster and centered label */}
-          <div style={{ paddingLeft: '0px', width: 'fit-content', marginTop: '50px' }}>
+          <div
+            style={{
+              paddingLeft: '0px',
+              width: 'fit-content',
+              marginTop: '50px',
+            }}
+          >
             <div style={{ textAlign: 'center' }}>
               <h3 className="text-white mb-3">More Like This</h3>
             </div>
@@ -177,5 +207,3 @@ const MovieDetailPage: React.FC = () => {
 };
 
 export default MovieDetailPage;
-
-
