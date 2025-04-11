@@ -18,7 +18,7 @@ interface MovieDetail {
   averageRating?: number;
 }
 
-const baseApiUrl = 'https://localhost:5000';
+const baseApiUrl = 'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Movie';
 
 const baseImageUrl =
   'https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/';
