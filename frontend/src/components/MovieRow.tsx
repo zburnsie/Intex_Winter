@@ -5,6 +5,7 @@ import '../pages/MoviesPage.css';
 interface MovieRowProps {
   genre: string;
   searchQuery: string;
+  displayLabel: string;
 }
 
 const baseImageUrl =
@@ -18,7 +19,7 @@ const normalizeTitleForPath = (title: string): string => {
     .trim();
 };
 
-const MovieRow: React.FC<MovieRowProps> = ({ genre, searchQuery }) => {
+const MovieRow: React.FC<MovieRowProps> = ({ genre, searchQuery, displayLabel }) => {
   const [movies, setMovies] = useState<any[]>([]);
   const [pageNum, setPageNum] = useState(1);
   const [hasMore, setHasMore] = useState(true);
@@ -120,7 +121,7 @@ const MovieRow: React.FC<MovieRowProps> = ({ genre, searchQuery }) => {
   return (
     <div className="genre-section mb-5">
       <h3 className="text-white mb-3" style={{ marginTop: '40px' }}>
-        {genre}
+        {displayLabel}
       </h3>
 
       <div className="scroll-wrapper">
@@ -153,6 +154,7 @@ const MovieRow: React.FC<MovieRowProps> = ({ genre, searchQuery }) => {
 };
 
 export default MovieRow;
+
 
 
 
