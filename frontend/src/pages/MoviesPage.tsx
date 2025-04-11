@@ -7,6 +7,7 @@ import MovieRow from '../components/MovieRow';
 import PopularRow from '../components/PopularRow';
 import SearchResultsGrid from '../components/SearchResultsGrid';
 import RecommendedRow from '../components/RecommendedRow';
+import MovieCard from '../components/MovieCard';
 import './MoviesPage.css';
 
 interface GenreRow {
@@ -14,60 +15,32 @@ interface GenreRow {
   genres: string[];
 }
 
-
 const MoviesPage: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [genreResults, setGenreResults] = useState<any[]>([]);
   const [showCookieBanner, setShowCookieBanner] = useState(false);
   const [selectedGenre, setSelectedGenre] = useState('');
 
   const genreRows: GenreRow[] = [
     { label: 'Action/Adventure', genres: ['Action/Adventure', 'TvAction'] },
     { label: 'Anime', genres: ['AnimeSeriesInternationalTvShows'] },
-    {
-      label: 'British TV',
-      genres: ['BritishTvShowsDocuseriesInternationalTvShows'],
-    },
-    {
-      label: 'Family Friendly',
-      genres: ['Children', 'FamilyMovies', 'KidsTv'],
-    },
-    {
-      label: 'Comedies',
-      genres: ['Comedies', 'TalkShowsTvComedies', 'TvComedies'],
-    },
-    {
-      label: 'International',
-      genres: [
-        'ComediesDramasInternationalMovies',
-        'ComediesInternationalMovies',
-        'InternationalTvShowsRomanticTvShowsTvDramas',
-        'DramasInternationalMovies',
-        'LanguageTvShows',
-      ],
-    },
-    {
-      label: 'Romantic Comedies',
-      genres: ['ComediesRomanticMovies', 'DramasRomanticMovies'],
-    },
+    { label: 'British TV', genres: ['BritishTvShowsDocuseriesInternationalTvShows'] },
+    { label: 'Family Friendly', genres: ['Children', 'FamilyMovies', 'KidsTv'] },
+    { label: 'Comedies', genres: ['Comedies', 'TalkShowsTvComedies', 'TvComedies'] },
+    { label: 'International', genres: ['ComediesDramasInternationalMovies', 'ComediesInternationalMovies', 'InternationalTvShowsRomanticTvShowsTvDramas', 'DramasInternationalMovies', 'LanguageTvShows'] },
+    { label: 'Romantic Comedies', genres: ['ComediesRomanticMovies', 'DramasRomanticMovies'] },
     { label: 'True Crime', genres: ['CrimeTvShowsDocuseries'] },
-    {
-      label: 'Documentaries',
-      genres: ['Documentaries', 'DocumentariesInternationalMovies'],
-    },
+    { label: 'Documentaries', genres: ['Documentaries', 'DocumentariesInternationalMovies'] },
     { label: 'Dramas', genres: ['Dramas'] },
     { label: 'Fantasy', genres: ['Fantasy'] },
     { label: 'Horror', genres: ['HorrorMovies'] },
-    {
-      label: 'Thrillers',
-      genres: ['Thrillers', 'InternationalMoviesThrillers'],
-    },
+    { label: 'Thrillers', genres: ['Thrillers', 'InternationalMoviesThrillers'] },
     { label: 'Musicals', genres: ['Musicals'] },
     { label: 'Nature', genres: ['NatureTv'] },
     { label: 'Reality TV', genres: ['RealityTv'] },
     { label: 'Spirituality', genres: ['Spirituality'] },
   ];
-
 
   useEffect(() => {
     const accepted = localStorage.getItem('cookiesAccepted');
@@ -80,7 +53,7 @@ const MoviesPage: React.FC = () => {
     setShowCookieBanner(false);
     localStorage.setItem('cookiesAccepted', 'true');
   };
-    
+
   const handleSearch = async () => {
     if (!searchQuery.trim()) return;
 
@@ -103,8 +76,7 @@ const MoviesPage: React.FC = () => {
           normalizedTitle
         )}.jpg`;
 
-        const averageRating =
-          movie.averageRating || Math.random() * (5 - 3) + 3;
+        const averageRating = movie.averageRating || Math.random() * (5 - 3) + 3;
 
         return {
           ...movie,
@@ -124,6 +96,53 @@ const MoviesPage: React.FC = () => {
     setSearchResults([]);
   };
 
+  useEffect(() => {
+    const fetchGenreResults = async () => {
+      if (!selectedGenre) {
+        setGenreResults([]);
+        return;
+      }
+
+      const genreRow = genreRows.find(row => row.label === selectedGenre);
+      if (!genreRow) return;
+
+      const queryParams = genreRow.genres.map(g => `movieGenres=${encodeURIComponent(g)}`).join('&');
+
+      try {
+        const res = await fetch(
+          `https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/movie/AllMovies?pageSize=1000&pageNum=1&${queryParams}`
+        );
+
+        const data = await res.json();
+
+        const results = data.movies.map((movie: any) => {
+          const normalizedTitle = movie.title
+            .normalize('NFD')
+            .replace(/\p{Diacritic}/gu, '')
+            .replace(/[^\w\s]/gu, '')
+            .trim();
+
+          const imagePath = `https://mlworkspace1318558619.blob.core.windows.net/movieposters/Movie Posters/Movie Posters/${encodeURIComponent(
+            normalizedTitle
+          )}.jpg`;
+
+          const averageRating = movie.averageRating || Math.random() * (5 - 3) + 3;
+
+          return {
+            ...movie,
+            imagePath,
+            averageRating,
+          };
+        });
+
+        setGenreResults(results);
+      } catch (err) {
+        console.error('Genre fetch failed', err);
+      }
+    };
+
+    fetchGenreResults();
+  }, [selectedGenre]);
 
   return (
     <AuthorizeView>
@@ -146,6 +165,17 @@ const MoviesPage: React.FC = () => {
           <>
             <h4 className="text-white mb-3">Search Results</h4>
             <SearchResultsGrid results={searchResults} />
+          </>
+        ) : selectedGenre ? (
+          <>
+            <h4 className="text-white mb-3">{selectedGenre}</h4>
+            <div className="row gx-4 gy-4 justify-content-center">
+              {genreResults.map(movie => (
+                <div key={movie.showId} className="col-6 col-sm-4 col-md-3 col-lg-2">
+                  <MovieCard {...movie} />
+                </div>
+              ))}
+            </div>
           </>
         ) : (
           <>
@@ -181,5 +211,3 @@ const MoviesPage: React.FC = () => {
 };
 
 export default MoviesPage;
-
-
