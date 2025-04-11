@@ -20,8 +20,10 @@ const PopularRow: React.FC = () => {
   useEffect(() => {
     const fetchPopularMovies = async () => {
       try {
-        const response = await fetch('https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net//api/Prediction/popularity');
-        
+        const response = await fetch(
+          'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net//api/Prediction/popularity'
+        );
+
         const data = await response.json();
 
         const mapped = data.map((movie: any) => {
@@ -33,7 +35,9 @@ const PopularRow: React.FC = () => {
               : movie.title;
 
           const normalizedTitle = normalizeTitleForPath(cleanedTitle);
-          const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
+          const imagePath = `${baseImageUrl}${encodeURIComponent(
+            normalizedTitle
+          )}.jpg`;
 
           // Add the random rating between 3 and 5 for movies with no ratings
           const averageRating = Math.random() * (5 - 3) + 3; // Random rating between 3 and 5

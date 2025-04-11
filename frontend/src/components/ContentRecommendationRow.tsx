@@ -17,14 +17,16 @@ const normalizeTitleForPath = (title: string): string => {
     .trim();
 };
 
-const ContentRecommendationRow: React.FC<ContentRecommendationRowProps> = ({ showId }) => {
+const ContentRecommendationRow: React.FC<ContentRecommendationRowProps> = ({
+  showId,
+}) => {
   const [movies, setMovies] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchRecommendations = async () => {
       try {
         const [movieRes, ratingRes] = await Promise.all([
-            fetch(`'https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Prediction/content-based/${showId}`),
+            fetch(`https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Prediction/content-based/${showId}`),
           fetch(`https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Rating/AllRatings`),
         ]);
 
@@ -40,13 +42,20 @@ const ContentRecommendationRow: React.FC<ContentRecommendationRowProps> = ({ sho
               : movie.title;
 
           const normalizedTitle = normalizeTitleForPath(cleanedTitle);
-          const imagePath = `${baseImageUrl}${encodeURIComponent(normalizedTitle)}.jpg`;
+          const imagePath = `${baseImageUrl}${encodeURIComponent(
+            normalizedTitle
+          )}.jpg`;
 
           // Calculate average rating or fallback to random between 3 and 5
-          const relevantRatings = ratingData.filter((r: any) => r.showId === movie.showId);
+          const relevantRatings = ratingData.filter(
+            (r: any) => r.showId === movie.showId
+          );
           const averageRating =
             relevantRatings.length > 0
-              ? relevantRatings.reduce((sum: number, r: any) => sum + r.rating, 0) / relevantRatings.length
+              ? relevantRatings.reduce(
+                  (sum: number, r: any) => sum + r.rating,
+                  0
+                ) / relevantRatings.length
               : Math.random() * (5 - 3) + 3; // Default random rating between 3 and 5
 
           return {
@@ -68,8 +77,6 @@ const ContentRecommendationRow: React.FC<ContentRecommendationRowProps> = ({ sho
 
   return (
     <div className="genre-section mb-5">
-      
-
       <div className="scroll-wrapper">
         <div className="genre-row d-flex flex-wrap justify-content-center gap-3 w-100">
           {movies.map((movie) => (
@@ -96,5 +103,3 @@ const ContentRecommendationRow: React.FC<ContentRecommendationRowProps> = ({ sho
 };
 
 export default ContentRecommendationRow;
-
-

@@ -25,7 +25,8 @@ const HybridRecommendationRow: React.FC<HybridRecommendationRowProps> = ({ showI
       try {
         const [movieRes, ratingRes] = await Promise.all([
           fetch(`https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Prediction/hybrid/${showId}`),
-          fetch(`https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/rating/llratings`)
+          fetch('https://intex-312-backend-btgbgsf0g8aegcdr.eastus-01.azurewebsites.net/api/Rating/AllRatings')
+          
         ]);
 
         const movieData = await movieRes.json();
