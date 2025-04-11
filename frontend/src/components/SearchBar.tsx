@@ -1,5 +1,6 @@
 import React from 'react';
-import { Form, Button, InputGroup } from 'react-bootstrap';
+import { Form } from 'react-bootstrap';
+import '../pages/MoviesPage.css'; // Make sure you have a CSS file for styling
 
 interface SearchBarProps {
   searchQuery: string;
@@ -15,8 +16,8 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchQuery, setSearchQuery, onSe
   };
 
   return (
-    <Form onSubmit={handleSubmit}>
-      <InputGroup className="search-bar-wrapper">
+    <Form onSubmit={handleSubmit} className="search-bar-container">
+      <div className="search-input-wrapper">
         <Form.Control
           type="text"
           placeholder="Search by title..."
@@ -24,20 +25,14 @@ const SearchBar: React.FC<SearchBarProps> = ({ searchQuery, setSearchQuery, onSe
           onChange={(e) => setSearchQuery(e.target.value)}
           className="search-input"
         />
-        <Button type="submit" className="search-btn">
-          Search
-        </Button>
         {searchQuery && onClear && (
-          <Button variant="secondary" className="clear-btn" onClick={onClear}>
-            Clear
-          </Button>
+          <span className="clear-icon" onClick={onClear}>
+            &times;
+          </span>
         )}
-      </InputGroup>
+      </div>
     </Form>
   );
 };
 
 export default SearchBar;
-
-
-
