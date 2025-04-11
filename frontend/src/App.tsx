@@ -34,9 +34,12 @@ const App: React.FC = () => {
       {!isLanding && (
         <>
           <nav className="custom-navbar">
-            <Link to="/" className="navbar-logo">
+            {/* <Link to="/" className="navbar-logo">
               <span className="logo-red">CINE</span>
               <span className="logo-white">NICHE</span>
+            </Link> */}
+            <Link to="/" className="navbar-logo">
+              <img src="/newlogo.png" alt="CineNiche Logo" className="logo-image" style={{ height: '120px', width: 'auto', display: 'block' }}/>
             </Link>
             <div className="navbar-links">
               <Link to="/">Home</Link>
